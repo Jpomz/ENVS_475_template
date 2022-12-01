@@ -1,0 +1,13 @@
+---
+title: "test markdown"
+output: html_document
+date: '2022-12-01'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Does work?
+
+I swear to god if not...
