@@ -1,5 +1,5 @@
 ---
-title: "Homework 1 part A: Intro to R"
+title: "Homework 1: Intro to R"
 subtitle: "ENVS475: Experimental Analysis and Design"
 date: "`r format(Sys.time(), '%B, %Y')`"
 output: html_document
@@ -24,9 +24,9 @@ For your assignments, you will be writing R scripts with comments and code which
 
 Each assignment should follow this naming convention:
 
-full_name_hw#
+`full_name_hw#`
 
-For example: justin_pomeranz_hw1
+For example: `justin_pomeranz_hw1`
 
 You can capitalize words in the file name if you choose, but it should follow the general convention above. 
 

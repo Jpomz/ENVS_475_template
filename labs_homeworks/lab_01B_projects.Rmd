@@ -180,7 +180,7 @@ ENVS_475/
 |─── data/
       |─── acid_mine_hw6.csv
       |─── clear_cut_2_hw8.rds
-      |─── acacia_lab2.csv
+      |─── uhuru_acacia_lab2.csv
 |─── scripts/
       |─── lab1_intro_R.R
       |─── lab2_ggplot.R
