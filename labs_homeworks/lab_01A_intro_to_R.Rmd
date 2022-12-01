@@ -26,13 +26,17 @@ It is based on an ever-expanding set of analytical packages that perform specifi
 
 ## Why `R`?
 
-`R` is free(!), runs on pretty much every operating system, and has a huge user base.  
+`R` is free(!), runs on pretty much every operating system, and has a huge user base.
+
+The use of `R` also promotes [open science](https://en.wikipedia.org/wiki/Open_science), and is one of the many possible solutions which are needed to remedy the [replication crisis](https://en.wikipedia.org/wiki/Replication_crisis) (also sometimes called the  reproducibility crisis). Indeed, it is somewhat surprising how lax many researchers and journals are in documenting the statistical analyses conducted in research. The use of `R scripts` and judicious commenting (see below) along with the publication of raw data will vastly improve scientific fields moving forward. 
 
 `R` is far from the only programming language for working with data. But it is the most widely used language in the fields of ecology, and environmental sciences. If you plan to pursue a career in any of these fields, proficiency in `R`is quickly becoming a prerequisite for many jobs.  
 
 Even if you don't pursue a career in one of these fields, the ability to manipulate, analyze, and visualize data (otherwise known as *data science*) is an extremely marketable skill in many professions right now.  
 
 ## Additional resources and where to get help
+
+- Cheat Sheets. In Rstudio, click `Help > Cheat Sheets` and select the appropriate one. The `RStudio IDE` is a good place to start. Even after nearly a decade of using `R` regularly, I often have the `Data transformation with dplyr` and `Data visualization with ggplot2` when I'm doing almost anything in Rstudio. You can also Google "R Cheat Sheets" to find others which are available. 
 
 We will go over the basics of using `R` in class but there are many good online resources for learning `R` and getting help. A few of my favorites include: 
 
@@ -43,7 +47,7 @@ We will go over the basics of using `R` in class but there are many good online 
 
 - [R for Data Science](https://r4ds.had.co.nz/) Which is a completely free book online and covers many of the important aspects of working in R. 
 
-Of course, if you encounter error messages you don't understand or need help figuring out how to accomplish something in `R`, google is your best friend (even the most experienced `R` users use google on a daily basis). The key to finding answers on google is asking the right questions. Please refer to these links for advice on formulating `R`-related questions:
+Of course, if you encounter error messages you don't understand or need help figuring out how to accomplish something in `R`, google is your best friend (even the most experienced `R` users use google on a daily basis, myself included). The key to finding answers on google is asking the right questions. Please refer to these links for advice on formulating `R`-related questions:
 
 - [How to ask for R help](https://blog.revolutionanalytics.com/2014/01/how-to-ask-for-r-help.html)
 
@@ -53,15 +57,16 @@ Of course, if you encounter error messages you don't understand or need help fig
 
 As a statistical programming tool, one thing R is very good at is doing math. So as a starting point, let's treat `R` like a fancy calculator.  
 
-We interact with this calculator by typing numbers and operators (+, -, \*, /) into the `Console` window. By default, the `Console` window is in the bottom left, but you can customize the display of windows in RStudio by clicking on *Tools > Global Options > Pane LAyout*.  For example, I like to have my `Console` window in the bottom right, and the `Source` window in the bottom left.  
+We interact with this calculator by typing numbers and operators (+, -, \*, /) into the `Console` window. By default, the `Console` window is in the bottom left, but you can customize the display of windows in RStudio by clicking on *Tools > Global Options > Pane Layout*.  For example, I like to have my `Console` window in the bottom right, and the `Source` window in the bottom left.  
 
-Let's try it - in the Console, write the `R`code required to add two plus two and then press enter:
+### Basic expressions
+Let's try it - in the Console, write the `R` code required to add two plus two and then press enter:
 
 ``` {r calc, echo=TRUE, eval = FALSE}
 2+2
 ```
 
-When you run the code, you should see the answer printed below the window. Play with your code a bit - try changing the number and the operators and then run the code again.  
+When you run the code, you should see the answer printed below the window. Play with your code a bit - try changing the number and the operators and then run the code again.  For example, try multiplying with `*`, division with `/`, and exponents with `^` or with `**`. Also, play around with order of operations and the use of `()` in your basic expressions. 
 
 ## Creating objects
 
@@ -75,7 +80,7 @@ x <- 3
 
 The operator `<-` is how we do assignments in `R`. Whatever is to the left of `<-` is the object's name and whatever is to the right is the value. As we will see later, objects can be much more complex than simply a number but for now, we'll keep it simple. 
 
-RStudio has built in shorcuts for the `<-` operator: `Alt` + `-` (Windows) or `Option` + `-` (Mac).
+RStudio has built in shorcuts for the `<-` operator: `Alt + -` (Windows) or `Option + -` (Mac).
 
 ***
 
@@ -103,15 +108,15 @@ After running it, print the new object `y` to see its value. Were you right?
 
 ## Naming objects
 
-It's a good idea to give objects names that tell you something about what the object represents. Names can be as long as you want them to be but can not have spaces. 
+It's a good idea to give objects names that tell you something about what the object represents. Names can be as long as you want them to be but **can not have spaces**. 
 
-### Snake Case (preferred method)
+### Snake Case (my preferred method)
 
 I prefer to use *snake case* where an underscore (`_`) is used to separate words in object names (for example: `my_data_object`, `filtered_data`, etc). 
 
 ### Other options
 
-Other options include *camelCase* where no spaces or separators are used but new words are capitalized (for example: `myDataObject`, `filteredData`, etc.), or using `.` to separate words (`my.data.object`, `filtered.data`. 
+Other options include *camelCase* where no spaces or separators are used but new words are capitalized (for example: `myDataObject`, `filteredData`, etc.), or using `.` to separate words (`my.data.object`, `filtered.data`, etc.). I strongly recommend *against* using periods to separate words. In this class it most likely won't come up, but `R` often uses `.` in internal functions, and as you advance in your programming abilities it may become an issue. Better to not make bad habits from the beginning then try to break them later.  
 
 Also remember long names require more typing so brevity is a good rule of thumb. Names also cannot start with a number and `R` is case-sensitive so, for example, `Apple` is **not** the same as `apple`.  
 
@@ -121,11 +126,13 @@ The console is useful for doing simple tasks but as our analyses become more com
 
 Instead of using the console, most of our work will be done using scripts. Scripts are special files that us to write, save, and run many lines of code. Scripts can be saved so you can work on them later or send them to collaborators.  
 
-To create a script, click `File -> New File -> R Script`. This new file should show up in a new window. 
+To create a script, click `File -> New File -> R Script`. You can also select the white square with a green plus sign on it in the top left of Rstudio and select the `R Script` option. Finally, if you don't want to use your mouse or prefer keyboard shortcuts, you can also press `Ctrl + Shift + N` (windows) or `Cmd + Shift + N` (mac). This new file should show up in a new window. 
+
+### Shortcuts
+
+As you gain more coding experience, you may be interested in learning more shortcuts. [A full list (Windows and Mac) can be found here](https://support.posit.co/hc/en-us/articles/200711853-Keyboard-Shortcuts-in-the-RStudio-IDE)
 
 ## Commenting your code
-
-# Pick Up Here
 
 `R` will ignore any code that follows a `#`. This is *very* useful for making your code more readable for both yourself and others. Use comments to remind yourself what a newly created object is, to explain what a line of code does, to leave yourself a reminder for later, etc. For example, in the previous code, it might be a good idea to use comments to define what each object represents:
 
@@ -139,18 +146,42 @@ m2 <- 15     # Number of previously marked individuals captured on second occasi
 
 Notice that when you run this code, `R` ignores the comments. 
 
+If you need to put in a longer comment, you will need to put a `#` in front of every line. For example (don't worry about the code for now, just observe the comments):
+
+```{r Long_comment, echo = TRUE}
+# load the pre-built data set in R called "CO2"
+
+data(CO2)
+
+# what are the names of the columns?
+names(CO2)
+
+# we are only interested in the "chilled"  treatment group
+# filter out this group and save in a new object for
+# further analysis
+# also switching to lower case for easier typing
+co2_chilled <- CO2[CO2$Treatment == "chilled",]
+
+# what is the average uptake of the chilled treatment?
+mean(co2_chilled$uptake)
+```
+
+You can run the entire script by selecting "source" at the top right of the script window (recommend selecting the down arrow and choosing "source with echo"). Likewise, you can run the entire script with echo with the shortcut `Ctrl+Shift+Enter` (windows) or `Cmd+Shift+Return` (mac). 
+
+You can also run individual lines of code in the script by putting your cursor on that line and pressing `Ctrl+Enter` (windows)	 or `Cmd+Return` (mac). When you do this, your cursor automatically moves to the next line. The line-by-line method is preferred when you are working out code or trying to figure out sections, problems, etc.
+
 # Vectors
 
-So far, we have only been working with objects that store a single number. However, often it is more convenient to store a string of numbers as a single object. In `R`, these strings are called *vectors* and they are usually created by enclosing the string between `c(` and `)`:
+So far, we have only been working with objects that store a single number (called `scalars` in programming jargon). However, often it is more convenient to store a string of numbers as a single object. In `R`, these strings are called *vectors* and they are usually created by enclosing the string between `c(` and `)`:
 
-```{r echo = TRUE}
+```{r c(), echo = TRUE}
 x <- c(3,5,2,5)
 x
 ```
 
-You can also sequences of consecutive numbers in a few different ways:
+You can also store sequences of consecutive numbers in a few different ways:
 
-```{r echo = TRUE}
+```{r 1:10 and seq(), echo = TRUE}
 x <- 1:10
 x
 
@@ -158,17 +189,32 @@ x2 <- seq(from = 1, to = 10, by = 1)
 x2
 ```
 
-The `seq()` function is very flexible and useful so if you are not familiar with it, be sure to look at the help page to better understand how to use it.
+## Functions
+
+A quick note on functions in `R`. We will be using functions heavily in this class. Functions take the form of `function_name()`, where the `()` enclose the function `arguments`. So in the call above: `seq(from = 1, to = 10, by = 1)` we are saying: produce a sequence of numbers from 1 (`from = 1`) to 10 (`to = 10`), and do it for each integer (`by = 1`). **Note** that you can enter the arguments without names if you put them in the correct order: `seq(1, 10, 1)`. However, while learning I **STRONGLY** encourage you to write out the argument names. This will undoubtedly avoid lots of confusion and frustration. 
+
+The `seq()` function is very flexible and useful so if you are not familiar with it, be sure to look at the help page to better understand how to use it. for example, note the `length.out` argument. This can be useful if you want a vector of a certain length (i.e., number of values) between a minimum and maximum value, but aren't sure what `by = ?` value to use. In this case, you would leave out the `by = ` argument and only use the `length.out = ` argument. 
+
+```{r length out, echo = TRUE}
+x3 <- seq(from = 1, to = 10, length.out = 5)
+x3
+```
+
+*** 
+
+You try it - change the `seq()` call to make a vector from 1 to 20 which has 8 values, and store it as `x4`. 
+
+***
 
 Another useful function for creating vectors is `rep()`, which repeats values of a vector:
 
-```{r echo = TRUE}
+```{r rep1, echo = TRUE}
 rep(x2, times = 2)
 ```
 
 or:
 
-```{r echo = TRUE}
+```{r rep2, echo = TRUE}
 rep(x2, each = 2)
 ```
 
@@ -176,12 +222,16 @@ Be sure you notice the difference between using the `times` argument vs the `eac
 
 A vector can also contain characters (though you cannot mix numbers and characters in the same vector!):
 
-```{r echo = TRUE}
+```{r string vector, echo = TRUE}
 occasions <- c("Occasion1", "Occasion2", "Occasion3")
 occasions
 ```
 
-The quotes around “Occasion1”, “Occasion2”, and "Occasion3" are critical. Without the quotes, `R` will assume there are objects called `Occasion1`, `Occasion2` and `Occasion3`. As these objects don’t exist in `R`’s memory, there will be an error message.  
+The quotes around “Occasion1”, “Occasion2”, and "Occasion3" are critical. Without the quotes, `R` will assume there are objects called `Occasion1`, `Occasion2` and `Occasion3`. As these objects don’t exist in `R`’s memory, there will be an error message.
+
+***
+You try it - modify the code above removing the `" "` around the different occassions within the `( )`. What does the Error message tell you?
+***
 
 Vectors can be any length (including 1. In fact, the numeric objects we've been working with are just vectors with length 1). The function `length()` tells you how long a vector is:
 
@@ -198,14 +248,20 @@ class(occasions)
 
 What is the class of a vector with both numeric and characters entries? Hint:
 
-```{r echo = TRUE}
+```{r mixed vector, echo = TRUE}
 mixed <- c(1, 2, "3", "4")
 ```
+
+Print out the `mixed` object in the console. What does it look like? What happend to the `numbers` and the `characters` in the vector?
 
 You can also use the `c()` function to add other elements to your vector:
 
 ```{r echo = TRUE}
-y <- c(x, 4,8,3)
+# first, recal what value you stored in "x"
+x
+
+# now make a new vector y, with x and other numbers
+y <- c(x, 4, 8, 3)
 ```
 
 Vectors are one of the many data structures that `R` uses. Other important ones are lists (`list()`), matrices (`matrix()`), data frames (`data.frame()`), factors (`factor()`) and arrays (`array()`). We will learn about each of those data structures as we encounter them in lab exercises. 
@@ -273,7 +329,7 @@ tick %>%
 What is the total number of ticks recorded in the study? For that, we can use the built-in `sum()` function:
 
 ```{r echo = TRUE}
-ticks <- c(4,7,2,3,150)
+ticks <- c(4, 7, 2, 3, 150)
 
 sum(ticks)
 ```
@@ -293,7 +349,7 @@ var(ticks)
 
 ### Arguments
 
-Every function takes a different set of arguments and in many cases you will need to look up what those arguments are. The best way to get help for a specific function is to type a question mark followed by the function name, which will bring up a help page in the bottom right panel. For example, the `round` function rounds a number to a specified number of decimal places. This is a useful function when we don't want to print a really large number of digits:
+Every function takes a different set of arguments and in many cases you will need to look up what those arguments are. The best way to get help for a specific function is to type a question mark followed by the function name, which will bring up a help page in the `Help` tab in R studio. For example, the `round` function rounds a number to a specified number of decimal places. This is a useful function when we don't want to print a really large number of digits:
 
 ```{r help, eval = FALSE, echo = TRUE}
 ?round
@@ -318,14 +374,20 @@ Although you don't have to name arguments, it’s a good idea to get in the habi
 
 ## Indexing vectors
 
-Often you will need to work with just a subset of a vector. For example, maybe you have a vector of plant biomass measured along transects but you only need 
+Often you will need to work with just a subset of a vector. For example, maybe you have a vector of plant biomass measured along transects but you only need the third observation:
+
+```{r echo = TRUE}
+y <- c(2, 4, 8, 4, 25)
+y[3]
+```
+
+Notice that to index certain elements of the vector `y`, we use square brackets `[]`. Inside those brackets, we provided *an integer* to refer to the position of elements in the vector. The indexing vector can be more than length = 1, but to do that we need to group them using the `c()` function. For example, let's say we wnated the 1st and the third observation in a vector:
 
 ```{r echo = TRUE}
 y <- c(2, 4, 8, 4, 25)
 y[c(1,3)]
 ```
 
-Notice that to index certain elements of the vector `y`, we use square brackets. Inside those brackets, we provided *an integer vector*, where each integer refers to the position of elements in the first vector. The indexing vector can be any length (including 1). 
 
 We can also index vectors using *a logical vector*. A logical vector is a special type of object that contains values of `TRUE` or `FALSE`. When using a logical vector for indexing, the logical vector indicates which elements to keep (`TRUE`) or remove (`FALSE`) from the original vector. For this reason, the indexing vector must be same length as the focal vector; i.e., `length(a) == length(v)`
 
@@ -356,13 +418,15 @@ y[c(5,4,3,2,1)]
 
 One of `R`'s primary strengths is the large number of *packages* available to users. Packages are units of shareable code and data that have been created by other `R` users. We have already seen the built-in functions that `R` comes with. Packages allow users to share lots and lots of other functions that serve specific purposes. Packages also allow users to share [data sets](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/00Index.html). There are packages for cleaning data, visualizing data, making maps, fitting specialized models, and basically anything else you can think of. 
 
-Accessing the code in a package first requires installing the package. This only needs to be done once per computer and is usually done using the `install.packages()` function:
+Accessing the code in a package first requires installing the package. This only needs to be done **once per computer** and is usually done using the `install.packages()` function:
 
 ```{r eval = FALSE}
 install.packages("devtools")
 ```
 
-Note that the name of the package (in this case `devtools`) must be in quotation marks. Packages installed using `install.packages()` are stored in a centralized repository called CRAN (Comprehensive R Archive Network). Once `devtools` (or any package) is installed on your computer, you do not need to re-run the `install.packages()` function unless you re-install/update `R` or need to update the package to a newer version. 
+Note that the name of the package (in this case `devtools`) must be in quotation marks. Packages installed using `install.packages()` are stored in a centralized repository called CRAN (Comprehensive R Archive Network). Once `devtools` (or any package) is installed on your computer, you do not need to re-run the `install.packages()` function unless you re-install/update `R` or need to update the package to a newer version.
+
+**Note** if you will be using your own personal laptop for this course, you will only need to run the `install.packages()` function once. However, if you will be using the department laptops in class, and then a desktop computer at home or in the library, computer labs, etc., you will need to run `install.packages()` the first time you use each computer. Likewise, if you are using university computers in the library or computer labs, you may need to `install.packages()` each time you log on (it's unclear if the University IT security procedures will remove these regularly or not). 
 
 Installing a package does not automatically make the functions from that package available in a given `R` session. To tell `R` where the functions come from, you must *load* the package using the `library()` function:
 
@@ -372,7 +436,7 @@ library(devtools)
 
 Unlike `install.packages()`, `library()` must be re-run each time you open `R`. Most people include a few calls to `library()` at the beginning of each script so that all packages needed to run the code are loaded at the beginning of the script. 
 
-Occasionally, some packages are stored in other places (e.g., github). These packages can be installed using different functions. For example, I created a package for this course that contains small data sets we will use in labs throughout the semester. The package is stored on github and can be installed by running:
+Occasionally, some packages are stored in other places (e.g., github). These packages can be installed using different functions. For example, this course is largely based on a course created by Clark Rushing at the University of Georgia. He created a package for the course that contains small data sets which we will use in labs throughout the semester. His package is stored on github and can be installed by running:
 
 ```{r eval = FALSE}
 install_github("RushingLab/FANR6750")
@@ -384,7 +448,7 @@ Note that the `install_github()` function is from the `devtools` package so you 
 
 So far, we have only discussed one particular class of `R` object - vectors. Vectors hold a string of values as a single object. Although useful for many applications, vectors are limited in their ability to store multiple types of data (numeric and character).  
 
-This is where data frames become useful. Perhaps the most common type data object you will use in `R` is the data frame. Data frames are tabular objects (rows and columns) similar in structure to spreadsheets (think Excel or GoogleSheets). In effect, data frames store multiple vectors - each column of the data frame is a vector. As such, each column can be a different class (numeric, character, etc.) but all values within a column must be the same class. Just as the first row of an Excel spreadsheet can be a list of column names, each column in a data frame has a name that (hopefully) provides information about what the values in that column represent.  
+This is where data frames become useful. Perhaps the most common type data object you will use in `R` is the data frame. Data frames are tabular objects (rows and columns) similar in structure to spreadsheets (think Excel or GoogleSheets). In effect, data frames store multiple vectors - each column of the data frame is a vector. As such, each column can be a different class (numeric, character, etc.) but all values within a column must be the same class. Just as the first row of an Excel spreadsheet can be a list of column names, each column in a data frame has a name that (hopefully) provides information about what the values in that column represent. The names of columns in data frames are often referred to as `variables` while the rows are generally referred to as `observations`.   
 
 To see how data frames work, let's load a data frame called `jayData` that comes with the `FANR6750` package. 
 
@@ -411,22 +475,28 @@ head(jayData)
 tail(jayData)
 ```
 
-We can see that `jayData` contains eight columns: `x`, `y`, `elevation`, `forest`, `chaparral`, `habitat`, `seeds`, and `jays`. We'll learn more about what each of these columns represents later in the semester, though just like functions, many data sets have help pages also and you can access those help pages using `?jayData`. 
-Several other useful functions for investigating the structure of data frames are `str()` and `summary()`
+We can see that `jayData` contains eight columns: `x`, `y`, `elevation`, `forest`, `chaparral`, `habitat`, `seeds`, and `jays`. We'll learn more about what each of these columns represents later in the semester. 
+Several other useful functions for investigating the structure of data frames are `names()` `str()` and `summary()`
 
 ```{r}
+
+names(jayData) 
 
 str(jayData)
 
 summary(jayData)
 ```
 
+`names()` just tells us the names of the columns (aka variables) in the data frame. We also get this information from some of the other functions, but it is often helpful to get a reminder on the column names, and the output from `names()` is easier to interpret quickly. 
+
 `str()` tells us about the structure of the data frame, for example `x` and `y`  are numeric columns and `habitat` contains character strings. `summary()` provides some simple summary statistics for each variable. 
 
-Another useful function is `nrow()`, which tells us now many rows are in the data frame (similar to `length()` for vectors):
+Other useful functions are `dim()`, `nrow()` and `ncol()`, which tells us the dimensions (number of rows and columns, in that order) number of columns, and how many rows are in the data frame (similar to `length()` for vectors):
 
 ```{r}
+dim(jayData)
 nrow(jayData)
+ncol(jayData)
 ```
 
 ### Subsetting data frames
@@ -450,7 +520,7 @@ jayData$jays
 
 Notice that if you hit `tab` after you type the `$`, RStudio will bring up all of the columns and you can use the up or down buttons to find the one you want. 
 
-Sometimes you may want to select more than one column. The easiest way to do that is to use the `select()` function in the `dplyr` package:
+Sometimes you may want to select more than one column. The easiest way to do that is to use the `select()` function in the `dplyr` package. Remember to run `install.packages("dplyr")` before the `library(dplyr)` call below if this is you're first time using the `dplyr` package on the computer you are using. 
 
 ```{r}
 library(dplyr)
@@ -458,6 +528,13 @@ library(dplyr)
 head(select(.data = jayData, x, y, jays))
 
 ```
+
+**Quick note** I used the `head()` function around the `select()` function above to shorten the display of the `jayData` to save room. Nesting functions like this (`head(select(...))`) can be very useful. However, it can also be confusing because you have to read the functions "inside out". Likewise it can be easy to miss or add additional `()` to either the beginning or the end of the function call. To help reduce this risk, I recommend turning on "rainbow brackets":
+1. Open Global Options from the Tools menu
+2. Select Code -> Display
+3. Enable the Rainbow Parentheses option at the bottom
+
+Back to the `select()` function... 
 
 Notice that select requires us to first provide the data frame object (`.data = jayData`) and then we provide the column names (unquoted!) we want to select. You can also use select to remove columns:
 
@@ -469,7 +546,9 @@ head(select(.data = jayData, -seeds))
 
 It's important to realize that even though there are different ways to accomplish the same general task (in this case, "subset columns of a data frame"), those methods will sometimes differ in subtle but important ways. 
 
-For example, what type of object did the `data.frame[,col#]` and `data.frame$column.name` options return? What type of object did `select(data.frame, col1, col2)` return? Those are very different results and knowing what the output will be can be useful when deciding the best way to accomplish your task.  
+For example, what type of object did the `data.frame[,col#]` and `data.frame$column.name` options return? What type of object did `select(data.frame, col1, col2)` return? Modify the code above by nesting it into the `class()` function to see what type of objects they are. 
+
+Those are very different results and knowing what the output will be can be useful when deciding the best way to accomplish your task.  
 
 ***
 
@@ -484,8 +563,10 @@ jayData[1,]
 If we want more than one row, we just put in a vector with all of the rows we want:
 
 ```{r}
+# rows 1 and 2
 jayData[1:2,]
 
+# rows 1 and 30
 jayData[c(1,30),]
 ```
 
@@ -501,15 +582,75 @@ Sometimes, we may not know the specific row number(s) we want but we do know the
 head(filter(jayData, habitat == "Oak"))
 ```
 
-Notice the need for two equals signs (`==`) when telling `R` we want the row where `habitat` equals `Oak`. Filter makes it very easy to select multiple rows using operators like greater than, less than, etc. 
+Notice the need for two equals signs (`==`) when telling `R` we want the row where `habitat` equals `Oak`. A related task might be to filter out all the rows *that are not* `Oak`. In this case we would use the `!=` operator which can be read "is not equal to":
+
+```{r}
+head(filter(jayData, habitat != "Oak"))
+```
+
+Filter makes it very easy to select multiple rows using operators like greater than, less than, etc. 
 
 ```{r}
 head(filter(jayData, elevation > 1000))
 ```
 
-or a slightly more complicated example:
+It is also possible to use the "or" operator (`|`) when we want to select observations which meet different values. For example, we want observations of less than 800 *OR* > 1200:
+
+```{r}
+head(filter(jayData, elevation < 800 | elevation > 1200))
+```
+
+We can also filter out observations based on multiple columns using the "and" (`&`) operator. For example, we want the rows which have an elevation less than 1000, **AND** are in the Oak habitat:
 
 ```{r}
 head(filter(jayData, elevation < 1000 & habitat == "Oak"))
 ```
 
+# Assignment Formats: R Scripts
+
+For your assignments, you will be writing R scripts with comments and code which solve problems and answer questions. You will submit your R scripts on D2L. I will download all the scripts and run them in RStudio on my computer to check your work. Therefore, you will need to follow strict assignment formatting rules. 
+
+## File Names
+
+Each assignment should follow this naming convention:
+
+full_name_hw#
+
+For example: justin_pomeranz_hw1
+
+You can capitalize words in the file name if you choose, but it should follow the general convention above. 
+
+## File format
+
+* Comment before each problem, and each sub-problem
+* Make sure your results print out on `Source with echo`
+  + If you're answer is saved in an object, make sure you print out that object afterwars
+  + for example, see the `volume` as the last line of the example below
+
+```{r assignment format, eval = FALSE}
+# Problem 1
+
+# 1.1
+2+2
+
+# 1.2
+2 - 8
+
+# problem 2
+
+width = 2
+height = 3
+length = 1.5
+volume = width * height * length
+volume
+
+```
+
+# Homework 1
+
+Create an assignment script, put it in your class folder and name it according to the convention above. 
+
+* We are going to get a feel for this by working through some exercises together. 
+* In class we will often only do part of an exercise and save the rest for later or for you to do on your own. 
+
+See the homework 1 file for exercise descriptions. 
