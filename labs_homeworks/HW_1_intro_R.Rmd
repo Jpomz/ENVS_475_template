@@ -41,7 +41,7 @@ You can capitalize words in the file name if you choose, but it should follow th
 # Problem 1
 
 # 1.1
-2+2
+2 + 2
 
 # 1.2
 2 - 8
