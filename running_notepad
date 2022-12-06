@@ -1,3 +1,7 @@
 running notes
 
 make "script_format" markdown file
+
+make new assignment for dplyr (if keeping)
+- focus on stats
+- group_by(), summarize(), etc.
