@@ -5,3 +5,15 @@ make "script_format" markdown file
 make new assignment for dplyr (if keeping)
 - focus on stats
 - group_by(), summarize(), etc.
+- use terui lab tutorial
+- modify to include things we've already discussed in class
+-- make a distribution plot
+-- histogram / boxplot
+- move dplyr to week 3
+- distributions to week 4
+
+Make assignment match updated dplyr tutorial. Find other built-in data set to play with -- shrub_volume_data [no]
+marine data setd: https://ourcodingclub.github.io/tutorials/data-manip-creative-dplyr/#ii
+
+
+re download ggplot data sets and name them correctly

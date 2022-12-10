@@ -28,7 +28,7 @@ A common workflow used by many novice R users goes something like this:
 
 ```{r, eval = FALSE}
 rm(list = ls())
-setwd("C:\Users\crushing\path\that\only\I\have")
+setwd("C:\Users\pomeranz\path\that\only\I\have")
 
 library(package1)
 library(package2)
@@ -180,7 +180,7 @@ ENVS_475/
 |─── data/
       |─── acid_mine_hw6.csv
       |─── clear_cut_2_hw8.rds
-      |─── uhuru_acacia_lab2.csv
+      |─── uhuru_acacia_lab2.txt
 |─── scripts/
       |─── lab1_intro_R.R
       |─── lab2_ggplot.R
