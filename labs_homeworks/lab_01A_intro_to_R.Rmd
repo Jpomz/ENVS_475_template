@@ -68,7 +68,9 @@ Let's try it - in the Console, write the `R` code required to add two plus two a
 
 When you run the code, you should see the answer printed below the window. Play with your code a bit - try changing the number and the operators and then run the code again.  For example, try multiplying with `*`, division with `/`, and exponents with `^` or with `**`. Also, play around with order of operations and the use of `()` in your basic expressions. 
 
-## Creating objects
+## Objects
+
+### Scalars
 
 We can run `R` like a calculator by typing equations directly into the console and then printing the answer. But usually we don't want to just do a calculation and see the answer. Instead, we assign *values* to *objects*. That object is then saved in `R`'s memory which allows us to use that object later in our analysis. 
 
@@ -101,11 +103,20 @@ We can also use objects to create new objects. *What do you think the following 
 
 ```{r multx, echo=TRUE}
 x <- 3
-y <- x*4
+y <- x  *4
 ```
 
 After running it, print the new object `y` to see its value. Were you right?
 
+We can do more complex manipulations and give our variables meaningful names. For example, perhaps we are doing surveys of nesting birds and want to get an estimate on the total weight of eggs in a nest. Let's say we have 6 eggs in a nest, and each egg weighs an average of 14 grams. Note that the last line is the name of the object that we created. We include this line of code so that R sill tell us the value of that object. 
+```{r more-objects, echo=TRUE}
+
+no_eggs <- 6
+egg_mass_g <- 14
+egg_mass_total <- no_eggs * egg_mass_g
+egg_mass_total
+
+```
 ## Naming objects
 
 It's a good idea to give objects names that tell you something about what the object represents. Names can be as long as you want them to be but **can not have spaces**. 
@@ -119,6 +130,72 @@ I prefer to use *snake case* where an underscore (`_`) is used to separate words
 Other options include *camelCase* where no spaces or separators are used but new words are capitalized (for example: `myDataObject`, `filteredData`, etc.), or using `.` to separate words (`my.data.object`, `filtered.data`, etc.). I strongly recommend *against* using periods to separate words. In this class it most likely won't come up, but `R` often uses `.` in internal functions, and as you advance in your programming abilities it may become an issue. Better to not make bad habits from the beginning then try to break them later.  
 
 Also remember long names require more typing so brevity is a good rule of thumb. Names also cannot start with a number and `R` is case-sensitive so, for example, `Apple` is **not** the same as `apple`.  
+
+## Built-in functions
+
+* A function is a complicated expression.
+* Command that returns a value
+
+```{r}
+sqrt(49)
+```
+
+* A function call is composed of two parts.
+    * Name of the function
+    * Arguments that the function requires to calculate the value it returns.
+    * `sqrt()` is the name of the function, and `49` is the argument.
+* We can also pass variables as the argument
+
+```{r}
+weight_lb <- 0.11
+sqrt(weight_lb)
+```
+
+* Another function that we'll use a lot is `str()`
+* All values and therefore all variables have types
+* `str`, short for "structure", lets us look at them
+
+```{r}
+str(weight_lb)
+```
+
+* Another data type is for text data
+* We right text inside of quotation makes
+
+```{r}
+"hello world"
+```
+
+* If we look at the structure of some text we see that it is type character
+
+```{r}
+str("hello world")
+```
+
+* Functions can take multiple arguments.
+    * Round `weight_lb` to one decimal place
+    * Typing `round()` shows there are two arguments
+    * Number to be rounded and number of digits
+
+```{r}
+round(weight_lb, 1)
+```
+
+* Functions return values, so as with other values and expressions, if we don't save the output of a function then there is no way to access it later
+* It is common to forget this when dealing with functions and expect the
+  function to have changed the value of the variable
+* But looking at `weight_lb` we see that it hasn't been rounded
+
+```{r}
+weight_lb
+```
+
+* To save the output of a function we assign it to a variable.
+
+```{r}
+weight_rounded <- round(weight_lb, 1)
+weight_rounded
+```
 
 ## Using scripts instead of the console
 
