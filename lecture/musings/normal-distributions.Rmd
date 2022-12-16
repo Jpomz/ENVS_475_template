@@ -1,0 +1,159 @@
+---
+title: "Normal Distributions"
+author: "Justin Pomeranz"
+date: "`r format(Sys.time(), '%B, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+# Normal Distributions
+
+## Why do we care about how numbers are distributed?
+
+Let's stop and take a step back. What is the purpose of statistics? Well, there're lots of reasons for statistics. But the one that I most often think of is "what should we expect to see when we measure something?" What values are normal (expected)? What values are *unexpected*? 
+
+Let's take an example. If I asked you what the average height of a human being is, you'd probably have an answer. Maybe somewhere between 5'6" and 5'10" (167-178 cm) depending on if you were thinking about averages within or among the sexes. Perhaps you're estimate would be slightly different if you were from a place where most people are taller or shorter than the average. However, I'm willing to bet (and I'm not even a betting man) that you *didn't* say the average around the world was 4 or 7 feet (122 or 213 cm). Meeting someone who is 4 or 7 feet may not surprise you that much, but meeting someone who was 2 or 10 feet (61 or 305 cm) would likely be very suprising (excepting of course children on the low end of the scale). 
+
+This is where understanding how numbers are distributed comes in really handy. All of us probably have a decent idea of how tall we would expect a new person we meet would be. We might not know *exactly* how tall a new acquaintance will be, but there are certain heights which would surprise us. This is essentially true for anything we might want to measure: the number of plants in a field; the biomass of trees in a forest; the amount of CO~2~ emitted from burning a gallon of gas. Most of us probably have very little idea of what we should expect if we measured these. If you burned a gallon of gas and measured 10,000 grams of Carbon, would you be surprised? Flabbergasted? Pretty chill about it? 
+
+## Describing the Normal Distribution
+
+The normal distribution, also called a Gaussian distribution, or the "bell curve" is probably somewhat familiar to you. It is a symmetric distribution that is centered near the mean or average. The mean is generally  represented with the greek letter $\mu$ (mu). 
+
+```{r, echo=FALSE}
+x1 <- rnorm(10000, 8887, 500)
+ggplot(data.frame(x = x1), aes(x)) +
+  geom_density() +
+  labs(x = "co2") +
+  theme_bw()
+```
+
+How wide the bell curve is is described by its standard deviation. The standard deviation is generally represented with the greek letter $\sigma$ (sigma)
+
+```{r, echo=FALSE}
+x2 <- rnorm(10000, mean = 8887, sd = 100)
+df <- data.frame(x = c(x1, x2),
+                 grp = rep(c("big SD", "small SD"), each = 10000))
+
+ggplot(df, aes(x = x,
+               group = grp,
+               fill = grp)) +
+  geom_density(alpha = 0.5) +
+  labs(x = "co2") +
+  theme_bw() 
+```
+
+Another important aspect of the standard deviation, is that multiples of it describe where different majorities of the data lie. For example, the mean + and - 1 standard deviation contains about 68% of the total observations ($\mu \pm \sigma$). Likewise, 95% of the observations are within 2 standard deviations ($\mu \pm 2\sigma$) and 99.7% are within 3 standard deviations ($\mu \pm 3\sigma$). This can be represented on a graph as so:
+(credit to Open Intro Statistics)
+![figure ](fig-6895997.pdf)
+
+Let's return to our example of measuring 10,000 grams of CO~2~ from burning 1 gallon of gas. Let's say that the grams of CO~2~ from 1 gallon of gas can be described as being normally distributed with a mean of 8887, and a standard deviation of 500 [^1].
+
+Mathematically, we would write this as: $$CO_{2} \sim {Normal}(\mu = 8,887,~ \sigma = 500)$$ 
+
+[^1]:(The mean estimate of 8,887 grams was taken from the US [EPA website](https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle#:~:text=Every%20gallon%20of%20gasoline%20burned%20creates%20about%208%2C887%20grams%20of%20CO2.) and the standard deviation of 500 grams was made up because I couldn't find a good estimate online.)
+
+We can plot a normal distribution described with a mean of 8,887 and a standard deviation of 500 and draw an arrow to show where our measurement of 10,000 lands:
+
+```{r, echo=FALSE}
+ggplot(data.frame(x = x1), aes(x)) +
+  geom_density() +
+  labs(x = "co2") +
+  theme_bw() +
+  annotate("segment",
+           x = 10000,
+           xend = 10000,
+           y = 2e-04,
+           yend = 0,
+           color = "red",
+           arrow = arrow(length = unit(0.05, "npc")))
+```
+
+Based on this information, we might think that an observation of 10,000 grams of CO~2~ might be pretty unlikely. We can go a step further, however, and measure the exact probability of getting a measurement at this magnitude. 
+
+For this, we can use some functions built in to R to describe the normal distribution. These functions are `dnorm()`, `pnorm()` and `qnorm()`. 
+
+## Normal Distribution functions
+
+Notice that all three functions have the form of `_norm()` which indicates that we are working with a normal distribution. The `_` is either a `p`, `d`, or `q`, which gives us different functions of the normal distribution according to the following:
+
+* `d` = density function
+
+* `p` = probability distribution function
+
+* `q` = quantile function
+
+Each of these are used to answer a specific question. 
+
+* `dnorm()`: what is the probability of sampling a specific number?
+
+* `pnorm()`: what is the probability of sampling *up to* a specific number?
+
+* `qnorm()`: what number represents a specific quantile of the data?
+
+
+So, what is the probability of measuring exactly 10,000 from our distribution?
+```{r}
+dnorm(10000, mean = 8887, sd = 500)
+```
+That is a vanishingly small number. I guess we should be flabbergasted by this measurement. But let's take a step back, that is the probability of measuring *exactly* 10,000 grams of CO~2~. The probability of measuring any number exactly is usually pretty small, even the average:
+
+```{r}
+dnorm(8887, mean = 8887, sd = 500)
+```
+That's only a 0.08% chance of measuring the mean. 
+
+Usually, we're interested in the probability of getting an observation smaller or greater than our value of interest. For example, what's the probability of measuring up to 10,000 grams of CO~2~?
+```{r}
+pnorm(10000, mean = 8887, sd = 500)
+```
+98% chance. Or, in other words, 98% of the data is *smaller* than 10,000. 
+
+We could also look at the probability of measuring more than 10,000 grams of CO~2~ by modifying the code in 2 ways:
+
+```{r}
+# first way
+1 - pnorm(10000, mean = 8887, sd = 500)
+pnorm(10000, mean = 8887, sd = 500, lower.tail = FALSE)
+```
+
+What value is at a given quantile of the data?
+```{r}
+qnorm(0.9, mean = 8887, sd = 500)
+
+```
+
+## Z-scores
+
+Standardize using z-scores. 
+
+$$z = \frac{x_{i} - \mu} {\sigma}$$
+
+0 = mean
++1 = 1 SD greater than the mean
++2 = 2 SD greater than the mean
++3 = 3 SD greater than the mean
+-1 = 1 SD less than the mean
+-2 = 2 SD less than the mean
+-3 = 3 SD less than the mean
+
+```{r}
+(10000 - 8887) / 500
+```
+
+### Homework
+GRE and Triathlon times from SP22 folder
+Lab 1 and 2 (cannibalize) from [OI biostat]( https://www.openintro.org/book/statlabs/?labblock=biostat_random_variables)
+
+[CH4 Lab 3](https://github.com/OI-Biostat/oi_biostat_labs/blob/master/04_inference_intro/03_hypothesis_testing/03_hypothesis_testing_handout.pdf) has how to access adult sleep data. Maybe a good one?
+
+
+```{r}
+plot(density(airquality$Wind))
+mean(airquality$Wind)
+sd(airquality$Wind)
+```
