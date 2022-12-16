@@ -35,8 +35,8 @@ You can capitalize words in the file name if you choose, but it should follow th
 
 * Comment before each problem, and each sub-problem
 * Make sure your results print out on `Source with echo`
-  + If you're answer is saved in an object, make sure you print out that object afterwars
-  + for example, see the `volume` as the last line of the example below
+  + If you're answer is saved in an object, make sure you print out that object afterwards
+  + for example, see that `volume` is on the last line of the problem 2 example below
 
 ```{r assignment format, eval = FALSE}
 # Problem 1

@@ -1,0 +1,74 @@
+---
+title: "Homework 2: Normal Distributions"
+subtitle: "ENVS475: Experimental Analysis and Design"
+date: "`r format(Sys.time(), '%B, %Y')`"
+output: 
+  html_document:
+    toc: true
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+   warning = FALSE, message = FALSE,
+   eval = FALSE,
+   fig.align = 'center', fig.retina = 2,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Exercises
+
+In your homework script, make sure to include comments using the `#` for each problem and subproblem. For example:
+```{r}
+# Exericise 1
+# 1.a
+qnorm(0.9, mean = 0, sd = 1)
+# 1.b
+dnorm(3, mean = 10, sd = 4)
+```
+
+
+### 1. Standard Normal Distribution (10 points)
+
+Recall that the standard normal distribution has a `mean = 0` and `sd = 1`. Use these values to answer the following questions. 
+
+You do not need to turn in your sketches of the distributions for credit, but you are stongly encouraged to draw these out to help check your answers. 
+
+a. What is the probability of getting an observation of exactly 1.25?
+b. What is the probability of getting an observation of exactly -0.33?
+c. What is the probability of getting an observation of exactly 2.9?
+d. What is the probability of getting an observation of less than 2.5?
+e. What is the probability of getting an observation of less than -0.9?
+f. What is the probability of getting an observation of greater than -1?
+g. What is the probability of getting an observation between 1.4 and 3.5?
+h. What value represents the 10th percentile of this distribution?
+i. What value represents the 95th percentile of this distribution?
+j. What value represents the 5th percentile?
+
+### 2. Normal Distribution: Age at childbirth (7 points)
+
+In the last decade, the average age of a mother at childbirth is 26.4 years, with standard deviation 5.8 years. The distribution of age at childbirth is approximately normal. 
+
+a. What age at childbirth puts a woman in the upper 2.5\% of the age distribution? In other words, what is the 97.5 percentile of this age distribution?
+b. What proportion of women who give birth are 21 years of age or older?
+c. What is the probability that a woman will have a child at exactly 32.8 years old?
+d. What is the probability that a woman will have a child between the ages of 18 and 22?
+e. What is the probability that a woman will give birth at exactly the mean age of this distribution?
+f. What values bound the range 95% of the data?
+g. How many standard deviations (i.e., Z-score) from the mean is a woman who gives birth at the age of 35?
+  
+### 3. Triathlon times. (8 points)
+
+In triathlons, it is common for racers to be placed into age and gender groups. The finishing times of men ages 30-34 has mean of 4,313 seconds with a standard deviation of 583 seconds. 
+The finishing times of the women ages 25-29 has a mean of 5,261 seconds with a standard deviation of 807 seconds. The distribution of finishing times for both groups is approximately normal. Note that a better performance corresponds to a faster finish.
+
+a. If a man of the 30-34 age group finishes the race in 4,948 seconds, what percent of the triathletes in the group did he finish faster than?
+b. If a woman of the 25-29 age group finishes the race in 5,513 seconds, what percent of the triathletes in the group did she finish faster than?
+c. Calculate the cutoff time for the fastest 5% of athletes in the men’s group.
+d. Calculate the cutoff time for the slowest 10% of athletes in the women’s group.
+e. What is the standardized Z-score for a man that finishes in 4,460 seconds?
+f. What is the standardized Z-score for a woman that finishes in 5,105 seconds?
+g. Compare the Z-scores calculated in part e and f. Which person performed better based on their age and gender group? **note** be sure to put a comment in front of the text for your explanation to part g. 
+h. What is the probability that a man will finish between 4,500 and 5,000 seconds?
+

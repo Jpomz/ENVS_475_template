@@ -2,7 +2,11 @@
 title: "Normal Distributions"
 author: "Justin Pomeranz"
 date: "`r format(Sys.time(), '%B, %Y')`"
-output: html_document
+output: 
+  html_document:
+    toc: TRUE
+    toc_depth: 2
+    fig.align: 'center'
 ---
 
 ```{r setup, include=FALSE}
@@ -24,17 +28,13 @@ This is where understanding how numbers are distributed comes in really handy. A
 
 The normal distribution, also called a Gaussian distribution, or the "bell curve" is probably somewhat familiar to you. It is a symmetric distribution that is centered near the mean or average. The mean is generally  represented with the greek letter $\mu$ (mu). 
 
-```{r, echo=FALSE}
-x1 <- rnorm(10000, 8887, 500)
-ggplot(data.frame(x = x1), aes(x)) +
-  geom_density() +
-  labs(x = "co2") +
-  theme_bw()
-```
+### different distirbutions here
+
 
 How wide the bell curve is is described by its standard deviation. The standard deviation is generally represented with the greek letter $\sigma$ (sigma)
 
 ```{r, echo=FALSE}
+x1 <- rnorm(10000, 8887, 500)
 x2 <- rnorm(10000, mean = 8887, sd = 100)
 df <- data.frame(x = c(x1, x2),
                  grp = rep(c("big SD", "small SD"), each = 10000))
@@ -47,17 +47,51 @@ ggplot(df, aes(x = x,
   theme_bw() 
 ```
 
-Another important aspect of the standard deviation, is that multiples of it describe where different majorities of the data lie. For example, the mean + and - 1 standard deviation contains about 68% of the total observations ($\mu \pm \sigma$). Likewise, 95% of the observations are within 2 standard deviations ($\mu \pm 2\sigma$) and 99.7% are within 3 standard deviations ($\mu \pm 3\sigma$). This can be represented on a graph as so:
-(credit to Open Intro Statistics)
-![figure ](fig-6895997.pdf)
+Another important aspect of the standard deviation, is that multiples of it describe where different majorities of the data lie. For example, the mean + and - 1 standard deviation contains about 68% of the total observations ($\mu \pm \sigma$). Likewise, 95% of the observations are within 2 standard deviations ($\mu \pm 2\sigma$) and 99.7% are within 3 standard deviations ($\mu \pm 3\sigma$). This is called the Empirical Rule and can be represented in a graph as so:
+
+
+![The Empirical Rule. (image credit Open Intro Statistics)](68-95-997.png){width=70%}
+
+When working with normal distribution problems, one of the first things you should do is sketch a graph. Draw a bell curve on a number line. Make sure to center the curve at the mean, and then write out a couple of standard deviations to either side. For example, if we have a normal distribution with `mean = 10` and `sd = 2`, you should immediately draw out something like this: 
+
+![rough sketc](sketch.png)
+The curve is centered at our mean of 10, and I added a few marks indicating 1 and 2 standard deviations away from the mean: $10 \pm 2$ and $10 \pm 2*2$. 
+
+Then, you can quickly sketch where a give observation would fall on the distribution. For example, if we had an observation of 9.7 and 13, I would quickly add them to the sketch:
+
+![Sketch with observations](sketch-obs.png)
+Doing this can be a quick estimate of where the observations fall, and can help us to check our answers. 
+
 
 Let's return to our example of measuring 10,000 grams of CO~2~ from burning 1 gallon of gas. Let's say that the grams of CO~2~ from 1 gallon of gas can be described as being normally distributed with a mean of 8887, and a standard deviation of 500 [^1].
 
 Mathematically, we would write this as: $$CO_{2} \sim {Normal}(\mu = 8,887,~ \sigma = 500)$$ 
 
+Using this information, let's apply the empirical rule to quickly write out the values that bound 68% of the data. Recall that 68% of the data falls within 1 SD of the mean. In R we could calculate this in a couple of different ways::
+
+```{r}
+# lower bound; mean - sd
+8887 - 500
+# upper bound; mean + sd
+8887 + 500
+
+# combine it in one line using c()
+c(8887 - 500, 8887 + 500)
+```
+
+A graph of the full distribution would look something like this (note that I'm switching to graphics made in R for accuracy, but when you are working on problems a quick sketch by hand can do wonders)" 
+
+```{r, echo=FALSE}
+ggplot(data.frame(x = x1), aes(x)) +
+  geom_density() +
+  labs(x = "co2") +
+  theme_bw()
+```
+
+
 [^1]:(The mean estimate of 8,887 grams was taken from the US [EPA website](https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle#:~:text=Every%20gallon%20of%20gasoline%20burned%20creates%20about%208%2C887%20grams%20of%20CO2.) and the standard deviation of 500 grams was made up because I couldn't find a good estimate online.)
 
-We can plot a normal distribution described with a mean of 8,887 and a standard deviation of 500 and draw an arrow to show where our measurement of 10,000 lands:
+Now, let's add an arrow to show where our measurement of 10,000 lands:
 
 ```{r, echo=FALSE}
 ggplot(data.frame(x = x1), aes(x)) +
@@ -79,7 +113,7 @@ For this, we can use some functions built in to R to describe the normal distrib
 
 ## Normal Distribution functions
 
-Notice that all three functions have the form of `_norm()` which indicates that we are working with a normal distribution. The `_` is either a `p`, `d`, or `q`, which gives us different functions of the normal distribution according to the following:
+Notice that all three functions have the form of `_norm()` which indicates that we are working with a normal distribution. There are functions for other distributions, which we may get to later this semester. The `_` is either a `p`, `d`, or `q`, which gives us different functions of the normal distribution according to the following:
 
 * `d` = density function
 
@@ -95,55 +129,198 @@ Each of these are used to answer a specific question.
 
 * `qnorm()`: what number represents a specific quantile of the data?
 
+### Probability of an *exact* number 
 
-So, what is the probability of measuring exactly 10,000 from our distribution?
+So, what is the probability of measuring exactly 10,000 from our distribution? To do this, we use the `dnorm()` function. the first argument is the number that we are interested in `10000`. The next two arguments are named, and they are where we describe what type of normal distribution we are working with. Recall above that we said this normal distribution is described by `mean = 8887` and `sd = 500`. Putting it all together the function call looks like this:
+
 ```{r}
 dnorm(10000, mean = 8887, sd = 500)
 ```
-That is a vanishingly small number. I guess we should be flabbergasted by this measurement. But let's take a step back, that is the probability of measuring *exactly* 10,000 grams of CO~2~. The probability of measuring any number exactly is usually pretty small, even the average:
+So the probability of measuring 10,000 from this distribution is only 0.0067%. That is a vanishingly small number. I guess we should be flabbergasted by this measurement. But let's take a step back, that is the probability of measuring *exactly* 10,000 grams of CO~2~. The probability of measuring any number exactly is usually pretty small, even the average:
 
 ```{r}
 dnorm(8887, mean = 8887, sd = 500)
 ```
-That's only a 0.08% chance of measuring the mean. 
+That's only a 0.08% chance of measuring *exactly* the mean. 
 
-Usually, we're interested in the probability of getting an observation smaller or greater than our value of interest. For example, what's the probability of measuring up to 10,000 grams of CO~2~?
+### Probability of more-or-less than a value
+
+Usually, we're interested in the probability of getting an observation which is smaller or greater than our value of interest. For example, what's the probability of measuring up to 10,000 grams of CO~2~? For this, we use `pnorm()`:
+
 ```{r}
 pnorm(10000, mean = 8887, sd = 500)
 ```
-98% chance. Or, in other words, 98% of the data is *smaller* than 10,000. 
+98.7% chance. Or, in other words, 98.7% of the data is *smaller* than 10,000. 
 
-We could also look at the probability of measuring more than 10,000 grams of CO~2~ by modifying the code in 2 ways:
+The default for the `pnorm()` function measures the probability of getting *up to* our value of interest. In other words, it is measuring the area under the curve to the left of our value. 
+
+```{r area-shade-left-plot, echo=FALSE}
+breaks <- c(-Inf, 10000, Inf)
+ggplot(data.frame(x = x1), aes(x)) +
+  geom_density() +
+  scale_fill_manual(values = c("dodgerblue", "grey")) +
+  stat_density(
+    n = 500,
+    geom = "area",
+    colour = "black",
+    aes(
+      fill = after_stat(x) %>% cut(!!breaks),
+      group = after_scale(fill)
+    )
+  ) +
+  #scale_y_continuous(limits = c(0,0.8e-02)) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  labs(title = "Area shaded to the left of our value (in blue)")
+```
+
+What if we wanted to look at the area under the curve to the right of our value? Or what the probability of measuring a value greater than our value of interest?
+
+```{r area-shade-right-plot, echo=FALSE}
+breaks <- c(-Inf, 10000, Inf)
+ggplot(data.frame(x = x1), aes(x)) +
+  geom_density() +
+  scale_fill_manual(values = c("grey", "dodgerblue")) +
+  stat_density(
+    n = 500,
+    geom = "area",
+    colour = "black",
+    aes(
+      fill = after_stat(x) %>% cut(!!breaks),
+      group = after_scale(fill)
+    )
+  ) +
+  #scale_y_continuous(limits = c(0,0.8e-03)) +
+  theme_bw() +
+  theme(legend.position = "none")+
+  labs(title = "Area shaded to the right of our value (in blue)")
+```
+
+We can calculate this probability by modifying our code in 2 ways. 
 
 ```{r}
 # first way
 1 - pnorm(10000, mean = 8887, sd = 500)
+# second way
 pnorm(10000, mean = 8887, sd = 500, lower.tail = FALSE)
 ```
 
-What value is at a given quantile of the data?
-```{r}
-qnorm(0.9, mean = 8887, sd = 500)
+In the first example, we take advantage of the fact that the entire area under the curve has to sum to 1. This is because the complete area under the curve represents 100% of all probabilities. So since our original code was calculating the area to the left, then the area to the right has to be equal to one minus that area. 
 
+In the second way, we add an argument `lower.tail = FALSE` to change the default of `pnorm()`, and have it measure the area to the right. 
+
+We can combine this information to calculate the probability of getting a measurement between 2 values, let's say between 9,000 and 10,000. 
+
+```{r area-shade-between-plot, echo=FALSE}
+breaks2 <- c(-Inf, 9000, 10000, Inf)
+ggplot(data.frame(x = x1), aes(x)) +
+  geom_density() +
+  scale_fill_manual(values = c("grey90", "dodgerblue", "grey50")) +
+  stat_density(
+    n = 1500,
+    geom = "area",
+    colour = "black",
+    aes(
+      fill = after_stat(x) %>% cut(!!breaks2),
+      group = after_scale(fill)
+    )
+  ) +
+  #scale_y_continuous(limits = c(0,0.8e-03)) +
+  theme_bw() +
+  theme(legend.position = "none")+
+  labs(title = "Area shaded between values (in blue)")
 ```
+
+To calculate this, we need to make two calls using the `pnorm()` function. In the first, we calculate the probability from the left to our maximum value of interest: `pnorm(10000, mean = 8887, sd = 500)`. This gives us the area of the light grey (to the left) and the blue shaded regions in the figure above. 
+
+Then, we need to calculate the area of the lighter grey region using `pnorm(9000, mean = 8887, sd = 500)` and subtract that from the area calculated above. In R, we would type the following:
+```{r}
+pnorm(10000, mean = 8887, sd = 500) - pnorm(9000, mean = 8887, sd = 500)
+```
+Which gives us approximately a 40% chance of observing a value between 9000 and 10,000. 
+
+### What value is a quantile of our data?
+
+We are often interested in knowing what value breaks off a specific percentage of the data. For example, above we found out the ~98.7% of our data was smaller than 10,000, but we might be interested in knowing what value marks the 95th percentile, or the 1st, or the 30th, etc. Luckily, this is exactly what the `qnorm()` function is for. Once again, this function takes our value of interest as the first argument, and then names arguments for the `mean` and `sd` which describe our distribution. 
+
+Using our example above, we can ask what specific value marks the 95th percentile: 
+```{r}
+qnorm(0.95, mean = 8887, sd = 500)
+```
+Likewise, we can supply multiple numbers in the first argument using the `c()` function. For example, if we want to know what values mark the 10th, 20th, 80th and 90th percentiles, we can enter the following: 
+```{r}
+qnorm(c(0.1, 0.2, 0.8, 0.9), mean = 8887, sd = 500)
+```
+## The Standard Normal Distribution
+
+The standard normal distribution (often call the Z-distribution) is a special case where `mean = 0`, and `sd = 1`. This distribution has a few special features which are helpful when we are thinking about data. Recall that approximately 68% of the data falls within one standard deviation of the mean, and 95% and 99.7% fall within 2 and 3 sd's respectively. Because the standard normal distribution has `sd = 1`, it makes it very easy to estimate where an observation lands within the distribution. 
+
+```{r, echo=FALSE}
+sn_int <- data.frame(
+  qnt = c("68%", "95%", "99.7%"),
+  low = c(-1, -2, -3),
+  hi = c(1, 2, 3)
+)
+knitr::kable(sn_int, "html", col.names = c("Percentage", "Min Value", "Max Value") , align = "c")
+```
+
+
+For example, if I tell you that I observed a value of 0.25 from a standard normal distribution, you can quickly surmise that it is within 68% of the data (0.25 falls within the range of `(-1, 1)`). In other words, this is an expected value which is close to the mean. 
+
+What if I told you I measured a value of -3.7 from a standard normal distribution? What would your initial thought be? If you refer back to the table, you should see that 99.7% of the data falls between `(-3, 3)`, so a value of -3.7 (i.e., less than -3) is in the extreme left tail of the distribution. 
+
+So far, we have been playing around with a (made up) distribution of CO~2~ emissions from burning a gallon of gas, which can be described with `mean = 8887` and `sd = 500`. You can use the same rules above to determine if a value is within so many SD's of the mean by using ranges of the mean minus x * the standard deviation:
+
+```{r, echo=FALSE}
+sn_co2 <- data.frame(
+  qnt = c("68%", "95%", "99.7%"),
+  low = c(8887 - 500, 8887 - 2*500, 8887 - 3*500),
+  hi = c(8887 + 500, 8887 + 2*500, 8887 + 3*500)
+)
+knitr::kable(sn_co2, "html", col.names = c("Percentage", "Min Value", "Max Value") , align = "c")
+```
+
+So if I told you I had a measurement of 7,500, you could use the above table to quickly estimate that it is somewhere within 95 to 99.7% of the data, or in the left tail of the distribution. 
+
+However this is less intuitive then using the standard normal distribution. Likewise, it requires a bit of mental math, can be time confusing and is prone to error. Luckily, there is a method for standardizing any normal distirbution into the standard normal distribution using Z-scores. 
 
 ## Z-scores
 
-Standardize using z-scores. 
+An amazing feature of normal distributions is that you can transform any one of them into a standard normal distribution. This is accomplished using the following equation:  
 
 $$z = \frac{x_{i} - \mu} {\sigma}$$
 
-0 = mean
-+1 = 1 SD greater than the mean
-+2 = 2 SD greater than the mean
-+3 = 3 SD greater than the mean
--1 = 1 SD less than the mean
--2 = 2 SD less than the mean
--3 = 3 SD less than the mean
+where $z$ is the standardized score, $x_{i}$ is the observation from your data and $\mu$ and $\sigma$ are the mean and sd of the data, respectively. 
 
+Let's calculate the standardized z-score of our CO~2~ observation. 
 ```{r}
+# observation = 10000
+# mean = 8887
+# sd = 500
 (10000 - 8887) / 500
 ```
+This value is greater than 2, so falls somewhere between the 95 and 99.7% of the data distribution. 
+
+### Comparing observations using z-scores
+
+The benefit of using z-scores becomes apparent when we want to compare observations from two different distributions. For example, let's compare student scores from two different common standardized tests: the ACT and the SAT. 
+
+The distribution of test scores on the SAT and the ACT are both nearly normal, but are on different scales. The SAT ranges from 400-1600, while the ACT ranges from 1-36. 
+
+Suppose that one student scores an 1800 on the SAT (Student A) and another student scores a 24 on the ACT (Student B). Which student performed better?
+
+- SAT scores are ${Normal}( \mu = 1500, \sigma = 300)$. ACT scores are ${Normal}(\mu = 21, \sigma = 5)$.
+
+- $x_A$ represents the score of Student A; $x_B$ represents the score of Student B.  
+
+\[Z_{A} = \frac{x_{A} - \mu_{SAT}}{\sigma_{SAT}} = \frac{1800-1500}{300} = 1 \]
+
+\[Z_{B} = \frac{x_{B} - \mu_{ACT}}{\sigma_{ACT}} = \frac{24 - 21}{5} = 0.6\]
+
+Student A has a z-score of 1, which is higher than the z-score for student B of 0.6. So student A was further away from the mean then student B and because the value was positive it's closer to the right side of the distribution. In other words, student A performed better than student B. 
+
+![SAT and ACT SCores. (image credit Open Intro Statistics)](sat-act.png){width=50%}
+
 
 ### Homework
 GRE and Triathlon times from SP22 folder
