@@ -14,24 +14,38 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
-# Normal Distributions
 
-## Why do we care about how numbers are distributed?
+# Why do we care about how numbers are distributed?
 
-Let's stop and take a step back. What is the purpose of statistics? Well, there're lots of reasons for statistics. But the one that I most often think of is "what should we expect to see when we measure something?" What values are normal (expected)? What values are *unexpected*? 
+Let's stop and take a step back. What is the purpose of statistics? Well, there're lots of reasons for statistics. But the one that I most often think of is "what should we expect to see when we measure something?" What values are normal (expected)? What values are *unexpected*? When we measure things there is often lots of *noise* or variation in the values we get. But somewhere, buried in that noise is the *signal*. Most often, we are interested in detecting the signal. 
 
-Let's take an example. If I asked you what the average height of a human being is, you'd probably have an answer. Maybe somewhere between 5'6" and 5'10" (167-178 cm) depending on if you were thinking about averages within or among the sexes. Perhaps you're estimate would be slightly different if you were from a place where most people are taller or shorter than the average. However, I'm willing to bet (and I'm not even a betting man) that you *didn't* say the average around the world was 4 or 7 feet (122 or 213 cm). Meeting someone who is 4 or 7 feet may not surprise you that much, but meeting someone who was 2 or 10 feet (61 or 305 cm) would likely be very suprising (excepting of course children on the low end of the scale). 
+Let's take an example. If I asked you what the average height of a human being is, you'd probably have an answer. Maybe somewhere between 5'6" and 5'10" (167-178 cm) depending on if you were thinking about averages within or among the sexes. Perhaps you're estimate would be slightly different if you were from a place where most people are taller or shorter than the average. However, I'm willing to bet (and I'm not even a betting man) that you *didn't* say the average around the world was 4 or 7 feet (122 or 213 cm). Meeting an individual who is 4 or 7 feet may not be overly surprising, but meeting someone who was 2 or 10 feet (61 or 305 cm) would likely be very surprising (excepting of course children on the low end of the scale). 
 
-This is where understanding how numbers are distributed comes in really handy. All of us probably have a decent idea of how tall we would expect a new person we meet would be. We might not know *exactly* how tall a new acquaintance will be, but there are certain heights which would surprise us. This is essentially true for anything we might want to measure: the number of plants in a field; the biomass of trees in a forest; the amount of CO~2~ emitted from burning a gallon of gas. Most of us probably have very little idea of what we should expect if we measured these. If you burned a gallon of gas and measured 10,000 grams of Carbon, would you be surprised? Flabbergasted? Pretty chill about it? 
+This is where understanding how numbers are distributed comes in really handy. All of us probably have a decent idea of how tall we would expect a new person we meet would be. We might not know *exactly* how tall a new acquaintance will be, but there are certain heights which would surprise us. 
 
-## Describing the Normal Distribution
+This is essentially true for anything we might want to measure: the number of plants in a field; the biomass of trees in a forest; the amount of CO~2~ emitted from burning a gallon of gas. Most of us probably have very little idea of what we should expect if we measured these. If you burned a gallon of gas and measured 10,000 grams of Carbon, would you be surprised? Flabbergasted? Pretty chill about it? 
 
-The normal distribution, also called a Gaussian distribution, or the "bell curve" is probably somewhat familiar to you. It is a symmetric distribution that is centered near the mean or average. The mean is generally  represented with the greek letter $\mu$ (mu). 
+# Describing the Normal Distribution
 
-### different distirbutions here
+The normal distribution, also called a Gaussian distribution, or the "bell curve" is probably somewhat familiar to you. It is a symmetric distribution that is centered near the mean (AKA average). The mean is generally represented with the greek letter $\mu$ (mu). $\mu$ determines where on the number line a given normal distirbution falls. For example, here are four identical normal distributions which only vary in their means, or where they occur on the number line:
 
+```{r, echo = FALSE}
+y1 <- rnorm(10000, sd = 2,mean = 0)
+y2 <- rnorm(10000, sd = 2,mean = 10)
+y3 <- rnorm(10000, sd = 2,mean = -5)
+y4 <- rnorm(10000, sd = 2,mean = -20)
 
-How wide the bell curve is is described by its standard deviation. The standard deviation is generally represented with the greek letter $\sigma$ (sigma)
+ydf <- data.frame(y = c(y1, y2, y3, y4),
+           mean = rep(c("0", "10", "-5", "-20"), each = 10000)) 
+
+ggplot(ydf, aes(x = y,
+                group = mean,
+                fill = mean)) +
+  geom_density(alpha = 0.5, adjust = 2) +
+  theme_bw()
+```
+
+How wide the bell curve is is described by its standard deviation. The standard deviation is generally represented with the greek letter $\sigma$ (sigma)> In the previous example the standard deviations were all identical. The following graph shows two normal distributions with identical means, but with different standard deviations. 
 
 ```{r, echo=FALSE}
 x1 <- rnorm(10000, 8887, 500)
@@ -47,6 +61,24 @@ ggplot(df, aes(x = x,
   theme_bw() 
 ```
 
+We describe normal distributions with the following mathematical notation:
+
+$x \sim \text{Normal} (\mu,~ \sigma)$
+
+The way you would read this is "x is normally distributed with a mean of mu and a standard deviation of sigma". 
+
+Note that $Normal()$ in the equation above is sometimes abbreviated to $N()$.  
+
+The above example shows the general format of writing out a normal distribution. We usually specify the value of $\mu$ and $\sigma$ when it is known. For example, here is how we would write it out the distribution for a variable $y$ with a a mean of 65 and a standard deviation of 10:
+
+$y \sim \text{N} (\mu = 65,~ \sigma = 10)$
+
+# Density plots and probability
+
+When we are looking at density plots, one of the main things we're looking for is how likely or unlikely are a give
+
+# The Empirical Rule
+
 Another important aspect of the standard deviation, is that multiples of it describe where different majorities of the data lie. For example, the mean + and - 1 standard deviation contains about 68% of the total observations ($\mu \pm \sigma$). Likewise, 95% of the observations are within 2 standard deviations ($\mu \pm 2\sigma$) and 99.7% are within 3 standard deviations ($\mu \pm 3\sigma$). This is called the Empirical Rule and can be represented in a graph as so:
 
 
@@ -54,14 +86,19 @@ Another important aspect of the standard deviation, is that multiples of it desc
 
 When working with normal distribution problems, one of the first things you should do is sketch a graph. Draw a bell curve on a number line. Make sure to center the curve at the mean, and then write out a couple of standard deviations to either side. For example, if we have a normal distribution with `mean = 10` and `sd = 2`, you should immediately draw out something like this: 
 
-![rough sketc](sketch.png)
-The curve is centered at our mean of 10, and I added a few marks indicating 1 and 2 standard deviations away from the mean: $10 \pm 2$ and $10 \pm 2*2$. 
+![Rough sketch of a normal distribution of mean = 10 and sd = 2](sketch.png)
+
+
+The curve is centered at our mean of 10 (tallest part of the "bell"), and I added a few marks indicating 1 and 2 standard deviations away from the mean: $10 \pm 2 = (8, 12)$ and $10 \pm 2*2 = (6, 14)$. 
 
 Then, you can quickly sketch where a give observation would fall on the distribution. For example, if we had an observation of 9.7 and 13, I would quickly add them to the sketch:
 
 ![Sketch with observations](sketch-obs.png)
-Doing this can be a quick estimate of where the observations fall, and can help us to check our answers. 
 
+
+Doing this can be a quick estimate of where the observations fall, and can help us to check our answers (more below). 
+
+# CO~2~ from a gallon of gas
 
 Let's return to our example of measuring 10,000 grams of CO~2~ from burning 1 gallon of gas. Let's say that the grams of CO~2~ from 1 gallon of gas can be described as being normally distributed with a mean of 8887, and a standard deviation of 500 [^1].
 
@@ -79,7 +116,7 @@ Using this information, let's apply the empirical rule to quickly write out the 
 c(8887 - 500, 8887 + 500)
 ```
 
-A graph of the full distribution would look something like this (note that I'm switching to graphics made in R for accuracy, but when you are working on problems a quick sketch by hand can do wonders)" 
+A graph of the full distribution would look something like this (note that I'm switching to graphics made in R for accuracy, but when you are working on problems a quick sketch by hand can do wonders)
 
 ```{r, echo=FALSE}
 ggplot(data.frame(x = x1), aes(x)) +
@@ -111,7 +148,7 @@ Based on this information, we might think that an observation of 10,000 grams of
 
 For this, we can use some functions built in to R to describe the normal distribution. These functions are `dnorm()`, `pnorm()` and `qnorm()`. 
 
-## Normal Distribution functions
+# Normal Distribution functions
 
 Notice that all three functions have the form of `_norm()` which indicates that we are working with a normal distribution. There are functions for other distributions, which we may get to later this semester. The `_` is either a `p`, `d`, or `q`, which gives us different functions of the normal distribution according to the following:
 
@@ -129,7 +166,7 @@ Each of these are used to answer a specific question.
 
 * `qnorm()`: what number represents a specific quantile of the data?
 
-### Probability of an *exact* number 
+## Probability of an *exact* number: `dnorm()`
 
 So, what is the probability of measuring exactly 10,000 from our distribution? To do this, we use the `dnorm()` function. the first argument is the number that we are interested in `10000`. The next two arguments are named, and they are where we describe what type of normal distribution we are working with. Recall above that we said this normal distribution is described by `mean = 8887` and `sd = 500`. Putting it all together the function call looks like this:
 
@@ -143,7 +180,7 @@ dnorm(8887, mean = 8887, sd = 500)
 ```
 That's only a 0.08% chance of measuring *exactly* the mean. 
 
-### Probability of more-or-less than a value
+## Probability of more-or-less than a value: `pnorm()`
 
 Usually, we're interested in the probability of getting an observation which is smaller or greater than our value of interest. For example, what's the probability of measuring up to 10,000 grams of CO~2~? For this, we use `pnorm()`:
 
@@ -239,7 +276,7 @@ pnorm(10000, mean = 8887, sd = 500) - pnorm(9000, mean = 8887, sd = 500)
 ```
 Which gives us approximately a 40% chance of observing a value between 9000 and 10,000. 
 
-### What value is a quantile of our data?
+## What value is a quantile of our data? `qnorm()`
 
 We are often interested in knowing what value breaks off a specific percentage of the data. For example, above we found out the ~98.7% of our data was smaller than 10,000, but we might be interested in knowing what value marks the 95th percentile, or the 1st, or the 30th, etc. Luckily, this is exactly what the `qnorm()` function is for. Once again, this function takes our value of interest as the first argument, and then names arguments for the `mean` and `sd` which describe our distribution. 
 
@@ -251,7 +288,7 @@ Likewise, we can supply multiple numbers in the first argument using the `c()` f
 ```{r}
 qnorm(c(0.1, 0.2, 0.8, 0.9), mean = 8887, sd = 500)
 ```
-## The Standard Normal Distribution
+# The Standard Normal Distribution
 
 The standard normal distribution (often call the Z-distribution) is a special case where `mean = 0`, and `sd = 1`. This distribution has a few special features which are helpful when we are thinking about data. Recall that approximately 68% of the data falls within one standard deviation of the mean, and 95% and 99.7% fall within 2 and 3 sd's respectively. Because the standard normal distribution has `sd = 1`, it makes it very easy to estimate where an observation lands within the distribution. 
 
@@ -301,7 +338,7 @@ Let's calculate the standardized z-score of our CO~2~ observation.
 ```
 This value is greater than 2, so falls somewhere between the 95 and 99.7% of the data distribution. 
 
-### Comparing observations using z-scores
+## Comparing observations using z-scores
 
 The benefit of using z-scores becomes apparent when we want to compare observations from two different distributions. For example, let's compare student scores from two different common standardized tests: the ACT and the SAT. 
 
@@ -320,17 +357,3 @@ Suppose that one student scores an 1800 on the SAT (Student A) and another stude
 Student A has a z-score of 1, which is higher than the z-score for student B of 0.6. So student A was further away from the mean then student B and because the value was positive it's closer to the right side of the distribution. In other words, student A performed better than student B. 
 
 ![SAT and ACT SCores. (image credit Open Intro Statistics)](sat-act.png){width=50%}
-
-
-### Homework
-GRE and Triathlon times from SP22 folder
-Lab 1 and 2 (cannibalize) from [OI biostat]( https://www.openintro.org/book/statlabs/?labblock=biostat_random_variables)
-
-[CH4 Lab 3](https://github.com/OI-Biostat/oi_biostat_labs/blob/master/04_inference_intro/03_hypothesis_testing/03_hypothesis_testing_handout.pdf) has how to access adult sleep data. Maybe a good one?
-
-
-```{r}
-plot(density(airquality$Wind))
-mean(airquality$Wind)
-sd(airquality$Wind)
-```
