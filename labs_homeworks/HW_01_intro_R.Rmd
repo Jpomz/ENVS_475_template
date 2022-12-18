@@ -26,9 +26,9 @@ For your assignments, you will be writing R scripts with comments and code which
 
 Each assignment should follow this naming convention:
 
-`full_name_hw#`
+`full_name_hw#.R`
 
-For example: `justin_pomeranz_hw1`
+For example: `justin_pomeranz_hw01.R`
 
 You can capitalize words in the file name if you choose, but it should follow the general convention above. 
 
@@ -67,7 +67,7 @@ Create an assignment script, put it in your class folder and name it according t
 * In class we will often only do part of an exercise and save the rest for later or for you to do on your own. 
 
 
-## 1. Basic expressions (10 pts)
+## 1. Basic expressions
 
 Write the following calculations in your script.
 
@@ -103,7 +103,7 @@ To tell someone reading the code what this section of the code is about, add a c
 3*5
 ```
 
-## 2. Basic Objects: Scalars (10 pts)
+## 2. Basic Objects: Scalars
 
 Here is a small program that converts a mass in kilograms to a mass in grams and then prints out the resulting value.
 
@@ -121,7 +121,7 @@ Create similar code to convert a mass in pounds to a mass kilograms.
 
 * Print the value of the new variable to the screen.
 
-### 3. More Objects (10 pts)
+### 3. More Objects
 Calculate a total biomass in grams for 3 white-throated woodrats [*Neotoma albigula*](https://en.wikipedia.org/wiki/White-throated_woodrat) and then convert it to kilograms. The total biomass is three times the average size of a single individual. An average individual weighs 250 grams.
 
 * Add a new section to your R script starting with a comment.
@@ -137,7 +137,7 @@ Calculate a total biomass in grams for 3 white-throated woodrats [*Neotoma albig
 * Print the final answer to the screen.
 
 
-## 4. Built-in Functions (10 pts)
+## 4. Built-in Functions 
 A built-in function is one that you don’t need to install and load a package to use. Some examples include:
 
 * `abs()` returns the absolute value of a number (e.g., `abs(-2)`)
@@ -157,7 +157,7 @@ Use these built-in functions to print the following items:
 
 *Optional Challenge*: Do the same thing as task 6 (immediately above), but instead of creating the intermediate variable, perform both the square root and the round on a single line by putting the `sqrt()` call inside the `round()` call.
 
-## 5. Modify the code (15 pts)
+## 5. Modify the code 
 
 The following code estimates the total net primary productivity (NPP) per day for two sites. It does this by multiplying the grams of carbon produced in a single square meter per day by the total area of the site. It then prints the daily NPP for each site.
 
@@ -178,7 +178,7 @@ Copy this code into your assignment and then add additional lines of code to do 
 2. The difference between the daily NPP for the two sites. We only want an absolute difference, so use abs() function to make sure the number is positive.
 3. The total NPP over a year for the two sites combined (the sum of the total daily NPP values from part (1) multiplied by 365).
 
-## 6. Basic Vectors (15 pts)
+## 6. Basic Vectors 
 Cut and paste the following vector into your assignment and then use code to print the requested values related to the vector.
 ```{r, eval = FALSE}
 numbers <- c(5, 2, 26, 8, 16)
@@ -192,7 +192,7 @@ numbers <- c(5, 2, 26, 8, 16)
 6. The first, second and third numbers in the numbers vector (using `[]`)
 7. The sum of the values in the numbers vector (using the `sum` function)
 
-## 7. `NULLS` in Vectors (15 pts)
+## 7. `NULLS` in Vectors
 
 Cut and paste the following vector into your assignment. Then use code to print the requested values related to the vector. You’ll need to use `na.rm = TRUE` argument within each function to ignore the null values. for example: `range(numbers_2, na.rm = TRUE)`
 
@@ -205,7 +205,7 @@ numbers_2 <- c(7, 6, 22, 5, NA, 42)
 3. The average of the numbers in the `numbers_2`
 4. The sum of the values in the `numbers_2` vector
 
-## 8. Shrub Volume Vectors (15 pts)
+## 8. Shrub Volume Vectors 
 
 You have data on the length, width, and height of 10 individuals of the yew [*Taxus baccata*](https://en.wikipedia.org/wiki/Taxus_baccata) stored in the following vectors:
 
