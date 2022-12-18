@@ -1,10 +1,11 @@
 ---
-title: "Homework 1: Intro to R"
+title: "Homework 01: Intro to R"
 subtitle: "ENVS475: Experimental Analysis and Design"
 date: "`r format(Sys.time(), '%B, %Y')`"
 output: 
   html_document:
     toc: true
+    toc_depth: 2
 ---
 
 ```{r setup, include = FALSE}
@@ -21,7 +22,7 @@ knitr::opts_chunk$set(
 
 For your assignments, you will be writing R scripts with comments and code which solve problems and answer questions. You will submit your R scripts on D2L. I will download all the scripts and run them in RStudio on my computer to check your work. Therefore, you will need to follow strict assignment formatting rules. 
 
-## File Names
+### File Names
 
 Each assignment should follow this naming convention:
 
@@ -31,7 +32,7 @@ For example: `justin_pomeranz_hw1`
 
 You can capitalize words in the file name if you choose, but it should follow the general convention above. 
 
-## File format
+### File format
 
 * Comment before each problem, and each sub-problem
 * Make sure your results print out on `Source with echo`
@@ -57,16 +58,16 @@ volume
 
 ```
 
-# Homework 1
+
+# Exercises Homework 01
 
 Create an assignment script, put it in your class folder and name it according to the convention above. 
 
 * We are going to get a feel for this by working through some exercises together. 
 * In class we will often only do part of an exercise and save the rest for later or for you to do on your own. 
 
-## Exercises
 
-### 1. Basic expressions (10 pts)
+## 1. Basic expressions (10 pts)
 
 Write the following calculations in your script.
 
@@ -102,7 +103,7 @@ To tell someone reading the code what this section of the code is about, add a c
 3*5
 ```
 
-### 2. Basic Objects: Scalars (10 pts)
+## 2. Basic Objects: Scalars (10 pts)
 
 Here is a small program that converts a mass in kilograms to a mass in grams and then prints out the resulting value.
 
@@ -136,7 +137,7 @@ Calculate a total biomass in grams for 3 white-throated woodrats [*Neotoma albig
 * Print the final answer to the screen.
 
 
-### 4. Built-in Functions (10 pts)
+## 4. Built-in Functions (10 pts)
 A built-in function is one that you don’t need to install and load a package to use. Some examples include:
 
 * `abs()` returns the absolute value of a number (e.g., `abs(-2)`)
@@ -156,7 +157,7 @@ Use these built-in functions to print the following items:
 
 *Optional Challenge*: Do the same thing as task 6 (immediately above), but instead of creating the intermediate variable, perform both the square root and the round on a single line by putting the `sqrt()` call inside the `round()` call.
 
-### 5. Modify the code (15 pts)
+## 5. Modify the code (15 pts)
 
 The following code estimates the total net primary productivity (NPP) per day for two sites. It does this by multiplying the grams of carbon produced in a single square meter per day by the total area of the site. It then prints the daily NPP for each site.
 
@@ -177,7 +178,7 @@ Copy this code into your assignment and then add additional lines of code to do 
 2. The difference between the daily NPP for the two sites. We only want an absolute difference, so use abs() function to make sure the number is positive.
 3. The total NPP over a year for the two sites combined (the sum of the total daily NPP values from part (1) multiplied by 365).
 
-### 6. Basic Vectors (15 pts)
+## 6. Basic Vectors (15 pts)
 Cut and paste the following vector into your assignment and then use code to print the requested values related to the vector.
 ```{r, eval = FALSE}
 numbers <- c(5, 2, 26, 8, 16)
@@ -191,7 +192,7 @@ numbers <- c(5, 2, 26, 8, 16)
 6. The first, second and third numbers in the numbers vector (using `[]`)
 7. The sum of the values in the numbers vector (using the `sum` function)
 
-### 7. `NULLS` in Vectors (15 pts)
+## 7. `NULLS` in Vectors (15 pts)
 
 Cut and paste the following vector into your assignment. Then use code to print the requested values related to the vector. You’ll need to use `na.rm = TRUE` argument within each function to ignore the null values. for example: `range(numbers_2, na.rm = TRUE)`
 
@@ -204,7 +205,7 @@ numbers_2 <- c(7, 6, 22, 5, NA, 42)
 3. The average of the numbers in the `numbers_2`
 4. The sum of the values in the `numbers_2` vector
 
-### 8. Shrub Volume Vectors (15 pts)
+## 8. Shrub Volume Vectors (15 pts)
 
 You have data on the length, width, and height of 10 individuals of the yew [*Taxus baccata*](https://en.wikipedia.org/wiki/Taxus_baccata) stored in the following vectors:
 
@@ -225,7 +226,7 @@ Copy these vectors into an R script and then determine the following:
 
 *Optional Challenge*: A vector of the volumes of the last 5 shrubs with the code written so that it will return the last 5 values regardless of the length of the vector (i.e., it will give the last 5 values if there are 10, 20, or 50 individuals).
 
-### 9. Variable Names (optional)
+## 9. Variable Names (optional)
 In the More Variables exercise (number 3 above) we used the variable names grams, number, and biomass to describe the individual mass, number of individuals, and total biomass of some white-throated woodrats. But are these variable names the best choice? If we came back to the code for this assignment in two weeks would we be able to remember what these variables were referring to and therefore what was going on in the code? The variable name biomass is also kind of long. If we had to type it many times it would be faster just to type b. We could also use really descriptive alternatives like individual_mass_in_grams. Or we would compromise and abbreviate this or leave out some of the words to make it shorter (e.g., indiv_mass_g).
 
 Think about good variable names and then create a new version of this code with the variables renamed to be most useful. Make sure your code still runs properly with the name changes.

@@ -11,7 +11,7 @@
 
 
 
-<title>Homework 1: Intro to R</title>
+<title>Homework 01: Intro to R</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -254,6 +254,7 @@ if (window.hljs) {
 
 
 
+
 <style type="text/css">
 .main-container {
   max-width: 940px;
@@ -274,6 +275,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -357,7 +361,7 @@ pre code {
 
 
 
-<h1 class="title toc-ignore">Homework 1: Intro to R</h1>
+<h1 class="title toc-ignore">Homework 01: Intro to R</h1>
 <h3 class="subtitle">ENVS475: Experimental Analysis and Design</h3>
 <h4 class="date">December, 2022</h4>
 
@@ -368,30 +372,7 @@ pre code {
 <li><a href="#assignment-formats-r-scripts">Assignment Formats: R
 Scripts</a>
 <ul>
-<li><a href="#file-names">File Names</a></li>
-<li><a href="#file-format">File format</a></li>
-</ul></li>
-<li><a href="#homework-1">Homework 1</a>
-<ul>
-<li><a href="#exercises">Exercises</a>
-<ul>
-<li><a href="#basic-expressions-10-pts">1. Basic expressions (10
-pts)</a></li>
-<li><a href="#basic-objects-scalars-10-pts">2. Basic Objects: Scalars
-(10 pts)</a></li>
-<li><a href="#more-objects-10-pts">3. More Objects (10 pts)</a></li>
-<li><a href="#built-in-functions-10-pts">4. Built-in Functions (10
-pts)</a></li>
-<li><a href="#modify-the-code-15-pts">5. Modify the code (15
-pts)</a></li>
-<li><a href="#basic-vectors-15-pts">6. Basic Vectors (15 pts)</a></li>
-<li><a href="#nulls-in-vectors-15-pts">7. <code>NULLS</code> in Vectors
-(15 pts)</a></li>
-<li><a href="#shrub-volume-vectors-15-pts">8. Shrub Volume Vectors (15
-pts)</a></li>
-<li><a href="#variable-names-optional">9. Variable Names
-(optional)</a></li>
-</ul></li>
+<li><a href="#exercises-homework-01">Exercises Homework 01</a></li>
 </ul></li>
 </ul>
 </div>
@@ -403,24 +384,24 @@ code which solve problems and answer questions. You will submit your R
 scripts on D2L. I will download all the scripts and run them in RStudio
 on my computer to check your work. Therefore, you will need to follow
 strict assignment formatting rules.</p>
-<div id="file-names" class="section level2">
-<h2>File Names</h2>
+<div id="file-names" class="section level3">
+<h3>File Names</h3>
 <p>Each assignment should follow this naming convention:</p>
 <p><code>full_name_hw#</code></p>
 <p>For example: <code>justin_pomeranz_hw1</code></p>
 <p>You can capitalize words in the file name if you choose, but it
 should follow the general convention above.</p>
 </div>
-<div id="file-format" class="section level2">
-<h2>File format</h2>
+<div id="file-format" class="section level3">
+<h3>File format</h3>
 <ul>
 <li>Comment before each problem, and each sub-problem</li>
 <li>Make sure your results print out on <code>Source with echo</code>
 <ul>
 <li>If you’re answer is saved in an object, make sure you print out that
-object afterwars</li>
-<li>for example, see the <code>volume</code> as the last line of the
-example below</li>
+object afterwards</li>
+<li>for example, see that <code>volume</code> is on the last line of the
+problem 2 example below</li>
 </ul></li>
 </ul>
 <pre class="r"><code># Problem 1
@@ -440,9 +421,8 @@ volume = width * height * length
 volume
 </code></pre>
 </div>
-</div>
-<div id="homework-1" class="section level1">
-<h1>Homework 1</h1>
+<div id="exercises-homework-01" class="section level2">
+<h2>Exercises Homework 01</h2>
 <p>Create an assignment script, put it in your class folder and name it
 according to the convention above.</p>
 <ul>
@@ -451,8 +431,6 @@ exercises together.</li>
 <li>In class we will often only do part of an exercise and save the rest
 for later or for you to do on your own.</li>
 </ul>
-<div id="exercises" class="section level2">
-<h2>Exercises</h2>
 <div id="basic-expressions-10-pts" class="section level3">
 <h3>1. Basic expressions (10 pts)</h3>
 <p>Write the following calculations in your script.</p>
