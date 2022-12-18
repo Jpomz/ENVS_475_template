@@ -136,6 +136,7 @@ There are other verbs in the `dplyr` package, along with many useful "helper" fu
 
 `filter()` allows you to select a subset of rows in a data frame. The first argument is the name of the data frame. The second and subsequent arguments are the expressions that filter the data frame. 
 
+#### Filter rows based on numeric data 
 For example, we can select all flights on July 4th with:
 ```{r}
 filter(flights, month == 7, day == 4)
@@ -203,6 +204,17 @@ identical(not_july_1, not_july_2)
 
 Both lines of code above give the same result, but the second line is simpler to write, and you don't have to remember if you're supposed to use an "AND" (`&`) or an "OR" (`|`) command. 
 
+#### Filtering rows based on character data
+
+In the example above, we were filtering observations based on numeric data (i.e., `month == 7` for July). Filter also works with character data types. For example, let's extract all of the flights that were operated by United Airlines, which is abbreviated as "UA" in the `carrier` column
+
+```{r}
+filter(flights, carrier == "UA")
+```
+Note the use of `""` around UA in the `filter()` function. Remove the quotes and run the code again. What happens?
+
+You should have received an error code in the R console. Error codes often look like hieroglyphics the first few times you see them, but the important information in this error is the "object 'UA' not found". When we enter unquoted arguments into the dplyr functions, R looks for objects (i.e., data objects, column names within a data object, etc.) with that name. 
+
 #### Removing `NA`'s with `filter()`
 
 A common task in data analysis requires the removal of `NA` values in our data. For example, in the `flights` data, flights which were cancelled have `NA` values in the `dep_` and `arr_` columns. 
@@ -238,7 +250,7 @@ unique(flights$origin)
 This data contains all of the flights leaving New York City, and the codes above refer to Newark, LaGuardia, and JFK, respectively. 
 
 
-### Pracice problems 1
+#### Pracice problems 1
 
 1. Filter out all of the flights that departed in December. 
 2. What are all of the `carriers` in this data set? Choose one and filter out all of the flights for that carrier. 
@@ -279,7 +291,7 @@ Similar to the `filter()` commands above, I hope you'll agree that the `arrange(
 
 ### Select columns with `select()`
 
-Data sets generally contain numerous columns, but oftentimes you are only interested in a few for a given analysis. `select()` allows you to focus on a useful subset of your data while dropping un-needed columns. You can indicate which columns you want by naming them (without quotes) or select which columns you *don't* want by putting a `-` in front of the name. Run the following commands, and be sure to note the number of rows and columns which each returns:
+Data sets generally contain numerous columns, but oftentimes you are only interested in a few for a given analysis. `select()` allows you to focus on a useful subset of your data while dropping un-needed columns. You can indicate which columns you want by naming them (without quotes) or select which columns you *don't* want by putting a `-` in front of the name. I have suppressed the output to save space in this document, but be sure to run the following commands in your session and see what happens. Be sure to note the number of rows and columns that each command returns.
 
 ```{r, eval=FALSE}
 # Select columns by name
@@ -301,7 +313,7 @@ There are a number of helper functions you can use within `select()`, like `star
 
 As a quick example, the following command selects all the column names which end with the word "time". Note that you need to put the search term in "" within the `ends_with()` command.
 
-```{r, eval=FALSE}
+```{r}
 select(flights, ends_with("time"))
 ```
 
@@ -445,6 +457,14 @@ summarize(carrier_group,
           mean_delay = mean(dep_delay, na.rm = TRUE))
 ```
 
+#### Using `n()` to get counts
+
+Another common data summarization task is to get the number of observations within a data set. For example, let's say we wanted to know how many flights each carrier was scheduled to operate. For this, we can use `n()`, which is a special function inside of the `summary()` function. 
+
+```{r}
+summarize(carrier_group, count = n())
+```
+#### Extended `dplyr` example 
 
 To illustrate the power of `dplyr`, here is a more complex data summarization. 
 
