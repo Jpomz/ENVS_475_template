@@ -1,0 +1,59 @@
+---
+title: "Homework 3: dplyr"
+subtitle: "ENVS475: Experimental Analysis and Design"
+date: "`r format(Sys.time(), '%B, %Y')`"
+output: 
+  html_document:
+    toc: true
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+   warning = FALSE, message = FALSE,
+   eval = FALSE,
+   fig.align = 'center', fig.retina = 2,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Assignment Formats: R Scripts
+
+For your assignments, you will be writing R scripts with comments and code which solve problems and answer questions. You will submit your R scripts on D2L. I will download all the scripts and run them in RStudio on my computer to check your work. Therefore, you will need to follow strict assignment formatting rules. 
+
+## File Names
+
+Each assignment should follow this naming convention:
+
+`full_name_hw#`
+
+For example: `justin_pomeranz_hw1`
+
+You can capitalize words in the file name if you choose, but it should follow the general convention above. 
+
+## File format
+
+* Comment before each problem, and each sub-problem
+* Make sure your results print out on `Source with echo`
+  + If you're answer is saved in an object, make sure you print out that object afterwards
+  + for example, see that `volume` is on the last line of the problem 2 example below
+
+```{r assignment format, eval = FALSE}
+# Problem 1
+
+# 1.1
+2 - 10
+
+# 1.2
+3 * 5
+
+# problem 2
+
+width = 2
+height = 3
+length = 1.5
+volume = width * height * length
+volume
+
+```
+

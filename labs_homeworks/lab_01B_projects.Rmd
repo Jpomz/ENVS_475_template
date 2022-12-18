@@ -177,16 +177,20 @@ If you prefer, you can have as many layers of subdirectories as you want. The im
 
 ```
 ENVS_475/
-|─── data/
-      |─── acid_mine_hw6.csv
-      |─── clear_cut_2_hw8.rds
-      |─── uhuru_acacia_lab2.txt
-|─── scripts/
-      |─── lab1_intro_R.R
-      |─── lab2_ggplot.R
-|─── homework/
-      |─── Justin_Pomeranz_HW1.R
-      |─── Justin_Pomeranz_HW2.R
+  |─── data/
+        |─── acid_mine_hw6.csv
+        |─── clear_cut_2_hw8.rds
+        |─── uhuru_acacia_lab2.txt
+  |─── scripts/
+        |─── lab1_intro_R.R
+        |─── lab2_ggplot.R
+  |─── homework/
+        |─── Justin_Pomeranz_HW1.R
+        |─── Justin_Pomeranz_HW2.R
+  |─── other_resources/
+        |─── cheatsheets/
+              |─── data-transformation.pdf
+              |─── data-visualization.pdf
 ```
 
 * `data/` contains data files provided by me in class to complete labs and/or homeworks
