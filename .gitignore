@@ -3,7 +3,6 @@
 .RData
 .Ruserdata
 token
-ignore/
-
+ignore/running_notepad
+ignore/weekly schedule
 cheatsheets/
-
