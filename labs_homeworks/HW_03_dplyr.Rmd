@@ -17,43 +17,108 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Assignment Formats: R Scripts
+# Assignment Format
 
-For your assignments, you will be writing R scripts with comments and code which solve problems and answer questions. You will submit your R scripts on D2L. I will download all the scripts and run them in RStudio on my computer to check your work. Therefore, you will need to follow strict assignment formatting rules. 
-
-## File Names
-
-Each assignment should follow this naming convention:
-
-`full_name_hw#`
-
-For example: `justin_pomeranz_hw1`
-
-You can capitalize words in the file name if you choose, but it should follow the general convention above. 
-
-## File format
-
+* Open a new R script
+* Save your R script in the `homework/` folder
+* Name your script according to: `full_name_hw##.R`
+  + For example: `justin_pomeranz_hw01.R`
 * Comment before each problem, and each sub-problem
 * Make sure your results print out on `Source with echo`
   + If you're answer is saved in an object, make sure you print out that object afterwards
-  + for example, see that `volume` is on the last line of the problem 2 example below
+  + See that `volume` is on the last line of the example below
+
 
 ```{r assignment format, eval = FALSE}
-# Problem 1
-
-# 1.1
-2 - 10
-
-# 1.2
-3 * 5
-
-# problem 2
-
+# problem 2 example
 width = 2
 height = 3
 length = 1.5
 volume = width * height * length
 volume
-
 ```
 
+# Setup
+
+## Load packages
+
+* Make sure that the `dplyr` package is downloaded on the machine you're using
+  + You can check this by clicking on the `Packages` tab in the *Files, Plots, Packages...* panel and scrolling down
+  + If you need to download the package, copy the following code into your Console panel and run it **Do not put it in your homework script*
+  + `install.packages("dplyr")` 
+* Copy the following code into the beginning of your homework script to load the `dplyr` package:
+```{r, eval=FALSE}
+# load libraries
+library(dplyr)
+```
+
+## Data
+
+* Download the `shrub-volume-data.csv` and the `marine.csv` file from D2L and save them in your `data/` folder
+
+* Copy and paste the following code into your script. 
+  + Make sure this is pasted on lines below the `library()` command
+```{r}
+shrub_data <- read.csv("data/shrub-volume-data.csv")
+marine <- read.csv("data/marine_hw03.csv")
+```
+
+# Exercises Homework 03: `dplyr`
+
+## Problem 1
+Dr. Granger is interested in studying the factors controlling the size and
+carbon storage of shrubs. She has conducted an experiment looking at the effect
+of three different treatments on shrub volume at four different locations. This data is in the `shrub_data` object which you loaded into R in the previous code. 
+
+Get familiar with the data by using `dplyr` to complete the following tasks.
+
+1. Select the data from the length column and print it out (using `select`).
+2. Select the data from the site and experiment columns and print it out (using `select`).
+3. Add a new column named `area` containing the area of the shrub, which is the length times the width (using `mutate`).
+4. Sort the data by length (using `arrange`).
+5. Filter the data to include only plants with heights greater than 5 (using `filter`).
+6. Filter the data to include only plants with heights greater than 4 and widths greater than 2 (using `,` or `&` to include two conditions).
+7. Filter the data to include only plants from Experiment 1 or Experiment 3 (using `|` for "or").
+8. Filter the data to remove rows with null values in the `height` column (using `!is.na`)
+9. Create a new data frame called `shrub_volumes` that includes all of the original data and a new column containing the volumes (length * width * height), and display it.
+Footer
+
+## Problem 2
+
+If the file `surveys.csv` is not already in your working `data/` folder then download a copy.
+
+Load the file into R using `read.csv()`.
+* Use the example from the `shrub_data` as a guide
+* Make sure `surveys.csv` is in the `data/` folder and that you put the file path into `read.csv()` correctly
+
+***Do not use pipes for this exercise.***
+
+1. Use `select()` to create a new data frame with just the `year`, `month`,`day`, and `species_id` columns in that order.
+
+2. Use `mutate()`, `select()`, and `filter()` with `!is.na()` to create a new   data frame with the `year`, `species_id`, and weight **in kilograms** of each individual, with no null weights. The weight in the table is given in grams so you will need to create a new column called `kg` for weight in kilograms by dividing the weight column by 1000.
+* Since no pipes are being used, you will need to create a new data object for each step
+  + Make sure to give them new names so you don't overwrite the original `surveys` object
+  + make sure the last line in this section is just the name of the last object you create so the results print out when you source the script. 
+3. Use the `filter()` function to get all of the rows in the data frame for the species ID `SH`.
+
+## Problem 3
+
+Use pipes (either `|>` or `%>%`) to combine the following operations to manipulate the `surveys` data.
+
+1. Use `mutate()`, `select()`, and `filter()` with `is.na()` to create a new data frame with the `year`, `species_id`, and weight **in kilograms** of each individual,with no null weights.
+
+2. Use the `filter()` and `select()` to get the `year`, `month`, `day`, and `species_id` columns for all of the rows in the data frame where `species_id` is `SH`.
+
+# Problem 4
+Summarize the `surveys` data
+1. Use `summarize` to calculate the mean `weight` in the `surveys` data. There are `NA`'s in the `weight` column, so be sure to use `na.rm = TRUE`.
+
+2. Use `summarize`, `group_by()` and `n()` to get the count of each species in the `surveys` data. 
+
+3. Use `summarize`, `group_by()` and `n()` to get the count of each species for each year in the `surveys` data. 
+
+4. Calculate the average weight for the "DO" species by year in the `surveys` data. 
+
+# Problem 5 Challenge
+
+Develop a data manipulation pipeline for the Portal `surveys` table that produces a table of data for only the three *Dipodomys* species (`DM`, `DO`, `DS`). The species IDs should be presented as lower case, not upper case. The table should contain information on the date, the species ID, the weight and hindfoot length. The data should not include null values for either weight or hindfoot length. The table should be sorted first by the species (so that each species is grouped together) and then by weight, with the largest weights at the top.
