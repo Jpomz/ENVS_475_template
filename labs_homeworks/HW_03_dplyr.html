@@ -385,7 +385,8 @@ assignment for a grade.</a></li>
 <li><a href="#problem-3">Problem 3</a></li>
 </ul></li>
 <li><a href="#problem-4">Problem 4</a></li>
-<li><a href="#problem-5-challenge">Problem 5 Challenge</a></li>
+<li><a href="#problem-5-challenge-optional">Problem 5 Challenge
+(optional)</a></li>
 </ul>
 </div>
 
@@ -441,8 +442,8 @@ library(dplyr)</code></pre>
 <div id="data" class="section level2">
 <h2>Data</h2>
 <ul>
-<li><p>Download the <code>shrub-volume-data.csv</code> and the
-<code>marine.csv</code> file from D2L and save them in your
+<li><p>Download the <code>shrub-volume-data.csv</code> and
+<code>surveys.csv</code> files from D2L and save them in your
 <code>data/</code> folder</p></li>
 <li><p>Copy and paste the following code into your script.</p>
 <ul>
@@ -450,8 +451,7 @@ library(dplyr)</code></pre>
 command</li>
 </ul></li>
 </ul>
-<pre class="r"><code>shrub_data &lt;- read.csv(&quot;data/shrub-volume-data.csv&quot;)
-marine &lt;- read.csv(&quot;data/marine_hw03.csv&quot;)</code></pre>
+<pre class="r"><code>shrub_data &lt;- read.csv(&quot;data/shrub-volume-data.csv&quot;)</code></pre>
 </div>
 </div>
 <div id="exercises-homework-03-dplyr" class="section level1">
@@ -463,9 +463,10 @@ size and carbon storage of shrubs. She has conducted an experiment
 looking at the effect of three different treatments on shrub volume at
 four different locations. This data is in the <code>shrub_data</code>
 object which you loaded into R in the previous code.</p>
-<p>Get familiar with the data by using <code>dplyr</code> to complete
-the following tasks.</p>
+<p>Complete the following tasks.</p>
 <ol style="list-style-type: decimal">
+<li>Get familiar with the shrub data by using the <code>names()</code>
+and <code>str()</code> functions.</li>
 <li>Select the data from the length column and print it out (using
 <code>select</code>).</li>
 <li>Select the data from the site and experiment columns and print it
@@ -491,13 +492,15 @@ volumes (length * width * height), and display it. Footer</li>
 <div id="problem-2" class="section level2">
 <h2>Problem 2</h2>
 <p>If the file <code>surveys.csv</code> is not already in your working
-<code>data/</code> folder then download a copy.</p>
+<code>data/</code> folder then download a copy from D2L.</p>
 <p>Load the file into R using <code>read.csv()</code>. * Use the example
-from the <code>shrub_data</code> as a guide * Make sure
+above from the <code>shrub_data</code> as a guide * Make sure
 <code>surveys.csv</code> is in the <code>data/</code> folder and that
 you put the file path into <code>read.csv()</code> correctly</p>
 <p><strong><em>Do not use pipes for this exercise.</em></strong></p>
 <ol style="list-style-type: decimal">
+<li><p>Get familiar with the surveys data by using the
+<code>names()</code> and <code>str()</code> functions.</p></li>
 <li><p>Use <code>select()</code> to create a new data frame with just
 the <code>year</code>, <code>month</code>,<code>day</code>, and
 <code>species_id</code> columns in that order.</p></li>
@@ -560,8 +563,8 @@ be sure to use <code>na.rm = TRUE</code>.</p>
 <code>surveys</code> data.</p></li>
 </ol>
 </div>
-<div id="problem-5-challenge" class="section level1">
-<h1>Problem 5 Challenge</h1>
+<div id="problem-5-challenge-optional" class="section level1">
+<h1>Problem 5 Challenge (optional)</h1>
 <p>Develop a data manipulation pipeline for the Portal
 <code>surveys</code> table that produces a table of data for only the
 three <em>Dipodomys</em> species (<code>DM</code>, <code>DO</code>,
