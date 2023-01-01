@@ -1,7 +1,7 @@
 ---
-title: "Homework 2: Normal Distributions"
-subtitle: "ENVS475: Experimental Analysis and Design"
-date: "`r format(Sys.time(), '%B, %Y')`"
+title: "ENVS475 Homework 2: Normal Distributions"
+subtitle: "Not graded"
+date: "Spring 2023"
 output: 
   html_document:
     toc: true
@@ -16,12 +16,13 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+## This assignment will not be graded
 
 ## Exercises
 
 In your homework script, make sure to include comments using the `#` for each problem and subproblem. For example:
 ```{r}
-# Exericise 1
+# Exercise 1
 # 1.a
 qnorm(0.9, mean = 0, sd = 1)
 # 1.b

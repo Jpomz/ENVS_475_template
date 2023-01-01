@@ -2,18 +2,25 @@ running notes
 
 make "script_format" markdown file
 
+week01 intro to R lab and assignment done
+week02 distributions lab and homework done
+week03 dplyr lab done
+week04 ggplot / summary stats
+
+dplyr lab updated (maybe add distibution plot?)
 make new assignment for dplyr (if keeping)
 - focus on stats
 - group_by(), summarize(), etc.
-- use terui lab tutorial
+- use terui lab tutorial - basis
 - modify to include things we've already discussed in class
 -- make a distribution plot
--- histogram / boxplot
-- move dplyr to week 3
-- distributions to week 4
 
 Make assignment match updated dplyr tutorial. Find other built-in data set to play with -- shrub_volume_data [no]
 marine data setd: https://ourcodingclub.github.io/tutorials/data-manip-creative-dplyr/#ii
 
 
 re download ggplot data sets and name them correctly
+
+To-do: 
+make dplyr hw
+make normal-dist slides
