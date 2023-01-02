@@ -27,7 +27,7 @@ This is essentially true for anything we might want to measure: the number of pl
 
 # Describing the Normal Distribution
 
-The normal distribution, also called a Gaussian distribution, or the "bell curve" is probably somewhat familiar to you. It is a symmetric distribution that is centered near the mean (AKA average). The mean is generally represented with the greek letter $\mu$ (mu). $\mu$ determines where on the number line a given normal distirbution falls. For example, here are four identical normal distributions which only vary in their means, or where they occur on the number line:
+The normal distribution, also called a Gaussian distribution, or the "bell curve" is probably somewhat familiar to you. It is a symmetric distribution that is centered near the mean (AKA average). The mean is generally represented with the greek letter $\mu$ (mu). $\mu$ determines where on the number line a given normal distribution falls. For example, here are four identical normal distributions which only vary in their means, or where they occur on the number line:
 
 ```{r, echo = FALSE}
 y1 <- rnorm(10000, sd = 2,mean = 0)
@@ -45,7 +45,7 @@ ggplot(ydf, aes(x = y,
   theme_bw()
 ```
 
-How wide the bell curve is is described by its standard deviation. The standard deviation is generally represented with the greek letter $\sigma$ (sigma)> In the previous example the standard deviations were all identical. The following graph shows two normal distributions with identical means, but with different standard deviations. 
+How wide the bell curve is is described by its standard deviation. The standard deviation is generally represented with the greek letter $\sigma$ (sigma). In the previous example the standard deviations were all identical. The following graph shows two normal distributions with identical means, but with different standard deviations. 
 
 ```{r, echo=FALSE}
 x1 <- rnorm(10000, 8887, 500)
@@ -63,7 +63,7 @@ ggplot(df, aes(x = x,
 
 We describe normal distributions with the following mathematical notation:
 
-$x \sim \text{Normal} (\mu,~ \sigma)$
+$$\Huge X \sim \text{Normal} (\mu,~ \sigma)$$
 
 The way you would read this is "x is normally distributed with a mean of mu and a standard deviation of sigma". 
 
@@ -71,7 +71,7 @@ Note that $Normal()$ in the equation above is sometimes abbreviated to $N()$.
 
 The above example shows the general format of writing out a normal distribution. We usually specify the value of $\mu$ and $\sigma$ when it is known. For example, here is how we would write it out the distribution for a variable $y$ with a a mean of 65 and a standard deviation of 10:
 
-$y \sim \text{N} (\mu = 65,~ \sigma = 10)$
+$\Big y \sim \text{N} (\mu = 65,~ \sigma = 10)$
 
 # Density plots and probability
 

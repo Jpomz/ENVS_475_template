@@ -188,7 +188,7 @@ ENVS_475/
         |─── Justin_Pomeranz_HW1.R
         |─── Justin_Pomeranz_HW2.R
   |─── other_resources/
-        |─── cheatsheets/
+        |─── cheat-sheets/
               |─── data-transformation.pdf
               |─── data-visualization.pdf
 ```
