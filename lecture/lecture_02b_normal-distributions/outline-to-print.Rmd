@@ -1,0 +1,39 @@
+---
+title: "Untitled"
+author: "ENVS475 Experimental Analysis and Design"
+date: '2023-01-02'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Overview
+
+Instructor outline for Normal Distribution lecture
+
+# Why do we care?
+
+# Normal Distribution
+## Describing it
+### Mu and Sigma
+## Ubiquitous in nature
+
+# Density plots
+## Empirical Rule
+## Working with N-distributions
+### Sketch
+### R-functions
+
+# R 
+## _norm()
+### dnorm - exact
+### pnorm - more-or-less
+### qnorm - value at quantile?
+
+# Standard Normal
+
+
+## Z-scores
+
