@@ -27,9 +27,10 @@ This is essentially true for anything we might want to measure: the number of pl
 
 # Describing the Normal Distribution
 
-The normal distribution, also called a Gaussian distribution, or the "bell curve" is probably somewhat familiar to you. It is a symmetric distribution that is centered near the mean (AKA average). The mean is generally represented with the greek letter $\mu$ (mu). $\mu$ determines where on the number line a given normal distirbution falls. For example, here are four identical normal distributions which only vary in their means, or where they occur on the number line:
+The normal distribution, also called a Gaussian distribution, or the "bell curve" is probably somewhat familiar to you. It is a symmetric distribution that is centered near the mean (AKA average). The mean is generally represented with the greek letter $\mu$ (mu). $\mu$ determines where on the number line a given normal distribution falls. For example, here are four identical normal distributions which only vary in their means, or where they occur on the number line:
 
 ```{r, echo = FALSE}
+set.seed(3987)
 y1 <- rnorm(10000, sd = 2,mean = 0)
 y2 <- rnorm(10000, sd = 2,mean = 10)
 y3 <- rnorm(10000, sd = 2,mean = -5)
@@ -42,12 +43,14 @@ ggplot(ydf, aes(x = y,
                 group = mean,
                 fill = mean)) +
   geom_density(alpha = 0.5, adjust = 2) +
-  theme_bw()
+  theme_bw() +
+  labs(caption = "Figure 1. Normal distributions with the same SD but different means")
 ```
 
-How wide the bell curve is is described by its standard deviation. The standard deviation is generally represented with the greek letter $\sigma$ (sigma)> In the previous example the standard deviations were all identical. The following graph shows two normal distributions with identical means, but with different standard deviations. 
+How wide the bell curve is is described by its standard deviation. The standard deviation is generally represented with the greek letter $\sigma$ (sigma). In the previous example the standard deviations were all identical. The following graph shows two normal distributions with identical means, but with different standard deviations. 
 
 ```{r, echo=FALSE}
+set.seed(3987)
 x1 <- rnorm(10000, 8887, 500)
 x2 <- rnorm(10000, mean = 8887, sd = 100)
 df <- data.frame(x = c(x1, x2),
@@ -57,13 +60,14 @@ ggplot(df, aes(x = x,
                group = grp,
                fill = grp)) +
   geom_density(alpha = 0.5) +
-  labs(x = "co2") +
+  labs(x = "co2",
+       caption = "Figure 2. Normal distributions with the same mean but different SDs") +
   theme_bw() 
 ```
 
 We describe normal distributions with the following mathematical notation:
 
-$x \sim \text{Normal} (\mu,~ \sigma)$
+$$\Large X \sim \text{Normal} (\mu,~ \sigma)$$
 
 The way you would read this is "x is normally distributed with a mean of mu and a standard deviation of sigma". 
 
@@ -71,7 +75,7 @@ Note that $Normal()$ in the equation above is sometimes abbreviated to $N()$.
 
 The above example shows the general format of writing out a normal distribution. We usually specify the value of $\mu$ and $\sigma$ when it is known. For example, here is how we would write it out the distribution for a variable $y$ with a a mean of 65 and a standard deviation of 10:
 
-$y \sim \text{N} (\mu = 65,~ \sigma = 10)$
+$$\Large y \sim \text{N} (\mu = 65,~ \sigma = 10)$$
 
 # Density plots and probability
 
@@ -82,18 +86,18 @@ When we are looking at density plots, one of the main things we're looking for i
 Another important aspect of the standard deviation, is that multiples of it describe where different majorities of the data lie. For example, the mean + and - 1 standard deviation contains about 68% of the total observations ($\mu \pm \sigma$). Likewise, 95% of the observations are within 2 standard deviations ($\mu \pm 2\sigma$) and 99.7% are within 3 standard deviations ($\mu \pm 3\sigma$). This is called the Empirical Rule and can be represented in a graph as so:
 
 
-![The Empirical Rule. (image credit Open Intro Statistics)](68-95-997.png){width=70%}
+![Figure 3. The Empirical Rule. (image credit Open Intro Statistics)](68-95-997.png){width=70%}
 
 When working with normal distribution problems, one of the first things you should do is sketch a graph. Draw a bell curve on a number line. Make sure to center the curve at the mean, and then write out a couple of standard deviations to either side. For example, if we have a normal distribution with `mean = 10` and `sd = 2`, you should immediately draw out something like this: 
 
-![Rough sketch of a normal distribution of mean = 10 and sd = 2](sketch.png)
+![Figure 4. Rough sketch of a normal distribution of mean = 10 and sd = 2](sketch.png)
 
 
 The curve is centered at our mean of 10 (tallest part of the "bell"), and I added a few marks indicating 1 and 2 standard deviations away from the mean: $10 \pm 2 = (8, 12)$ and $10 \pm 2*2 = (6, 14)$. 
 
 Then, you can quickly sketch where a give observation would fall on the distribution. For example, if we had an observation of 9.7 and 13, I would quickly add them to the sketch:
 
-![Sketch with observations](sketch-obs.png)
+![Figure 5. Sketch with observations](sketch-obs.png)
 
 
 Doing this can be a quick estimate of where the observations fall, and can help us to check our answers (more below). 
@@ -121,19 +125,21 @@ A graph of the full distribution would look something like this (note that I'm s
 ```{r, echo=FALSE}
 ggplot(data.frame(x = x1), aes(x)) +
   geom_density() +
-  labs(x = "co2") +
+  labs(x = "co2",
+       caption = "Figure 6. Hypothetical distribution of grams of CO~2~ emitted from burning one gallon of gas.") +
   theme_bw()
 ```
 
 
-[^1]:(The mean estimate of 8,887 grams was taken from the US [EPA website](https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle#:~:text=Every%20gallon%20of%20gasoline%20burned%20creates%20about%208%2C887%20grams%20of%20CO2.) and the standard deviation of 500 grams was made up because I couldn't find a good estimate online.)
+[^1]:The mean estimate of 8,887 grams was taken from the US [EPA website](https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle#:~:text=Every%20gallon%20of%20gasoline%20burned%20creates%20about%208%2C887%20grams%20of%20CO2.) and the standard deviation of 500 grams was made up because I couldn't find a good estimate online.
 
 Now, let's add an arrow to show where our measurement of 10,000 lands:
 
 ```{r, echo=FALSE}
 ggplot(data.frame(x = x1), aes(x)) +
   geom_density() +
-  labs(x = "co2") +
+  labs(x = "co2",
+       caption = "Figure 7.") +
   theme_bw() +
   annotate("segment",
            x = 10000,
@@ -146,7 +152,9 @@ ggplot(data.frame(x = x1), aes(x)) +
 
 Based on this information, we might think that an observation of 10,000 grams of CO~2~ might be pretty unlikely. We can go a step further, however, and measure the exact probability of getting a measurement at this magnitude. 
 
-For this, we can use some functions built in to R to describe the normal distribution. These functions are `dnorm()`, `pnorm()` and `qnorm()`. 
+For this, we can use some functions built in to R to describe the normal distribution. These functions are `dnorm()`, `pnorm()` and `qnorm()`.
+
+### Endnotes {#endnotes}
 
 # Normal Distribution functions
 
@@ -208,7 +216,7 @@ ggplot(data.frame(x = x1), aes(x)) +
   #scale_y_continuous(limits = c(0,0.8e-02)) +
   theme_bw() +
   theme(legend.position = "none") +
-  labs(title = "Area shaded to the left of our value (in blue)")
+  labs(caption = "Figure 8. Area shaded to the left of our value (in blue)")
 ```
 
 What if we wanted to look at the area under the curve to the right of our value? Or what the probability of measuring a value greater than our value of interest?
@@ -230,7 +238,7 @@ ggplot(data.frame(x = x1), aes(x)) +
   #scale_y_continuous(limits = c(0,0.8e-03)) +
   theme_bw() +
   theme(legend.position = "none")+
-  labs(title = "Area shaded to the right of our value (in blue)")
+  labs(caption = "Figure 9. Area shaded to the right of our value (in blue)")
 ```
 
 We can calculate this probability by modifying our code in 2 ways. 
@@ -265,7 +273,7 @@ ggplot(data.frame(x = x1), aes(x)) +
   #scale_y_continuous(limits = c(0,0.8e-03)) +
   theme_bw() +
   theme(legend.position = "none")+
-  labs(title = "Area shaded between values (in blue)")
+  labs(caption = "Figure 10. Area shaded between values (in blue)")
 ```
 
 To calculate this, we need to make two calls using the `pnorm()` function. In the first, we calculate the probability from the left to our maximum value of interest: `pnorm(10000, mean = 8887, sd = 500)`. This gives us the area of the light grey (to the left) and the blue shaded regions in the figure above. 
@@ -288,6 +296,7 @@ Likewise, we can supply multiple numbers in the first argument using the `c()` f
 ```{r}
 qnorm(c(0.1, 0.2, 0.8, 0.9), mean = 8887, sd = 500)
 ```
+
 # The Standard Normal Distribution
 
 The standard normal distribution (often call the Z-distribution) is a special case where `mean = 0`, and `sd = 1`. This distribution has a few special features which are helpful when we are thinking about data. Recall that approximately 68% of the data falls within one standard deviation of the mean, and 95% and 99.7% fall within 2 and 3 sd's respectively. Because the standard normal distribution has `sd = 1`, it makes it very easy to estimate where an observation lands within the distribution. 
@@ -356,4 +365,106 @@ Suppose that one student scores an 1800 on the SAT (Student A) and another stude
 
 Student A has a z-score of 1, which is higher than the z-score for student B of 0.6. So student A was further away from the mean then student B and because the value was positive it's closer to the right side of the distribution. In other words, student A performed better than student B. 
 
-![SAT and ACT SCores. (image credit Open Intro Statistics)](sat-act.png){width=50%}
+![Figure 11. SAT and ACT SCores. (image credit Open Intro Statistics)](sat-act.png){width=50%}
+
+# Appendix
+## Exampe code for figures
+
+### Figure 1
+```{r fig-1-code,eval=FALSE}
+# Set random number generator seed
+# makes results reproducible
+set.seed(3987)
+# simulate 4 data sets with same mean, different SD
+y1 <- rnorm(10000, sd = 2,mean = 0)
+y2 <- rnorm(10000, sd = 2,mean = 10)
+y3 <- rnorm(10000, sd = 2,mean = -5)
+y4 <- rnorm(10000, sd = 2,mean = -20)
+
+# combine data into one data.frame (i.e., a table)
+ydf <- data.frame(y = c(y1, y2, y3, y4),
+           mean = rep(c("0", "10", "-5", "-20"), each = 10000)) 
+
+# make plot
+ggplot(ydf, aes(x = y,
+                group = mean,
+                fill = mean)) +
+  geom_density(alpha = 0.5, adjust = 2) +
+  theme_bw() +
+  labs(caption = "Figure 1. Normal distributions with the same SD but different means")
+```
+
+### Figure 2
+
+```{r fig-2-code, eval=FALSE}
+# make reproducible, and sample data
+set.seed(3987)
+x1 <- rnorm(10000, 8887, 500)
+x2 <- rnorm(10000, mean = 8887, sd = 100)
+
+# combine data into data.frame
+df <- data.frame(x = c(x1, x2),
+                 grp = rep(c("big SD", "small SD"), each = 10000))
+
+# plot
+ggplot(df, aes(x = x,
+               group = grp,
+               fill = grp)) +
+  geom_density(alpha = 0.5) +
+  labs(x = "co2",
+       caption = "Figure 2. Normal distributions with the same mean but different SDs") +
+  theme_bw() 
+```
+
+### Figure 7 
+
+```{r fig-7-code, eval=FALSE}
+# make plot
+ggplot(data.frame(x = x1), aes(x)) +
+  geom_density() +
+  labs(x = "co2",
+       caption = "Figure 7.") +
+  theme_bw() +
+  # add arrow as an "annotation"
+  annotate("segment", 
+           x = 10000,
+           xend = 10000,
+           y = 2e-04,
+           yend = 0,
+           color = "red",
+           arrow = arrow(length = unit(0.05, "npc")))
+```
+
+### Figure 8
+```{r area-shade-left-plot-code, eval=FALSE}
+# this is more complicated
+# don't worry if you don'totally follow it
+
+# define intervals to shade
+breaks <- c(-Inf, 10000, Inf)
+
+# make base plot
+ggplot(data.frame(x = x1), aes(x)) +
+  geom_density() +
+  scale_fill_manual(values = c("dodgerblue", "grey")) +
+  # add shading
+  stat_density(
+    n = 500,
+    geom = "area",
+    colour = "black",
+    aes(
+      fill = after_stat(x) %>% cut(!!breaks),
+      group = after_scale(fill)
+    )
+  ) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  labs(caption = "Figure 8. Area shaded to the left of our value (in blue)")
+```
+
+```{js, echo=FALSE}
+$(document).ready(function() {
+  $('.footnotes ol').appendTo('#endnotes');
+  $('.footnotes').remove();
+});
+```

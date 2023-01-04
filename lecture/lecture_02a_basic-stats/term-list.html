@@ -9,9 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="ENVS475 Experimental Analysis and Design" />
 
 
-<title>ENVS475 Homework 2: Normal Distributions</title>
+<title>Basic Statistic Terms and Definitions</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -361,125 +362,348 @@ pre code {
 
 
 
-<h1 class="title toc-ignore">ENVS475 Homework 2: Normal
-Distributions</h1>
-<h3 class="subtitle">Not graded</h3>
-<h4 class="date">Spring 2023</h4>
+<h1 class="title toc-ignore">Basic Statistic Terms and Definitions</h1>
+<h4 class="author">ENVS475 Experimental Analysis and Design</h4>
+<h4 class="date">Spring, 2023</h4>
 
 </div>
 
-<div id="TOC">
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>This document contains commonly used terms, parameters, and formulas
+in applied statisitics. This document is non-exhaustive and is provided
+as an study aid.</p>
+</div>
+<div id="terms-and-definitions" class="section level2">
+<h2>Terms and Definitions</h2>
+<p><strong>Population</strong>: Collection of subjects of interest.
+Usually biologically meaningful. For example: “all the trees on the
+Grand Mesa”; “The dissolved oxygen levels of all streams in the Colorado
+River Basin”; “The total diversity of Birds (Species numbers and
+relative abundances) in Grand Junction throughout the year”.</p>
+<p><strong>Sample</strong>: A finite subset of the population, i.e.,
+what data we collect. Samples allow us to draw inferences to the
+population. Good samples should be:</p>
 <ul>
-<li><a href="#this-assignment-will-not-be-graded">This assignment will
-not be graded</a>
+<li><p>Random</p></li>
+<li><p>Representative</p></li>
+<li><p>Sufficiently large</p></li>
+</ul>
+<p><strong>Parameters</strong></p>
 <ul>
-<li><a href="#exercises">Exercises</a>
+<li><p>Attributes of the population</p></li>
+<li><p>Usually unknown</p></li>
+<li><p>Attributes of interest</p></li>
+</ul>
+<p><strong>Statistics</strong></p>
 <ul>
-<li><a href="#standard-normal-distribution-10-points">1. Standard Normal
-Distribution (10 points)</a></li>
-<li><a href="#normal-distribution-age-at-childbirth-7-points">2. Normal
-Distribution: Age at childbirth (7 points)</a></li>
-<li><a href="#triathlon-times.-8-points">3. Triathlon times. (8
-points)</a></li>
-</ul></li>
+<li><p>Attributes of the sample</p></li>
+<li><p>Usually treated as estimates of parameters</p></li>
+</ul>
+<p>Helpful mnemoninc: match the P’s (Population and Parameters) and S’s
+(Samples and Statistics)</p>
+</div>
+<div id="greek-letters" class="section level2">
+<h2>Greek Letters</h2>
+<table>
+<colgroup>
+<col width="11%" />
+<col width="16%" />
+<col width="72%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Greek Symbol</th>
+<th align="center">Name</th>
+<th align="left">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math inline">\(\mu\)</span></td>
+<td align="center">mu</td>
+<td align="left">Population “true” mean or average</td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(\sigma\)</span></td>
+<td align="center">sigma</td>
+<td align="left">Population “true” standard deviation (SD). Measure of
+the how far observation, <span class="math inline">\(y\)</span> is from
+the mean, <span class="math inline">\(\mu\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(\sigma^2\)</span></td>
+<td align="center">sigma-squared</td>
+<td align="left">Population “true” variance</td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(\alpha\)</span></td>
+<td align="center">alpha</td>
+<td align="left">Significance level, usually 0.05</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(\beta\)</span></td>
+<td align="center">beta</td>
+<td align="left">Parameters in linear models, OR type-II error</td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(\epsilon\)</span></td>
+<td align="center">epsilon</td>
+<td align="left">Error term. The variation in expected and observed
+value</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(\gamma\)</span></td>
+<td align="center">gamma</td>
+<td align="left">–</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="summary-statistics" class="section level2">
+<h2>Summary Statistics</h2>
+<table>
+<colgroup>
+<col width="13%" />
+<col width="86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Symbol/Term</th>
+<th align="left">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math inline">\(y_i\)</span></td>
+<td align="left">The <em>i</em>th observation of <span class="math inline">\(y\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(\overline{y}\)</span> or
+<span class="math inline">\(\hat{\mu}\)</span></td>
+<td align="left">Sample or global mean. Estimate of <span class="math inline">\(\mu\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(\overline{y_j}\)</span></td>
+<td align="left">The estimated average for group <span class="math inline">\(j\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(\overline{y.}\)</span></td>
+<td align="left">Global mean. the <span class="math inline">\(.\)</span>
+is used to delineate from group means, if needed.</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(s\)</span> or <span class="math inline">\(\hat{\sigma}\)</span></td>
+<td align="left">Sample standard deviation, estimate of <span class="math inline">\(\sigma\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(s^2\)</span> or <span class="math inline">\(\hat{\sigma}^2\)</span></td>
+<td align="left">Sample variance, estimate of <span class="math inline">\(\sigma^2\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(SE\)</span></td>
+<td align="left">Standard error of the mean. Measure of how far, on
+avergae, the sample mean <span class="math inline">\(\overline{y}\)</span> is from the true mean, <span class="math inline">\(\mu\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(N, n\)</span></td>
+<td align="left">Sample size, number of observations</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(df\)</span></td>
+<td align="left">Degrees of Freedom. Usually in the form of <span class="math inline">\(N - 1\)</span> or <span class="math inline">\(N -
+N_{of~groups}\)</span>, etc.</td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(P\)</span></td>
+<td align="left">P-value. Generally, the probability of observing the
+data IF your null hypothesis (H<sub>O</sub>) is TRUE</td>
+</tr>
+</tbody>
+</table>
+<p>Hats over parameters (i.e., <span class="math inline">\(\hat{\mu},
+\hat{\sigma}\)</span>) are used to indicate that they are sample
+estimates.</p>
+</div>
+<div id="random-variable-distributions" class="section level2">
+<h2>Random Variable Distributions</h2>
+<p>A random variable is a numerical description of the outcome of a
+statistical experiment. A random variable that may assume only a finite
+number of values is said to be discrete; one that may assume any value
+in some interval on the real number line is said to be continuous. For
+instance, a random variable representing the number of automobiles sold
+at a particular dealership on one day would be discrete, while a random
+variable representing the weight of a person in kilograms (or pounds)
+would be continuous.</p>
+<p>The probability distribution for a random variable describes how the
+probabilities are distributed over the values of the random
+variable.</p>
+<p>A continuous random variable may assume any value in an interval on
+the real number line or in a collection of intervals. Since there is an
+infinite number of values in any interval, it is not meaningful to talk
+about the probability that the random variable will take on a specific
+value; instead, the probability that a continuous random variable will
+lie within a given interval is considered.</p>
+<p>There are many probability distributions, but we will mostly be
+focused on the Normal Distribution.</p>
+<div id="normal-distribution" class="section level3">
+<h3>Normal Distribution</h3>
+<p>The normal distribution, also called a Gaussian distribution, or the
+“bell curve” is probably somewhat familiar to you. It is a symmetric
+distribution that is centered near the mean (AKA average). The mean is
+generally represented with the greek letter <span class="math inline">\(\mu\)</span> (mu). <span class="math inline">\(\mu\)</span> determines where on the number line a
+given normal distribution falls. How wide the bell curve is is described
+by its standard deviation. The standard deviation is generally
+represented with the greek letter <span class="math inline">\(\sigma\)</span> (sigma).</p>
+<p>Here is an example of two normal distributions with the same mean
+(<span class="math inline">\(\mu\)</span>), but different standard
+deviations (<span class="math inline">\(\sigma\)</span>):</p>
+<p><img src="data:image/png;base64,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" width="672" />
+We describe normal distributions with the following mathematical
+notation:</p>
+<p><span class="math display">\[\Huge X \sim \text{Normal} (\mu,~
+\sigma)\]</span> ### Empirical Rule In a Normal Distribution, the mean +
+and - 1 standard deviation contains about 68% of the total observations
+(<span class="math inline">\(\mu \pm \sigma\)</span>). Likewise, 95% of
+the observations are within 2 standard deviations (<span class="math inline">\(\mu \pm 2\sigma\)</span>) and 99.7% are within 3
+standard deviations (<span class="math inline">\(\mu \pm
+3\sigma\)</span>).</p>
+</div>
+</div>
+<div id="null-hypothesis-signifigance-testing-nhst" class="section level2">
+<h2>Null Hypothesis Signifigance Testing (NHST)</h2>
+<p><strong>NULL Hypothesis</strong></p>
+<ul>
+<li><p><span class="math inline">\(H_0\)</span></p></li>
+<li><p>No difference / relationship / effect</p></li>
+<li><p>usually has the “=” sign in the Null hypothesis</p>
+<ul>
+<li><span class="math inline">\(H_0: \mu = 0\)</span></li>
 </ul></li>
 </ul>
+<p><strong>Alternative Hypothesis</strong></p>
+<ul>
+<li><p><span class="math inline">\(H_A\)</span></p></li>
+<li><p>There is some difference / relationship / effect</p></li>
+<li><p>Does not have the “=” sign <span class="math inline">\(H_A: \mu
+\ne 0\)</span></p></li>
+</ul>
+<p><span class="math inline">\(\alpha\)</span></p>
+<ul>
+<li><p>Significance level. Usually 0.05</p></li>
+<li><p>What we compare our <span class="math inline">\(P\)</span>-value
+to.</p>
+<ul>
+<li>If <span class="math inline">\(P \ge \alpha\)</span>, <strong>Fail
+to reject null hypothesis</strong></li>
+<li>If <span class="math inline">\(P &lt; \alpha\)</span>,
+<strong>Reject null hypothesis</strong></li>
+</ul></li>
+</ul>
+<p><span class="math inline">\(P\)</span>-value</p>
+<ul>
+<li><p>How likely your observations are <em>IF</em> the Null hypothesis
+ris true.</p></li>
+<li><p>Does <strong>NOT</strong> tell us how much evidence there is in
+favor of a given alternative hypothesis</p></li>
+</ul>
 </div>
-
-<div id="this-assignment-will-not-be-graded" class="section level1">
-<h1>This assignment will not be graded</h1>
-<div id="exercises" class="section level2">
-<h2>Exercises</h2>
-<p>In your homework script, make sure to include comments using the
-<code>#</code> for each problem and subproblem. For example:</p>
-<pre class="r"><code># Exercise 1
-# 1.a
-qnorm(0.9, mean = 0, sd = 1)
-# 1.b
-dnorm(3, mean = 10, sd = 4)</code></pre>
-<div id="standard-normal-distribution-10-points" class="section level3">
-<h3>1. Standard Normal Distribution (10 points)</h3>
-<p>Recall that the standard normal distribution has a
-<code>mean = 0</code> and <code>sd = 1</code>. Use these values to
-answer the following questions.</p>
-<p>You do not need to turn in your sketches of the distributions for
-credit, but you are stongly encouraged to draw these out to help check
-your answers.</p>
-<ol style="list-style-type: lower-alpha">
-<li>What is the probability of getting an observation of exactly
-1.25?</li>
-<li>What is the probability of getting an observation of exactly
--0.33?</li>
-<li>What is the probability of getting an observation of exactly
-2.9?</li>
-<li>What is the probability of getting an observation of less than
-2.5?</li>
-<li>What is the probability of getting an observation of less than
--0.9?</li>
-<li>What is the probability of getting an observation of greater than
--1?</li>
-<li>What is the probability of getting an observation between 1.4 and
-3.5?</li>
-<li>What value represents the 10th percentile of this distribution?</li>
-<li>What value represents the 95th percentile of this distribution?</li>
-<li>What value represents the 5th percentile?</li>
-</ol>
+<div id="formulas" class="section level2">
+<h2>Formulas</h2>
+<div id="simple-linear-model" class="section level3">
+<h3>Simple Linear Model</h3>
+<p><span class="math display">\[\Huge y = \beta_0 + \beta_1x +
+\epsilon\]</span> Where <span class="math inline">\(y\)</span> is the
+response variable, <span class="math inline">\(\beta_0\)</span> is the
+intercept, and <span class="math inline">\(\beta_1\)</span> is the <span class="math inline">\(x\)</span>-coefficient, and <span class="math inline">\(\epsilon\)</span> is the error term, or the
+expected variation in your observation and your expected result.</p>
+<p>It may not be obvious now, but nearly every statistical test we will
+perform in this class is a variation on this simple linear model.</p>
 </div>
-<div id="normal-distribution-age-at-childbirth-7-points" class="section level3">
-<h3>2. Normal Distribution: Age at childbirth (7 points)</h3>
-<p>In the last decade, the average age of a mother at childbirth is 26.4
-years, with standard deviation 5.8 years. The distribution of age at
-childbirth is approximately normal.</p>
-<ol style="list-style-type: lower-alpha">
-<li>What age at childbirth puts a woman in the upper 2.5% of the age
-distribution? In other words, what is the 97.5 percentile of this age
-distribution?</li>
-<li>What proportion of women who give birth are 21 years of age or
-older?</li>
-<li>What is the probability that a woman will have a child at exactly
-32.8 years old?</li>
-<li>What is the probability that a woman will have a child between the
-ages of 18 and 22?</li>
-<li>What is the probability that a woman will give birth at exactly the
-mean age of this distribution?</li>
-<li>What values bound the range 95% of the data?</li>
-<li>How many standard deviations (i.e., Z-score) from the mean is a
-woman who gives birth at the age of 35?</li>
-</ol>
-</div>
-<div id="triathlon-times.-8-points" class="section level3">
-<h3>3. Triathlon times. (8 points)</h3>
-<p>In triathlons, it is common for racers to be placed into age and
-gender groups. The finishing times of men ages 30-34 has mean of 4,313
-seconds with a standard deviation of 583 seconds. The finishing times of
-the women ages 25-29 has a mean of 5,261 seconds with a standard
-deviation of 807 seconds. The distribution of finishing times for both
-groups is approximately normal. Note that a better performance
-corresponds to a faster finish.</p>
-<ol style="list-style-type: lower-alpha">
-<li>If a man of the 30-34 age group finishes the race in 4,948 seconds,
-what percent of the triathletes in the group did he finish faster
-than?</li>
-<li>If a woman of the 25-29 age group finishes the race in 5,513
-seconds, what percent of the triathletes in the group did she finish
-faster than?</li>
-<li>Calculate the cutoff time for the fastest 5% of athletes in the
-men’s group.</li>
-<li>Calculate the cutoff time for the slowest 10% of athletes in the
-women’s group.</li>
-<li>What is the standardized Z-score for a man that finishes in 4,460
-seconds?</li>
-<li>What is the standardized Z-score for a woman that finishes in 5,105
-seconds?</li>
-<li>Compare the Z-scores calculated in part e and f. Which person
-performed better based on their age and gender group?
-<strong>note</strong> be sure to put a comment in front of the text for
-your explanation to part g.</li>
-<li>What is the probability that a man will finish between 4,500 and
-5,000 seconds?</li>
-</ol>
+<div id="sum-of-squares" class="section level3">
+<h3>Sum of Squares</h3>
+<p>The Sum of squares formula is a way of measuring the average
+deviation of an observation in a sample from the sample mean:</p>
+<p><span class="math display">\[\Huge TSS = \sum_{i=1}^n (y_i -
+\overline{y})^2\]</span></p>
+<p>Where <span class="math inline">\(n\)</span> is the total number of
+observations, <span class="math inline">\(y_i\)</span> is the
+<em>i</em>th observation in a sample, <span class="math inline">\(y\)</span>, and <span class="math inline">\(\overline{y}\)</span> is the sample mean.</p>
+<p>Variations on the TSS formula will come up frequently throughout
+class. For example, in ANOVA, we will use a modified version of the
+formula which calculates the average deviation of a group-mean from the
+global mean (AKA sample mean):</p>
+<p><span class="math display">\[\Huge TSS = n_j \sum_{j=1}^a
+(\overline{y_j} - \overline{y.})^2\]</span> Where <span class="math inline">\(a\)</span> is the number of groups, <span class="math inline">\(n_j\)</span> and <span class="math inline">\(y_j\)</span> are the number of observations and
+mean of group <span class="math inline">\(j\)</span>, respectively, and
+<span class="math inline">\(\overline{y.}\)</span> is the sample
+mean.</p>
 </div>
 </div>
+<div id="r-terminology" class="section level2">
+<h2>R Terminology</h2>
+<table>
+<colgroup>
+<col width="11%" />
+<col width="88%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Term</th>
+<th align="left">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Objects</td>
+<td align="left">A data structure in R with set class, rules, etc.
+Essentiially, everything we work with in R is an object</td>
+</tr>
+<tr class="even">
+<td align="center">Scalar</td>
+<td align="left">An object with a single value. i.e.,
+<code>x = 10</code></td>
+</tr>
+<tr class="odd">
+<td align="center">Vector</td>
+<td align="left">A collection of observations i.e.,
+<code>z = c(2, 4, 6, 8)</code>. Vectors have to have the same data type,
+i.e., <code>numeric</code>, <code>character</code>,
+<code>logical</code>, etc.</td>
+</tr>
+<tr class="even">
+<td align="center">Data Frame</td>
+<td align="left">A list of vectors of equal length. 2-dimensional data
+structure. Can be a combination of different data types, but all
+observations within a vector need to be the same. Columns are usually
+called <code>variables</code> and rows are called
+<code>observations</code></td>
+</tr>
+<tr class="odd">
+<td align="center">Function</td>
+<td align="left">A function is a set of statements organized together to
+perform a specific task. Functions have different arguments, and
+generally need to take an object as input. i.e.,
+<code>mean(z, na.rm = TRUE)</code></td>
+</tr>
+<tr class="even">
+<td align="center">Comments</td>
+<td align="left">Comments are plain text notes in R-scripts which are
+note evaluated. They are started by placing a <code>#</code> at the
+beginning of the script line. Comments are extremely useful and should
+be used often in your code.</td>
+</tr>
+<tr class="odd">
+<td align="center">Classes</td>
+<td align="left">All objects in R have a class. Examples include
+<code>numeric</code>, <code>character</code>,<code>logical</code>,
+<code>data.frame</code>, <code>matrix</code>, and <code>list</code>.
+Furthermore, columns (variables) within a <code>data.frame</code> can
+have different classes.</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 

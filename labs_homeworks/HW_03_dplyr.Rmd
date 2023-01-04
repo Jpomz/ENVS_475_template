@@ -1,7 +1,7 @@
 ---
-title: "Homework 3: dplyr"
-subtitle: "ENVS475: Experimental Analysis and Design"
-date: "`r format(Sys.time(), '%B, %Y')`"
+title: "ENVS475 Homework 3: dplyr"
+subtitle: "Complete for a grade"
+date: "Spring 2023"
 output: 
   html_document:
     toc: true
@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+
+# Complete this assignment for a grade.
 
 # Assignment Format
 
@@ -54,13 +56,12 @@ library(dplyr)
 
 ## Data
 
-* Download the `shrub-volume-data.csv` and the `marine.csv` file from D2L and save them in your `data/` folder
+* Download the `shrub-volume-data.csv` and `surveys.csv` files from D2L and save them in your `data/` folder
 
 * Copy and paste the following code into your script. 
   + Make sure this is pasted on lines below the `library()` command
 ```{r}
 shrub_data <- read.csv("data/shrub-volume-data.csv")
-marine <- read.csv("data/marine_hw03.csv")
 ```
 
 # Exercises Homework 03: `dplyr`
@@ -70,32 +71,35 @@ Dr. Granger is interested in studying the factors controlling the size and
 carbon storage of shrubs. She has conducted an experiment looking at the effect
 of three different treatments on shrub volume at four different locations. This data is in the `shrub_data` object which you loaded into R in the previous code. 
 
-Get familiar with the data by using `dplyr` to complete the following tasks.
+Complete the following tasks.
 
-1. Select the data from the length column and print it out (using `select`).
-2. Select the data from the site and experiment columns and print it out (using `select`).
-3. Add a new column named `area` containing the area of the shrub, which is the length times the width (using `mutate`).
-4. Sort the data by length (using `arrange`).
-5. Filter the data to include only plants with heights greater than 5 (using `filter`).
-6. Filter the data to include only plants with heights greater than 4 and widths greater than 2 (using `,` or `&` to include two conditions).
-7. Filter the data to include only plants from Experiment 1 or Experiment 3 (using `|` for "or").
-8. Filter the data to remove rows with null values in the `height` column (using `!is.na`)
-9. Create a new data frame called `shrub_volumes` that includes all of the original data and a new column containing the volumes (length * width * height), and display it.
+1. Get familiar with the shrub data by using the `names()` and `str()` functions. 
+2. Select the data from the length column and print it out (using `select`).
+3. Select the data from the site and experiment columns and print it out (using `select`).
+4. Add a new column named `area` containing the area of the shrub, which is the length times the width (using `mutate`).
+5. Sort the data by length (using `arrange`).
+6. Filter the data to include only plants with heights greater than 5 (using `filter`).
+7. Filter the data to include only plants with heights greater than 4 and widths greater than 2 (using `,` or `&` to include two conditions).
+8. Filter the data to include only plants from Experiment 1 or Experiment 3 (using `|` for "or").
+9. Filter the data to remove rows with null values in the `height` column (using `!is.na`)
+10. Create a new data frame called `shrub_volumes` that includes all of the original data and a new column containing the volumes (length * width * height), and display it.
 Footer
 
 ## Problem 2
 
-If the file `surveys.csv` is not already in your working `data/` folder then download a copy.
+If the file `surveys.csv` is not already in your working `data/` folder then download a copy from D2L.
 
 Load the file into R using `read.csv()`.
-* Use the example from the `shrub_data` as a guide
+* Use the example above from the `shrub_data` as a guide
 * Make sure `surveys.csv` is in the `data/` folder and that you put the file path into `read.csv()` correctly
 
 ***Do not use pipes for this exercise.***
 
-1. Use `select()` to create a new data frame with just the `year`, `month`,`day`, and `species_id` columns in that order.
+1. Get familiar with the surveys data by using the `names()` and `str()` functions.
 
-2. Use `mutate()`, `select()`, and `filter()` with `!is.na()` to create a new   data frame with the `year`, `species_id`, and weight **in kilograms** of each individual, with no null weights. The weight in the table is given in grams so you will need to create a new column called `kg` for weight in kilograms by dividing the weight column by 1000.
+2. Use `select()` to create a new data frame with just the `year`, `month`,`day`, and `species_id` columns in that order.
+
+3. Use `mutate()`, `select()`, and `filter()` with `!is.na()` to create a new   data frame with the `year`, `species_id`, and weight **in kilograms** of each individual, with no null weights. The weight in the table is given in grams so you will need to create a new column called `kg` for weight in kilograms by dividing the weight column by 1000.
 * Since no pipes are being used, you will need to create a new data object for each step
   + Make sure to give them new names so you don't overwrite the original `surveys` object
   + make sure the last line in this section is just the name of the last object you create so the results print out when you source the script. 
@@ -119,6 +123,6 @@ Summarize the `surveys` data
 
 4. Calculate the average weight for the "DO" species by year in the `surveys` data. 
 
-# Problem 5 Challenge
+# Problem 5 Challenge (optional)
 
 Develop a data manipulation pipeline for the Portal `surveys` table that produces a table of data for only the three *Dipodomys* species (`DM`, `DO`, `DS`). The species IDs should be presented as lower case, not upper case. The table should contain information on the date, the species ID, the weight and hindfoot length. The data should not include null values for either weight or hindfoot length. The table should be sorted first by the species (so that each species is grouped together) and then by weight, with the largest weights at the top.

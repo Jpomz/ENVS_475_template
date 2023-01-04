@@ -11,7 +11,7 @@
 
 
 
-<title>ENVS475 Homework 2: Normal Distributions</title>
+<title>Lab 07: Introduction to R Markdown</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -361,125 +361,474 @@ pre code {
 
 
 
-<h1 class="title toc-ignore">ENVS475 Homework 2: Normal
-Distributions</h1>
-<h3 class="subtitle">Not graded</h3>
-<h4 class="date">Spring 2023</h4>
+<h1 class="title toc-ignore">Lab 07: Introduction to R Markdown</h1>
+<h3 class="subtitle">ENVS475: Experimental Analysis and Design</h3>
+<h4 class="date">December, 2022</h4>
 
 </div>
 
 <div id="TOC">
 <ul>
-<li><a href="#this-assignment-will-not-be-graded">This assignment will
-not be graded</a>
-<ul>
-<li><a href="#exercises">Exercises</a>
-<ul>
-<li><a href="#standard-normal-distribution-10-points">1. Standard Normal
-Distribution (10 points)</a></li>
-<li><a href="#normal-distribution-age-at-childbirth-7-points">2. Normal
-Distribution: Age at childbirth (7 points)</a></li>
-<li><a href="#triathlon-times.-8-points">3. Triathlon times. (8
-points)</a></li>
-</ul></li>
-</ul></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#what-is-markdown">What is Markdown?</a></li>
+<li><a href="#why-use-r-markdown">Why use R Markdown</a></li>
+<li><a href="#creating-a-new-r-markdown-file">Creating a new R Markdown
+file</a></li>
+<li><a href="#basic-formatting-the-yaml-header">Basic formatting: The
+YAML header</a></li>
+<li><a href="#headers">Headers</a></li>
+<li><a href="#header-1">Header 1</a></li>
+<li><a href="#font-formats">Font formats</a></li>
+<li><a href="#lists">Lists</a></li>
+<li><a href="#hyperlinks">Hyperlinks</a></li>
+<li><a href="#equations">Equations</a></li>
+<li><a href="#adding-functioning-code">Adding functioning code</a></li>
+<li><a href="#additional-resources">Additional resources</a></li>
 </ul>
 </div>
 
-<div id="this-assignment-will-not-be-graded" class="section level1">
-<h1>This assignment will not be graded</h1>
-<div id="exercises" class="section level2">
-<h2>Exercises</h2>
-<p>In your homework script, make sure to include comments using the
-<code>#</code> for each problem and subproblem. For example:</p>
-<pre class="r"><code># Exercise 1
-# 1.a
-qnorm(0.9, mean = 0, sd = 1)
-# 1.b
-dnorm(3, mean = 10, sd = 4)</code></pre>
-<div id="standard-normal-distribution-10-points" class="section level3">
-<h3>1. Standard Normal Distribution (10 points)</h3>
-<p>Recall that the standard normal distribution has a
-<code>mean = 0</code> and <code>sd = 1</code>. Use these values to
-answer the following questions.</p>
-<p>You do not need to turn in your sketches of the distributions for
-credit, but you are stongly encouraged to draw these out to help check
-your answers.</p>
-<ol style="list-style-type: lower-alpha">
-<li>What is the probability of getting an observation of exactly
-1.25?</li>
-<li>What is the probability of getting an observation of exactly
--0.33?</li>
-<li>What is the probability of getting an observation of exactly
-2.9?</li>
-<li>What is the probability of getting an observation of less than
-2.5?</li>
-<li>What is the probability of getting an observation of less than
--0.9?</li>
-<li>What is the probability of getting an observation of greater than
--1?</li>
-<li>What is the probability of getting an observation between 1.4 and
-3.5?</li>
-<li>What value represents the 10th percentile of this distribution?</li>
-<li>What value represents the 95th percentile of this distribution?</li>
-<li>What value represents the 5th percentile?</li>
+<div id="overview" class="section level1">
+<h1>Overview</h1>
+<p>This week, you will be introduced to R Markdown. You will follow some
+self-guided reading and will submit an R Markdown file and the rendered
+HTML document for Homework 7 (Due at the end of next week).</p>
+</div>
+<div id="what-is-markdown" class="section level1">
+<h1>What is Markdown?</h1>
+<p>Before we discuss what R Markdown is, we need to discuss what
+Markdown is. What is Markdown? Let’s start with what it’s not.</p>
+<p>Many of you have probably created a report or a paper using a word
+processor like Microsoft Word or Google Docs. Word processors are
+referred to as “what you see is what you get” (<em>wysiwyg</em>) text
+editors. This means that when you highlight text and click the
+<code>boldface</code> icon in Word, the text appears bold on your
+screen. All sorts of other formatting options, including making headers,
+inserting figures, adding page numbers, etc., are possible by clicking
+on buttons. There is code behind the scenes that creates these changes
+but users don’t see the code, only the formatting output. This makes
+<em>wysiwyg</em> editors relatively easy to use for beginners. But for
+more advanced users, it can actually be problematic. Have you ever had
+Word act in ways that you don’t fully understand? Of course! We all
+have. Have you ever tried opening a <code>.docx</code> file using an
+older version of Word, only to find that it doesn’t look the way thought
+it would? Have you ever inserted a figure only to have it jump to
+another page or get ‘anchored’ to the bottom of a page? These are just a
+few of the problems that occur when your document has a bunch of hidden
+formatting code that you cannot see or understand.</p>
+<p>Markdown is different. Markdown files are plain text files, meaning
+that they can be created and edited using text editors (like NotePad on
+Windows or TextEdit on Mac). The biggest difference between Markdown
+files and Word documents is that formatting Markdown documents occurs in
+the document itself rather than behind the scenes. So to make something
+<strong>boldface</strong> you have to tell Markdown to do that by
+putting two <code>**asterisks**</code> on either side of the word or
+phrase. <em>Italics</em> is done by putting one <code>*asterisk*</code>
+around the text. <a href="https://en.wikipedia.org/wiki/Markdown">Hyperlinks</a> are written
+like this:
+<code>[Hyperlinks](https://en.wikipedia.org/wiki/Markdown)</code>. These
+are just a few of the many formatting options you can include in a
+Markdown document. We’ll learn about options like headers, lists,
+mathematical symbols and equations, and figures later in this tutorial
+and throughout the semester.</p>
+<p>As you’re writing, the text won’t look bold or italic or whatever
+(this is not ‘what you see is what you get’, it’s ‘what you see is what
+you type’). The formatting only shows up when you render the Markdown
+file to create another type of document (pdf, html, even Word). The nice
+thing about Markdown is that because it uses standard ways to express
+specific formatting options, you can convert your documents into
+different output formats very easily.</p>
+<div id="what-is-r-markdown" class="section level2">
+<h2>What is R Markdown?</h2>
+<p>In this course, we will use a specific ‘flavor’ of Markdown called ‘R
+Markdown’. R Markdown gives us all of the formatting options available
+for Markdown <em>plus</em> the ability to embed, display, and run R code
+in our documents. By mixing R code with plain text, we can create
+dynamic reports that replicate the analytical processes, show the code
+underlying these processes, create the output from our analysis
+(figures, summary statistics, etc.), and provide all of the necessary
+text explanations to go along with the code and output.</p>
+<p>This will be particularly important for assignments in the remainder
+of this class. As we perform more advanced statistical models, it will
+be necessary to interpret the results. R Markdown will allow us to run
+the code for the models in the document, and include text for
+interpretation. This will be much easier to read than including long
+comments in our scripts. Likewise, being able to include things like
+<em>italics</em>, <strong>boldface</strong>, sub and superscripts will
+make interpretation easier and much nicer presentation.</p>
+</div>
+</div>
+<div id="why-use-r-markdown" class="section level1">
+<h1>Why use R Markdown</h1>
+<p>R Markdown has many advantages compared to creating reports in Word
+or GoogleDocs. These advantages include:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Versatility</strong>- Want to convert a Word document
+into pdf? That’s not too hard. But pdf to Word? That’s a pain. PDF to
+HTML? Maybe you know how to do that but I don’t. With R Markdown, we can
+change between these formats (or produce multiple outputs at once) with
+a few lines of code). You can even convert them into pretty nice slide
+shows.</p></li>
+<li><p><strong>Embed code in text</strong> - After running an analysis,
+how do you get your results into Word? Type them by hand?
+Copy-and-paste? Both are a pain and error prone. Rerun your analysis
+using new data? Oops, now you have to copy and paste those new results
+and figures. With R Markdown, we embed code directly into the text so
+results and figures get added to our reports automatically. That means
+no copying and pasting and updating reports as new results come in is
+pain free. I cannot emphasize enough how convenient this is. This will
+certainly save you time in the future.</p></li>
+<li><p><strong>Annotate your code</strong> - Using the <code>#</code> is
+great for adding small annotations to your R scripts and you should
+definitely get in the habitat of doing that. But sometimes you need to
+add a lot of details to help other users (or your future self) make
+sense of complex code. For instance, in future assignments in this class
+<em>interpreting</em> the results of statistical analyses will become
+more detailed and complex. Writing this in R Markdown will be much
+easier, and reading the html document will be easier for me to grade! R
+Markdown allows you to create documents with as much text and formatting
+as you need, along with the code.</p></li>
+<li><p><strong>Version control</strong> - Tired of saving
+<code>manuscript_v1.doc</code>, <code>manuscript_v2.doc</code>,
+<code>manuscript_final.doc</code>, <code>manuscript_final_v2.doc</code>?
+Then version control is for you. We won’t go into the specifics here but
+R Markdown allows you to seamlessly use version control systems like git
+and Github to document changes to your reports.</p></li>
+<li><p><strong>Edit as text files</strong> - R Markdown files are most
+easily created and edited within RStudio but you don’t have to do it
+that way. They can be opened and edited in base R and even using text
+editors. This means you can create and edit them on any platform
+(Windows, Mac, Linux) using free software that is already installed on
+the computer</p></li>
+<li><p><strong>Stability</strong> - How many of us have had Word crash
+while we’re working on a paper? Did you save as you were working? Hope
+so. Because R Markdown files are smaller and more lightweight, they tend
+not to cause your computer to crash as you’re working on them.</p></li>
+<li><p><strong>Focus on text, not formatting</strong> - Do you spend a
+lot of time tweaking the formatting of your Word document rather than
+writing? R Markdown allows you to separate the writing process from the
+formatting process, which allows you to focus on the former without
+worrying about that later (in theory at least). Plus there are lots of
+templates you can use to ensure that the formatting is taken care
+without you having to do anything special!</p></li>
+</ol>
+<div id="why-not-use-r-markdown" class="section level2">
+<h2>Why not use R Markdown?</h2>
+<p>There are a few disadvantages to R Markdown.</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Your adviser/boss/professor/colleague doesn’t use
+it</strong> - Try sending a <code>.Rmd</code> file to your adviser to
+get feedback. I’ll wait… Like it or not, most folks still use word
+processors, so if you adopt R Markdown you will still have to create and
+edit Word documents for some collaborators who are stuck in their ways.
+(Or do what I do: Write it in R Markdown and knit it as a Word
+document.)</p></li>
+<li><p><strong>No track changes</strong> - Even if you’re lucky to have
+an adviser who will review a <code>.Rmd</code> file, you won’t get nice
+track changes like in Word. There are alternative to this (version
+control helps) but none are quite as easy as track changes.</p></li>
+<li><p><strong>Fewer formatting options</strong> - For better or worse,
+you have a more limited set of formatting options with R Markdown. That
+can be constraining (but often it’s actually freeing!)</p></li>
+<li><p><strong>There’s a learning curve</strong> - You already know how
+to use Word. R Markdown is new. How do you make something bold? How do
+you insert equations? How do you get figures to go at the end of your
+document? At first, you will almost certainly have to Google almost
+every thing you need to do in R Markdown (this is why number 1 is a
+problem). Most of it is pretty simple but it still means the going can
+be slow at first. Also I recommend downloading the two R Markdown Cheat
+Sheets available in R Studio (<code>Help -&gt; Cheatsheets</code>) into
+your <code>other_resources\cheatsheets</code> folder!</p></li>
 </ol>
 </div>
-<div id="normal-distribution-age-at-childbirth-7-points" class="section level3">
-<h3>2. Normal Distribution: Age at childbirth (7 points)</h3>
-<p>In the last decade, the average age of a mother at childbirth is 26.4
-years, with standard deviation 5.8 years. The distribution of age at
-childbirth is approximately normal.</p>
-<ol style="list-style-type: lower-alpha">
-<li>What age at childbirth puts a woman in the upper 2.5% of the age
-distribution? In other words, what is the 97.5 percentile of this age
-distribution?</li>
-<li>What proportion of women who give birth are 21 years of age or
-older?</li>
-<li>What is the probability that a woman will have a child at exactly
-32.8 years old?</li>
-<li>What is the probability that a woman will have a child between the
-ages of 18 and 22?</li>
-<li>What is the probability that a woman will give birth at exactly the
-mean age of this distribution?</li>
-<li>What values bound the range 95% of the data?</li>
-<li>How many standard deviations (i.e., Z-score) from the mean is a
-woman who gives birth at the age of 35?</li>
+</div>
+<div id="creating-a-new-r-markdown-file" class="section level1">
+<h1>Creating a new R Markdown file</h1>
+<ol style="list-style-type: decimal">
+<li><p>Click on
+<code>File -&gt; New File -&gt; R Markdown...</code></p></li>
+<li><p>Enter a title and choose a format (HTML, pdf, or Word) for the
+document (for this class, I recommend sticking with HTML; other formats
+require additional package downloads and can be a little finicky to get
+set up).</p></li>
+<li><p>Click <code>Ok</code></p></li>
+<li><p>Save the newly created document</p></li>
 </ol>
+<p>Pretty easy</p>
 </div>
-<div id="triathlon-times.-8-points" class="section level3">
-<h3>3. Triathlon times. (8 points)</h3>
-<p>In triathlons, it is common for racers to be placed into age and
-gender groups. The finishing times of men ages 30-34 has mean of 4,313
-seconds with a standard deviation of 583 seconds. The finishing times of
-the women ages 25-29 has a mean of 5,261 seconds with a standard
-deviation of 807 seconds. The distribution of finishing times for both
-groups is approximately normal. Note that a better performance
-corresponds to a faster finish.</p>
-<ol style="list-style-type: lower-alpha">
-<li>If a man of the 30-34 age group finishes the race in 4,948 seconds,
-what percent of the triathletes in the group did he finish faster
-than?</li>
-<li>If a woman of the 25-29 age group finishes the race in 5,513
-seconds, what percent of the triathletes in the group did she finish
-faster than?</li>
-<li>Calculate the cutoff time for the fastest 5% of athletes in the
-men’s group.</li>
-<li>Calculate the cutoff time for the slowest 10% of athletes in the
-women’s group.</li>
-<li>What is the standardized Z-score for a man that finishes in 4,460
-seconds?</li>
-<li>What is the standardized Z-score for a woman that finishes in 5,105
-seconds?</li>
-<li>Compare the Z-scores calculated in part e and f. Which person
-performed better based on their age and gender group?
-<strong>note</strong> be sure to put a comment in front of the text for
-your explanation to part g.</li>
-<li>What is the probability that a man will finish between 4,500 and
-5,000 seconds?</li>
+<div id="basic-formatting-the-yaml-header" class="section level1">
+<h1>Basic formatting: The YAML header</h1>
+<p>At the top of your <code>.Rmd</code> file, you should see several
+line in between three blue dashes:</p>
+<pre><code>---
+title: &quot;The title I entered&quot;
+author: &quot;The author I entered&quot;
+output: html_document
+---</code></pre>
+<p>This is called the “YAML header” and it’s where we can control a lot
+of the major formatting options for our documents. For example, to
+change the output to pdf, just switch <code>html_document</code> to
+<code>pdf_document</code> (note, you may need to install a Latex
+distribution to knit to pdf. If you get an error message at this step,
+see suggestions <a href="https://bookdown.org/yihui/rmarkdown/installation.html">here</a>)
+and then click the <code>Knit</code> button again.</p>
+<p>There’s lots of formatting options you can include in the YAML
+header, most of which are beyond the scope of this course. For this
+class we’re going to stick with HTML output, but we will include table
+of contents by including the following code:</p>
+<pre><code>---
+title: &quot;The title I entered&quot;
+author: &quot;The author I entered&quot;
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+---</code></pre>
+<p>Notice that the <code>output</code> section has changed and there are
+now additional arguments included which are indented. *
+<code>toc: true</code> means that we will include a table of contents *
+<code>toc_depth: 3</code> means that we will include an entry for all
+headers from level 1 to 3.</p>
+</div>
+<div id="headers" class="section level1">
+<h1>Headers</h1>
+<p>Using headers is a natural way to break up a document or report into
+smaller sections. You can include headers by putting one or more
+<code>#</code> signs in front of text. One <code>#</code> is a main
+header, <code>##</code> is the secondary header, etc.</p>
+</div>
+<div id="header-1" class="section level1">
+<h1>Header 1</h1>
+<div id="header-2" class="section level2">
+<h2>Header 2</h2>
+<div id="header-3" class="section level3">
+<h3>Header 3</h3>
+<div id="header-4" class="section level4">
+<h4>Header 4</h4>
+</div>
+</div>
+</div>
+<div id="paragraph-and-line-breaks" class="section level2">
+<h2>Paragraph and line breaks</h2>
+<p>When writing chunks of text in R Markdown (e.g., a report or
+manuscript), you can create new paragraphs by leaving an empty line
+between each paragraph:</p>
+<pre><code>This is one paragraph.
+
+This is the next paragraph</code></pre>
+</div>
+</div>
+<div id="font-formats" class="section level1">
+<h1>Font formats</h1>
+<div id="bold-italics-sub--and-superscripts" class="section level2">
+<h2><strong>Bold</strong>, <em>Italics</em>, sub- and superscripts</h2>
+<p>As mentioned earlier, create <strong>boldface</strong> by surrounding
+text with two asterisks (<code>**bold**</code>) and use single asterisks
+for <em>italics</em> (<code>*italics*</code>). You can also enter
+<del>strikethrough</del> text with <code>~~strikethough~~</code>.</p>
+<p>You can also add subscripts: H<sub>2</sub>O (<code>H~2~O</code>) and
+superscripts: x<sup>10</sup> (<code>x^10^</code>) <strong>NOTE</strong>
+that the code for sub and superscripts in equations is slightly
+different, see below.</p>
+</div>
+<div id="highlight-code-in-text" class="section level2">
+<h2>Highlight Code in Text</h2>
+<p>To highlight code, for example <code>mean()</code> surround the text
+with back ticks `mean()`. Note, this does not actually insert
+functioning code, just formats text to show that it is code rather than
+plain text.</p>
+<p>You can include multiple lines of code by including three back ticks
+(```) on the line before the code and then three back ticks on the line
+after the code:</p>
+<pre><code>Multiple lines of code
+look like 
+this</code></pre>
+</div>
+</div>
+<div id="lists" class="section level1">
+<h1>Lists</h1>
+<div id="bulleted-lists" class="section level2">
+<h2>Bulleted lists</h2>
+<ul>
+<li><p>Bulleted lists can be included by starting a line with an
+asterisk</p></li>
+<li><p>You can also start the lines with a single dash
+<code>-</code></p>
+<ul>
+<li>for sub-bullets, indent the line (press <code>tab</code> once) and
+start it with <code>+</code>
+<ul>
+<li>for sub-sub-bullets, indent twice (press <code>tab</code> two times)
+and start with <code>-</code></li>
+</ul></li>
+</ul></li>
+</ul>
+<pre><code>* Bullet
+
+  + Sub-bullets</code></pre>
+</div>
+<div id="numbered-lists" class="section level2">
+<h2>Numbered lists</h2>
+<ol style="list-style-type: decimal">
+<li><p>Numbered lists look like this</p></li>
+<li><p>You can also include sub-levels in number lists</p>
+<ol style="list-style-type: lower-roman">
+<li>these can be lower case roman numerals<br />
+</li>
 </ol>
+<ol style="list-style-type: lower-alpha">
+<li>or lowercase letters<br />
+B. or uppercase letters</li>
+</ol></li>
+</ol>
+<pre><code>1. Numbered list
+2. Here is another point
+  i) and some sub points</code></pre>
 </div>
 </div>
+<div id="hyperlinks" class="section level1">
+<h1>Hyperlinks</h1>
+<p>Insert hyperlinks by putting the text you want displayed in square
+brackets followed by the link in parentheses:
+<code>[RStudio cheatsheet](https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf)</code></p>
+</div>
+<div id="equations" class="section level1">
+<h1>Equations</h1>
+<p>Inserting equations in R Markdown is where knowing some Latex really
+comes in handy because equations are written using Latex code. For the
+most part, this is not too difficult but if you need to insert complex
+equations you will probably need to look up the code for some symbols.
+There are many good resources for if you google “latex equations” or
+something similar. One of my favorite resources is <a href="https://rpruim.github.io/s341/S19/from-class/MathinRmd.html">Math
+in R Markdown</a></p>
+<div id="inline-vs.-block-equations" class="section level2">
+<h2>Inline vs. block equations</h2>
+<p>You can include equations either inline (<span class="math inline">\(e = mc^2\)</span>) or as a stand-alone block:</p>
+<p><span class="math display">\[e=mc^2\]</span></p>
+<p>Inline equations are added by putting a single dollar sign
+<code>$</code> on either side of the equation (<code>$e=mc^2$</code>).
+Equation blocks are create by starting and ending a new line with double
+dollar signs</p>
+<p><code>$$e=mc^2$$</code></p>
+</div>
+<div id="greek-letters" class="section level2">
+<h2>Greek letters</h2>
+<p>Statistical models include a lot of Greek letters (<span class="math inline">\(\alpha, \beta, \gamma\)</span>, etc.). You can add
+Greek letters to an equation by typing a backslash <code>\</code>
+followed by the name of the letter <code>\alpha</code>. Uppercase and
+lower case letters are possible by capitalizing the name (<span class="math inline">\(\Delta\)</span> = <code>$\Delta$</code>) or not
+(<span class="math inline">\(\delta\)</span> =
+<code>$\delta$</code>).</p>
+<p>You can also add Greek letters directly inline with text as so:
+<code>here is my line of text with the letter $\alpha$</code></p>
+</div>
+<div id="equation-subscripts-and-superscripts" class="section level2">
+<h2>Equation Subscripts and superscripts</h2>
+<p>You can add superscripts using the <code>^</code> (<span class="math inline">\(\pi r^2\)</span>=<code>$\pi r^2$</code>) symbol
+and subscripts using an underscore <code>_</code> (<span class="math inline">\(N_t\)</span> = <code>$N_t$</code>). Note that only
+one <code>^</code> or <code>_</code> is needed at the beginning. Look
+again at adding sub- and superscripts to normal text above to see the
+differences.</p>
+<p>If the superscript or subscript in an equation includes more than one
+character, put the entire script within curly brackets <code>{}</code>:
+<span class="math inline">\(N_t-1 \neq N_{t-1}\)</span> is
+<code>$N_t-1 \neq N_{t-1}$</code></p>
+</div>
+</div>
+<div id="adding-functioning-code" class="section level1">
+<h1>Adding functioning code</h1>
+<p>The ability to format and create pdf and html documents is great but
+the real strength of R Markdown is the ability to include and run code
+within your document. Code can be included <strong>inline</strong> or in
+<strong>chunks</strong></p>
+<div id="inline-code" class="section level2">
+<h2>Inline code</h2>
+<p>Inline code is useful to including (simple) <code>R</code> output
+directly into the text. Inline code can be added by enclosing
+<code>R</code> code between <code>`r</code> and <code>`</code>. For
+example, typing <code>`r mean(c(3,7,4,7,9))`</code> will compute and
+print the mean of the given vector. That is, it will print 6 instead of
+the code itself. This can be very useful for including summary
+statistics in reports.</p>
+<p>For example, if we have a vector indicating the number of individuals
+captured at each occasion during a mark-recapture study (e.g.,
+<code>n &lt;- c(155, 132, 147, 163)</code>) and we want to include the
+number of occasions in a report, instead of typing <code>4</code>, we
+can type <code>`r length(n)`</code>. Not only does this prevent typos,
+it is extremely useful if <code>length(n)</code> might change in the
+future. Instead of manually changing the number of occasions, we just
+re-render the document and the new number of occasions will be printed
+automatically.</p>
+</div>
+<div id="code-chunks" class="section level2">
+<h2>Code chunks</h2>
+<p>For more complicated code, it is generally more useful to use
+<strong>chunks</strong> than inline code. Chunks start on a separate
+line with <code>```{r}</code> and end with a <code>```</code> on its own
+line (instead of doing this manually, you can click the
+<code>Insert</code> button at the top right of script window, then click
+<code>R</code>). In between these two lines, you can include as many
+lines of code as you want. For example,</p>
+<p><code>```{r}</code><br />
+<code>n1 &lt;- 44     # Number of individuals captured on first occasion</code><br />
+<code>n2 &lt;- 32     # Number of individuals captured on second occasion</code><br />
+<code>m2 &lt;- 15     # Number of previously marked individuals captured on second occasion</code><br />
+<code>N &lt;- n1 * n2 / m2     # Lincoln-Peterson estimate of abundance</code><br />
+<code>```</code></p>
+<div id="chunk-options" class="section level3">
+<h3>Chunk options</h3>
+<p>Code chunks can take a lot of options to control how the code is run
+and what is displayed in the documents. These options go after
+<code>{r</code> and before the closing <code>}</code> (to see all the
+options put your cursor after the <code>{r</code>, hit the space bar,
+then hit <code>tab</code>). For example:</p>
+<ul>
+<li><p><code>echo = FALSE</code> shows the output of the code but not
+the code itself</p></li>
+<li><p><code>include = FALSE</code> runs the code but does not display
+the code <em>or</em> the output (useful for chunks that read or format
+data)</p></li>
+<li><p><code>eval = FALSE</code> shows the code but does not run it
+(useful for showing code)</p></li>
+<li><p><code>warning = FALSE</code> and <code>message = FALSE</code> can
+be include to ensure that error messages and warnings are not printed,
+which can be useful for cleaning up the appearance of documents</p></li>
+<li><p><code>cache = TRUE</code> save the results of the <code>R</code>
+code and doesn’t rerun the chunk unless the code is changed (useful for
+chunks that take a long time to run)</p></li>
+<li><p><code>out.height</code> and <code>out.width</code> control the
+size of figures in a pdf document in inches or centimeters (e.g.,
+<code>out.height = &quot;3in&quot;, notice the quotation marks) See the main [R Markdown page](http://yihui.name/knitr/options/) for a complete list of possible options. ### Setting defaults for all chunks Often it is useful to set the default behavior for all chunks rather that including, for example,</code>warning
+= FALSE` at the beginning of each one. To do this, you can include a
+chunk at the beginning of the document:
+<code>```{r include = FALSE}</code><br />
+<code>opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE)</code><br />
+<code>```</code></p></li>
+</ul>
+<p>Any options can be included in this chuck to set the default
+behaviors. You can over-ride these defaults within chunks as needed. You
+can also load common packages in this chunk to streamline chunks later
+in the document.</p>
+</div>
+</div>
+</div>
+<div id="additional-resources" class="section level1">
+<h1>Additional resources</h1>
+<p>All of the information necessary to complete the homework assignment
+should be available in this document. For further information, you can
+visit the following:</p>
+<p>From the RStudio tool bar, click <code>Help -&gt; Cheatsheets</code>
+and then select the <code>R Markdown cheat sheet</code> (lots of other
+good cheat sheets there as well)</p>
+<p><a href="https://r4ds.had.co.nz/r-markdown.html">chapter on R
+Markdown in the R4DS book</a>.</p>
+<p>RStudio’s <a href="https://rmarkdown.rstudio.com/lesson-1.html">R
+Markdown</a> tutorial</p>
+<p>Tom Edward’s <a href="http://learnr.usu.edu/r_markdown/1_1_markdown.php">R Markdown</a>
+tutorial</p>
+<p>Coding Club’s <a href="https://ourcodingclub.github.io/2016/11/24/rmarkdown-1.html">Getting
+Started with R Markdown</a></p>
+<p>Cosma Shalizi’s <a href="http://www.stat.cmu.edu/~cshalizi/rmarkdown">Using R Markdown for
+Class Reports</a></p>
 </div>
 
 

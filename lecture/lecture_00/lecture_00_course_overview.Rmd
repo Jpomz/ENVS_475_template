@@ -1,0 +1,185 @@
+---
+title: 'LECTURE 0: Course Overview'
+subtitle: "ENVS475 Experimental Analysis and Design"
+author: "Dr. Justin Pomeranz"
+date: "Spring 2023"
+output: 
+  ioslides_presentation:
+    widescreen: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+<style type="text/css">
+body p {
+  color: #000000;
+}
+ul {
+  color: #000000;
+}
+</style>
+
+## Logistics
+
+**Lecture**: Monday, Wednesday, Friday 2-2:50 PM, WS 245  
+
+**Credits**: 3  
+
+**Instructor**: Dr. Justin Pomeranz
+
+[jpomeranz@coloradomesa.edu](jpomeranz@coloradomesa.edu)
+
+**Office**: WS 230E, 
+
+* MWF 9:30-10:30 am
+
+* Tuesday: Zoom, by appointment.
+
+
+## Course schedule and materials
+
+**Texts** (Available for free):
+
+* *The New Statistics with R* by Andy Hector.
+
+  + Available through the Library
+
+* *R for Data Science* by Hadley Wickham & Garrett Grolemund
+
+  + Available for free online: [https://r4ds.had.co.nz/index.html](https://r4ds.had.co.nz/index.html)
+
+All learning materials on D2L
+
+* Brief tour of D2L site
+
+## Course Objectives: *Applied* Statistics
+
+**Objectives**: 
+
+* Practical information on designing experiments and analyzing data 
+
+* **Analysis Life Cycle**
+
+  + Research Question
+  
+  + **Study Design**
+  
+  + Data entry, management
+  
+  + **Data Visualization**
+  
+  + **Statistical Analyses and interpretation**
+  
+
+## Program Student Learning Outcomes: 
+
+1. Design an environmental study. (Quantitative skills, critical thinking skills)
+
+2.  Work with data to visualize, analyze, and interpret the results. (Quantitative skills, critical thinking skills)
+
+## Software
+
+* Course taught in R
+
+* No prior experience needed
+
+* If using your own computer, ensure that R and R Studio are downloaded before next class
+  
+  + See instructions on D2L
+  
+## Why R?
+
+* R is free and open source
+* Runs on all platforms (Windows, Mac, Linux, etc.)
+* Promotes "Open Science"
+  + e.g., combats the ["replication crisis"](https://en.wikipedia.org/wiki/Replication_crisis)
+* Widely used in Env Sci, Ecology, etc.
+  + e.g., Grad School!
+* R is an in-demand skill used across industries
+  + Search for "R Programmer" on Indeed.com
+* It's 2023, knowing some computer programming will help
+
+## General Course Structure
+
+**Course mantra**: work hard, learn a game-changing tool for your research, and have an incredibly in-demand skill to help land you a job!
+
+This course broadly follows the I do, we do, you do methodology. 
+
+*Generally*:
+
+* Monday - Lecture on topic (I do)
+
+* Wednesday - "Lab" on topic (We do)
+
+* Friday - Open to work on assignments (You do)
+
+Exception: First couple of weeks
+
+## Grading
+
+(Approximately) Weekly homework assignments (60% of grade) 
+
+* 6 graded: 10% each
+
+Meant to help with:
+
+* Understanding lecture/lab concepts
+      
+* Implementing models in R
+      
+* Interpreting and presenting results
+
+Two exams (40% of grade)
+
+* Take-home, open-note format
+* You will have 1-2 weeks to complete exam
+* Class time will be provided to work on it and ask questions
+  
+## Homework
+* There will be approximately 14 assignments (16 weeks - 2 exam weeks). 
+* A minimum of 6 will be graded ($\sim$ 10% each).
+  + Assignments for a grade will be approximately every-other-week
+  + It will be explicit which ones are graded and not. 
+
+* Material builds on itself throughout semester. You are strongly encouraged to complete **ALL** assignments. 
+
+* Assignments are due Friday at 5 pm of the following week
+  + Automatic 2 day grace period, afterwards - 50% 
+  + Assignments will not be accepted after 5 days (Wednesday) passed due date 
+  
+## Homework Grading Rubric
+* Produces the correct answer using the requested approach: 100%
+* Generally uses the right approach, but a minor mistake results in an incorrect answer: 90%
+* Attempts to solve the problem and makes some progress using the core concept; OR complete assignment submitted after 2-day grace period: 50%
+* Answer demonstrates a lack of understanding of the core concept; OR mostly incomplete: 0%
+
+Solutions to assignments will be posted on D2L and/or will be gone over in class. 
+
+## Basic Outline
+
+1) Introduction to R and Rstudio
+
+2) Foundational concepts for statistical inference
+
+3) Summary Statistics
+
+4) Basic linear models
+
+5) Null hypothesis significance testing
+
+6) Comparing means (t-tests, ANOVA)
+
+7) Regressions 
+
+## Looking Forward
+
+**Homework:**
+
+* Download R and RStudio (in that order) on personal computer (if using)
+
+* Next class: Introduction to R and Rstudio (Lab 01A and 01B on D2l)
+  
+* If time allows: Brief tour of Rstudio
+  + Follow along on ENVS laptops or personal if software already downloaded

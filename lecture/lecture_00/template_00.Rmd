@@ -1,0 +1,177 @@
+---
+title: "LECTURE 0: Course overview"
+subtitle: "ENVS475 (Exp. Design & Analysis)"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# logistics
+
+**Lecture**: Monday, Wednesday, Friday 11:30-12:20, 1-304  
+**Lab**: Monday or Tuesday  
+**Credits**: 3  
+
+---
+# instructors
+
+#### Dr. Clark Rushing  
+[clark.rushing@uga.edu](clark.rushing@uga.edu)   
+**Office**: 3-409  
+**Office hours**: Monday and Wednesday 1:00-2:30 (or by appointment)
+
+#### Michael Baker  
+[michael.baker2@uga.edu](michael.baker2@uga.edu)  
+**Office**: 1-102A  
+**Office hours**: W 9:30-11:00 or by appointment  
+  
+#### Nancy Raginski  
+[nancy.raginski@uga.edu](nancy.raginski@uga.edu)  
+**Office**: 3-402  
+**Office hours**: Th 10-11:30 or by appointment
+
+---
+# course schedule and materials
+
+Lectures and labs: [rushinglab.github.io/FANR6750](https://rushinglab.github.io/FANR6750)<sup>1</sup>
+
+.footnote[[1] Bookmark this page!]
+
+--
+
+.pull-left[
+**Primary text** (not required):
+
+Quinn, G.P. & Keough, M.J. 2002. Experimental Design and Data Analysis for Biologists. Cambridge University Press
+]
+
+.pull-right[
+# ```{r, echo = FALSE, out.height=300, out.width=225}
+# knitr::include_graphics("fig/experimental-design-and-data-analysis-for-biologists-1.jpg")
+# ```
+]
+
+
+---
+# labs
+
+**Meet weekly**
+
+--
+
+- You should have registered for either Monday **or** Tuesday
+
+--
+
+- Always attend your assigned lab section unless both TA's have provided prior approval to attend the other section
+
+--
+
+**Taught in R**
+
+--
+
+- No prior experience required
+
+--
+
+- But those without prior experience may need to spend time learning outside of class
+
+--
+
+- You can use your own laptop but make sure you have R and RStudio installed prior the first lab<sup>1</sup>
+
+
+
+.footnote[[1] See [here](https://rushinglab.github.io/FANR6750/articles/syllabus.html#course-resources-1) for instructions]
+
+---
+# lab assignments
+
+--
+
+- 5 throughout semester (approximately bi-weekly)
+
+--
+
+- Meant to help with:
+    + Understanding lecture/lab concepts
+    + Implementing models in R
+    + Interpreting and presenting results
+    
+--
+
+- Worth 10 points each
+    + 6 points for turning in **complete** assignment **on time**
+    + 2 points for correcting assignment (using a key)
+    + 2 points for completed self-assessment form
+
+---
+# grading
+
+#### 200 points total
+
+--
+
+- 3 lecture exams, 50 points (25%) each
+
+    + Take-home, open-note format
+    + Not (explicitly) cummulative<sup>1</sup>
+    + See schedule for approximate dates (subject to change)
+
+--
+
+- 5 lab assignments, 10 points (5%) each
+
+.footnote[[1] Material is somewhat cumulative by nature & some important concepts will be repeated]  
+
+---
+# course objectives
+
+**To understand:**  
+<br/>
+
+--
+1) the logical structure of experiments, especially the design of manipulative experiments;  
+<br/>
+
+--
+2) the analysis of such experiments, focusing on linear models;  
+<br/>
+
+--
+3) the use of models in ecological studies (experimental and observational);  
+<br/>
+
+
+---
+# basic structure
+
+--
+
+1) Foundational concepts for statistical inference
+
+--
+
+2) Linear model basics
+
+--
+
+3) Null hypothesis significance testing
+
+--
+
+4) Linear model variations for experiments (t-tests, ANOVA, ANCOVA)
+
+--
+
+5) Generalized linear models and model selection
+
+---
+# looking ahead
+
+### Next time: Basic Concepts in Statistics
+
+### Reading: Quinn chp. 1
