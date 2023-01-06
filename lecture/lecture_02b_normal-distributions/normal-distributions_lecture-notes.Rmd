@@ -106,7 +106,7 @@ Doing this can be a quick estimate of where the observations fall, and can help 
 
 Let's return to our example of measuring 10,000 grams of CO~2~ from burning 1 gallon of gas. Let's say that the grams of CO~2~ from 1 gallon of gas can be described as being normally distributed with a mean of 8887, and a standard deviation of 500 [^1].
 
-Mathematically, we would write this as: $$CO_{2} \sim {Normal}(\mu = 8,887,~ \sigma = 500)$$ 
+Mathematically, we would write this as: $$\large CO_{2} \sim {Normal}(\mu = 8,887,~ \sigma = 500)$$ 
 
 Using this information, let's apply the empirical rule to quickly write out the values that bound 68% of the data. Recall that 68% of the data falls within 1 SD of the mean. In R we could calculate this in a couple of different ways::
 
@@ -334,7 +334,7 @@ However this is less intuitive then using the standard normal distribution. Like
 
 An amazing feature of normal distributions is that you can transform any one of them into a standard normal distribution. This is accomplished using the following equation:  
 
-$$z = \frac{x_{i} - \mu} {\sigma}$$
+$$\Large z = \frac{x_{i} - \mu} {\sigma}$$
 
 where $z$ is the standardized score, $x_{i}$ is the observation from your data and $\mu$ and $\sigma$ are the mean and sd of the data, respectively. 
 
