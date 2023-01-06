@@ -57,14 +57,14 @@ library(ggplot2)
 
 An experiment in Kenya has been exploring the influence of large herbivores on plants.
 
-Check to see if `uhuru_acacia_lab2.txt` is in your workspace.
+Check to see if `uhuru_acacia.csv` is in your workspace.
 
 If not download it from D2L and put it in your `data/` folder in your Class R project. 
 
 Read the data file into R using the following command:
 
 ```{r, eval=FALSE}
-acacia <- read.csv("data/uhuru_acacia_lab2.txt", sep="\t", na.strings = c("dead"))
+acacia <- read.csv("data/uhuru_acacia.csv")
 ```
 
 # Exercises Homework 04: `ggplot2`
@@ -100,6 +100,8 @@ Also:
 * Set the color for `AXIS1` to "red" and `AXIS2` to "black" using the `fill` argument. Label the x axis "Canopy Diameter(m)" and the y axis "Number of Acacia".
 
 4. Use `facet_wrap()` to make the same plot as (3) but with one subplot for each treatment. Set the number of bins in the histogram to 10.
+
+5. Make a plot showing boxplots of the CIRC data split and colored by treatment group. Also include the individual data points and add noise *only* to the horizontal axis (`width = 0.1`). Finally, chnage the theme to `theme_dark()`.  
 
 # Problem 3: dplyr + ggplot
 
