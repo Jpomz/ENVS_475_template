@@ -1,5 +1,6 @@
 ---
-title: "Untitled"
+title: "Outline for Norm-Dist"
+subtitle: "print for instructor"
 author: "ENVS475 Experimental Analysis and Design"
 date: '2023-01-02'
 output: html_document
@@ -9,31 +10,142 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Overview
-
-Instructor outline for Normal Distribution lecture
-
 # Why do we care?
 
-# Normal Distribution
-## Describing it
-### Mu and Sigma
 ## Ubiquitous in nature
 
-# Density plots
-## Empirical Rule
-## Working with N-distributions
-### Sketch
-### R-functions
 
-# R 
+# Normal Distribution
+Draw a bell curve
+
+## Density plots  
+Area under curve Must sum to 1
+
+## Describing it
+### Population  
+Mu and Sigma
+$$\Large y \sim Normal(\mu,~\sigma)$$
+
+Draw different $\mu$, same $\sigma$  
+- where on the number line?
+Draw different $\sigma$, same $\mu$  
+- how wide on the number line?
+
+### Samples
+Mean,$\overline{y}$ $\hat{\mu}$
+Standard deviation $s$ $\hat{\sigma}$
+
+
+## Empirical Rule
+
+$$\Large \overline{y} \pm s = 68\%_{data}$$
+$$\Large \overline{y} \pm 2*s = 95\%_{data}$$
+$$\Large \overline{y} \pm 3*s = 99.5\%_{data}$$
+
+## Working with Norm-distributions
+
+US Female Heights
+$$\Large h_{i} \sim Normal(\mu = 164,~ \sigma = 6)$$
+
+### Sketch  
+
+Draw normal distribution  
+1 sd = `r c(164 - 6,  164  +   6)`  
+2 sd = `r c(164 - 2*6, 164 + 2*6)`  
+3 sd = `r c(164 - 3*6, 164 + 3*6)` 
+
+#### Add observations
+Where does `r round(qnorm(c(0.65, 0.1, 0.95, 0.001), mean = 164, sd = 6), 0)`
+
+# Probability 
+
+What is the likelihood of an individual measuring *Exactly* 166 cm?
+What is the probability of measuring smaller or larger than that value?
+
+Need calculus to measure area under curves to answer these questions. 
+
+Luckily, we can use R. 
+
+# R-functions
+
 ## _norm()
+All have syntax of `_norm(_, mean, sd)`  
+
 ### dnorm - exact
-### pnorm - more-or-less
-### qnorm - value at quantile?
+`dnorm(166, mean = 164, sd = 6)` $\rightarrow$  
+
+`r dnorm(166, mean = 164, sd = 6)`  
+
+### pnorm - more-or-less  
+probability of less than 166:  
+`pnorm(166, mean = 164, sd = 6)` $\rightarrow$  
+
+`r pnorm(166, mean = 164, sd = 6)`
+
+Probability of greater than 166:  
+`1 - pnorm(166, mean = 164, sd = 6)` or  
+`pnorm(166, mean = 164, sd = 6, lower.tail = FALSE)`
+
+`r 1 - pnorm(166, mean = 164, sd = 6)`
+
+### qnorm - value at quantile?  
+
+What height is in the top 75%?  
+`qnorm(0.75, mean = 164, sd = 6)`  
+`r qnorm(0.75, mean = 164, sd = 6)`  
+
+What height is in the bottom 10%?  
+`qnorm(0.1, mean = 164, sd = 6)`  
+`r qnorm(0.1, mean = 164, sd = 6)`  
+
+### rnorm  
+You can also sample from a normal distribution.  
+What are 5 expected heights of US females?
+`rnorm(5, mean = 164, sd=6)`  
+`r rnorm(5, mean = 164, sd=6)`  
+
+Round to 0.1 digits:  
+
+`round(rnorm(5, mean = 164, sd=6), 1)`  
+`r round(rnorm(5, mean = 164, sd=6), 1)`  
 
 # Standard Normal
+$$ \Large z \sim Normal(\mu = 0,~\sigma = 1)$$
 
 
-## Z-scores
+## Z-scores  
 
+Convert any observation to a z-score  
+$$\Large z = \frac{x_{i} - \mu} {\sigma}$$
+
+### Range  
+z-scores should be between `c(-3,3)` (i.e., 99.5% of the data)
+
+### Positive  
+Above the average
+
+### Negative  
+Below the average 
+
+
+What is the z-score for US female of 166 cm height?
+
+$$\Large z = \frac{166 - 164} {6} = 0.333$$
+
+
+What is the z-score for US female of 155 cm height?
+
+$$\Large z = \frac{155 - 164} {6} = -1.5$$
+
+What is the z-score for US female of 183 cm height?
+
+$$\Large z = \frac{183 - 164} {6} = 3.12$$
+
+What is the percentile of a female of 183 height? Or, what percentage of the data is this person above?
+`pnorm(183, mean = 164, sd = 6)`
+`r pnorm(183, 164, 6)`  
+This explains the z-score > 3!
+
+### Utility
+
+Z-scores especially useful for comparing measurements on different scales. I.e., SAT and ACT example in lecture notes. 

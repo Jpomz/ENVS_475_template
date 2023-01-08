@@ -2,6 +2,9 @@ running notes
 
 make "script_format" markdown file
 
+
+re download ggplot data sets and name them correctly
+
 week01 intro to R lab and assignment done
 week02 distributions lab and homework done
 week03 dplyr lab done
@@ -15,11 +18,8 @@ make new assignment for dplyr (if keeping)
 - modify to include things we've already discussed in class
 -- make a distribution plot
 
-Make assignment match updated dplyr tutorial. Find other built-in data set to play with -- shrub_volume_data [no]
-marine data setd: https://ourcodingclub.github.io/tutorials/data-manip-creative-dplyr/#ii
+dplyr - lab and homework done
 
-
-re download ggplot data sets and name them correctly
 
 To-do: 
 Week2
@@ -39,3 +39,5 @@ Week 6 - t-tests
   W - lab (not done)
   F - hw 06 ungraded
 Week 7 - remote (done?)
+
+

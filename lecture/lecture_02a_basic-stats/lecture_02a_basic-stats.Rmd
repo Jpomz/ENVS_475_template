@@ -1,0 +1,395 @@
+---
+title: "LECTURE 02a: Basic concepts in statistics"
+subtitle: "ENVS475: Exp. Design and Analysis"
+author: "<br/><br/><br/>Spring 2023"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: true
+---
+
+```{r setup, echo = FALSE, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(echo = FALSE, fig.align = 'center', warning=FALSE, message=FALSE, fig.retina = 2)
+#source(here::here("R/zzz.R"))
+# library(emo)
+# library(gganimate)
+```
+
+class: inverse
+
+# Outline<sup>1</sup>
+
+.footnote[[1] Lecture based on [FANR6750](https://rushinglab.github.io/FANR6750/index.html)]
+
+<br/>
+#### 1) What is statistics?
+
+<br/>  
+--
+
+#### 2) Statistics and the scientific method
+
+<br/> 
+--
+
+#### 3) Experiments and causal inference
+
+<br/> 
+
+---
+
+# What is statistics?
+
+<br/>
+<br/>
+> The study of the collection, analysis, interpretation, presentation, and organization of data (Dodge 2006)  
+
+<br/>  
+--
+<br/>
+> The science of learning from data (various)  
+
+---
+# Why do we need statistics?
+
+### Common tasks  
+- Estimate unknown parameters  
+<br/>
+
+--
+- Test hypotheses  
+<br/>
+
+--
+- Describe stochastic systems  
+<br/>
+
+--
+- Make predictions that account for uncertainty  
+
+---
+
+# Science
+## Let's start by defining science
+--
+
+- **Google:** study of the structure and behavior of the physical and natural world through observation and experiment.
+
+--
+
+- **Isaac Asimov:** …a system for testing your thoughts against the universe and seeing whether they match.
+
+--
+
+- **Carl Sagan:** …a way of thinking much more than it is a body of knowledge.
+
+--
+
+- **Albert Einstein:** …all our science, measured against reality, is primitive and childlike — and yet it is the most precious thing we have.
+
+---
+# Brief History of Science
+## 1) Descriptive
+
+* Oldest form of “science”
+
+* Hunter-gatherer societies
+
+  + Observations related to survival
+	 	
+* Collect observations $\rightarrow$ explanation
+
+  + No testable hypothesis
+  
+* Explanations based on myth, religion, lore
+
+	  + Ex) locust plagues, floods, eclipses
+
+---
+# Brief History of Science
+## 2) [Deduction](https://en.wikipedia.org/wiki/Deduction) (Ancient Greeks)
+
+* Aristotle‑ (385‑323 b.C.) Father of 	scientific methodology
+
+* Rationalist‑ logic and reason as chief 	sources of knowledge
+
+* Basic truths revealed by concentrated 	thinking
+
+Major tool:
+**SYLLOGISM** = formal argument
+* Major premise
+
+* Minor premise
+
+* Conclusion
+
+---
+
+## Syllogism Example
+**MAJOR:** all fur‑bearing, milk-producing animals are mammals
+<br/>
+**MINOR:** mice have fur and produce milk
+<br/>
+**CONCLUSION:** mice are mammals
+<br/>
+
+* General statement $\rightarrow$ specific conclusion
+
+<br/>
+Ideas remained unchallenged for ~2000 y
+
+* Stagnation of science
+
+Belief that ancient Greeks had discovered 	everything of significance		
+
+Need for absolute proof, w/ mathematical 	rigor (e.g., Geometry) dominated science
+
+---
+# Brief History of Science
+## 3) [Induction](https://en.wikipedia.org/wiki/Induction)
+
+.pull-left[
+Sir Francis Bacon (1561‑1626) 
+	
+* Challenged rationalist’s
+	
+* “Truth from work not words”
+
+Collect large body of observations 
+
+* Draw conclusions from these facts
+
+* Importance of statistics (coming up!)
+]
+
+--
+
+.pull-right[
+No hypotheses 
+
+* Similar to Descriptive Science
+
+* However, observations  subjected to analysis
+
+  + Specific $\rightarrow$ General
+  
+Example: 
+<br/>
+**OBSERVATION:** Every fox I have seen is red. 
+<br/>
+**CONCLUSION:** Every fox in the world is red. 
+]
+
+---
+
+# Stats and the scientific method
+
+#### Ways of learnings
+
+--
+
+.pull-left[
+**Inductive reasoning**
+
+- Consistent observations -> general principle
+
+- Problem: "confirmatory" observations can't disprove theory
+
+- Example: I've only seen birds that fly :: all birds can fly
+]
+
+--
+
+.pull-right[
+[**Hypothetico-Deductive reasoning**](https://en.wikipedia.org/wiki/Hypothetico-deductive_model)
+
+- Formalized by Karl Popper
+
+- Theory -> predictions -> observations
+
+- Based on *falsification*
+
+- **Example hypothesis**: All birds can fly :: penguins are birds :: penguins can fly
+
+  + Observe penguins can't flying, *falsify* hypothesis
+]
+
+---
+# Stats and the scientific method
+
+#### Ways of learnings (real world)
+
+--
+
+1) Observation, Pattern identification (i.e., exploratory studies)
+- Anecdotes  
+- Correlations/visual analysis  
+- Exploratory modeling (i.e., fishing)
+    
+---
+# Stats and the scientific method
+
+#### Ways of learnings (real world)
+
+1) Observation, Pattern identification (i.e., exploratory studies)
+
+2) Hypothesis formation
+- Formed from patterns  
+- Should focus on mechanisms ("because", "controls", "adapted to") 
+- Should be falsifiable  
+- Ideally > 1 alternatives  
+
+---
+# Stats and the scientific method
+
+#### Ways of learnings (real world)
+
+1) Observation, Pattern identification (i.e., exploratory studies)
+
+2) Hypothesis formation
+
+3) Predictions
+- If the hypothesis is true, what do you expect to see?  
+  + *IF THEN* statements
+- Focus on things **we can measure**
+- More = better
+
+---
+# Stats and the scientific method
+
+#### Ways of learnings (real world)
+
+1) Observation, Pattern identification (i.e., exploratory studies)
+
+2) Hypothesis formation
+
+3) Predictions
+
+4) Data collection
+- Can be observational 
+- manipulative experiment to determine *causation*  
+- Sampling must be *designed* to answer question  
+
+---
+# Stats and the scientific method
+
+#### Ways of learnings (real world)
+
+1) Observation, Pattern identification (i.e., exploratory studies)
+
+2) Hypothesis formation
+
+3) Predictions
+
+4) Data collection
+
+5) Models and testing 
+- STATS!  
+- Model is mathematical abstraction of hypothesis
+- Model used to "confront" hypothesis with data (via predictions)
+- Draw conclusions: Does data support hypothesis?  
+
+---
+# Stats and the scientific method
+
+#### Example
+1) **Observation, Pattern**: Trees at higher elevations are shorter than at low elevations
+
+--
+
+2) **Hypotheses**
+
+--
+
+3) **Predictions**
+
+--
+
+4) **Data collection**<sup>1</sup>
+
+
+5) **Models**<sup>1</sup>
+
+.footnote[[1] We'll get to these!]
+
+---
+class: inverse, middle, center
+
+# Causal inference
+
+---
+# Causal inference
+
+#### Often, we want to know whether $x$ influences $y$
+
+--
+
+- In other words, if we change $x$, will $y$ change also (and by how much)? 
+
+--
+
+- Harder than it seems! Why?
+
+--
+
+- Generally restricted to *manipulative* experiments
+
+--
+
+    + Well-designed experiments ensure that "treatment assignment is independent of the potential outcomes" (Gelman et al. 2021)
+
+
+---
+## Importance of Observational Studies 
+
+Experiments are important to show causation
+<br/>
+- Limits our inferences  
+  + Ex) smoking and lung cancer  
+<br/>
+- Limits the scale of our questions  
+  + Ex) global climate change  
+  
+<br/>
+Experiments are not the only way to test our hypotheses  
+<br/>
+- Observational studies, “natural” experiments  
+
+---
+## Importance of Observational Studies  
+
+Establishing causation may not be the goal.
+<br/>
+* Other methods for establishing causation
+<br/>
+  + modeling: relationship of temperature and atmospheric CO~2~ levels  
+<br/>
+* Observational data  
+  + can suggest causal theories  
+  + and direction of future research. 
+<br/>  
+
+Observational studies often establish a pattern which we then try to explain mechanistically  
+<br/>
+* Survey for density of rabbitbrush and soil texture  
+
+* Experiment to determine if rabbitbrush germinates better on sandy vs. silty loam soil texture in the greenhouse  
+
+---
+# Looking ahead
+
+### **Wednesday**: Normal Distributions  
+* Look over Normal Distribution Lecture notes before next class!  
+
+### **Friday**: HW02  
+* Not graded
+
+<br/>
+
+### **Reading**: Hector chp. 5
+
+### **Video Resources**: on D2L

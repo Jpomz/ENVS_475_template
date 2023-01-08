@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>LECTURE 02a: Basic concepts in statistics</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="   Spring 2023" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# LECTURE 02a: Basic concepts in statistics
+]
+.subtitle[
+## ENVS475: Exp. Design and Analysis
+]
+.author[
+### <br/><br/><br/>Spring 2023
+]
+
+---
+
+
+
+
+class: inverse
+
+# Outline&lt;sup&gt;1&lt;/sup&gt;
+
+.footnote[[1] Lecture based on [FANR6750](https://rushinglab.github.io/FANR6750/index.html)]
+
+&lt;br/&gt;
+#### 1) What is statistics?
+
+&lt;br/&gt;  
+--
+
+#### 2) Statistics and the scientific method
+
+&lt;br/&gt; 
+--
+
+#### 3) Experiments and causal inference
+
+&lt;br/&gt; 
+
+---
+
+# What is statistics?
+
+&lt;br/&gt;
+&lt;br/&gt;
+&gt; The study of the collection, analysis, interpretation, presentation, and organization of data (Dodge 2006)  
+
+&lt;br/&gt;  
+--
+&lt;br/&gt;
+&gt; The science of learning from data (various)  
+
+---
+# Why do we need statistics?
+
+### Common tasks  
+- Estimate unknown parameters  
+&lt;br/&gt;
+
+--
+- Test hypotheses  
+&lt;br/&gt;
+
+--
+- Describe stochastic systems  
+&lt;br/&gt;
+
+--
+- Make predictions that account for uncertainty  
+
+---
+
+# Science
+## Let's start by defining science
+--
+
+- **Google:** study of the structure and behavior of the physical and natural world through observation and experiment.
+
+--
+
+- **Isaac Asimov:** …a system for testing your thoughts against the universe and seeing whether they match.
+
+--
+
+- **Carl Sagan:** …a way of thinking much more than it is a body of knowledge.
+
+--
+
+- **Albert Einstein:** …all our science, measured against reality, is primitive and childlike — and yet it is the most precious thing we have.
+
+---
+# Brief History of Science
+## 1) Descriptive
+
+* Oldest form of “science”
+
+* Hunter-gatherer societies
+
+  + Observations related to survival
+	 	
+* Collect observations `\(\rightarrow\)` explanation
+
+  + No testable hypothesis
+  
+* Explanations based on myth, religion, lore
+
+	  + Ex) locust plagues, floods, eclipses
+
+---
+# Brief History of Science
+## 2) [Deduction](https://en.wikipedia.org/wiki/Deduction) (Ancient Greeks)
+
+* Aristotle‑ (385‑323 b.C.) Father of 	scientific methodology
+
+* Rationalist‑ logic and reason as chief 	sources of knowledge
+
+* Basic truths revealed by concentrated 	thinking
+
+Major tool:
+**SYLLOGISM** = formal argument
+* Major premise
+
+* Minor premise
+
+* Conclusion
+
+---
+
+## Syllogism Example
+**MAJOR:** all fur‑bearing, milk-producing animals are mammals
+&lt;br/&gt;
+**MINOR:** mice have fur and produce milk
+&lt;br/&gt;
+**CONCLUSION:** mice are mammals
+&lt;br/&gt;
+
+* General statement `\(\rightarrow\)` specific conclusion
+
+&lt;br/&gt;
+Ideas remained unchallenged for ~2000 y
+
+* Stagnation of science
+
+Belief that ancient Greeks had discovered 	everything of significance		
+
+Need for absolute proof, w/ mathematical 	rigor (e.g., Geometry) dominated science
+
+---
+# Brief History of Science
+## 3) [Induction](https://en.wikipedia.org/wiki/Induction)
+
+.pull-left[
+Sir Francis Bacon (1561‑1626) 
+	
+* Challenged rationalist’s
+	
+* “Truth from work not words”
+
+Collect large body of observations 
+
+* Draw conclusions from these facts
+
+* Importance of statistics (coming up!)
+]
+
+--
+
+.pull-right[
+No hypotheses 
+
+* Similar to Descriptive Science
+
+* However, observations  subjected to analysis
+
+  + Specific `\(\rightarrow\)` General
+  
+Example: 
+&lt;br/&gt;
+**OBSERVATION:** Every fox I have seen is red. 
+&lt;br/&gt;
+**CONCLUSION:** Every fox in the world is red. 
+]
+
+---
+
+# Stats and the scientific method
+
+#### Ways of learnings
+
+--
+
+.pull-left[
+**Inductive reasoning**
+
+- Consistent observations -&gt; general principle
+
+- Problem: "confirmatory" observations can't disprove theory
+
+- Example: I've only seen birds that fly :: all birds can fly
+]
+
+--
+
+.pull-right[
+[**Hypothetico-Deductive reasoning**](https://en.wikipedia.org/wiki/Hypothetico-deductive_model)
+
+- Formalized by Karl Popper
+
+- Theory -&gt; predictions -&gt; observations
+
+- Based on *falsification*
+
+- **Example hypothesis**: All birds can fly :: penguins are birds :: penguins can fly
+
+  + Observe penguins can't flying, *falsify* hypothesis
+]
+
+---
+# Stats and the scientific method
+
+#### Ways of learnings (real world)
+
+--
+
+1) Observation, Pattern identification (i.e., exploratory studies)
+- Anecdotes  
+- Correlations/visual analysis  
+- Exploratory modeling (i.e., fishing)
+    
+---
+# Stats and the scientific method
+
+#### Ways of learnings (real world)
+
+1) Observation, Pattern identification (i.e., exploratory studies)
+
+2) Hypothesis formation
+- Formed from patterns  
+- Should focus on mechanisms ("because", "controls", "adapted to") 
+- Should be falsifiable  
+- Ideally &gt; 1 alternatives  
+
+---
+# Stats and the scientific method
+
+#### Ways of learnings (real world)
+
+1) Observation, Pattern identification (i.e., exploratory studies)
+
+2) Hypothesis formation
+
+3) Predictions
+- If the hypothesis is true, what do you expect to see?  
+  + *IF THEN* statements
+- Focus on things **we can measure**
+- More = better
+
+---
+# Stats and the scientific method
+
+#### Ways of learnings (real world)
+
+1) Observation, Pattern identification (i.e., exploratory studies)
+
+2) Hypothesis formation
+
+3) Predictions
+
+4) Data collection
+- Can be observational 
+- manipulative experiment to determine *causation*  
+- Sampling must be *designed* to answer question  
+
+---
+# Stats and the scientific method
+
+#### Ways of learnings (real world)
+
+1) Observation, Pattern identification (i.e., exploratory studies)
+
+2) Hypothesis formation
+
+3) Predictions
+
+4) Data collection
+
+5) Models and testing 
+- STATS!  
+- Model is mathematical abstraction of hypothesis
+- Model used to "confront" hypothesis with data (via predictions)
+- Draw conclusions: Does data support hypothesis?  
+
+---
+# Stats and the scientific method
+
+#### Example
+1) **Observation, Pattern**: Trees at higher elevations are shorter than at low elevations
+
+--
+
+2) **Hypotheses**
+
+--
+
+3) **Predictions**
+
+--
+
+4) **Data collection**&lt;sup&gt;1&lt;/sup&gt;
+
+
+5) **Models**&lt;sup&gt;1&lt;/sup&gt;
+
+.footnote[[1] We'll get to these!]
+
+---
+class: inverse, middle, center
+
+# Causal inference
+
+---
+# Causal inference
+
+#### Often, we want to know whether `\(x\)` influences `\(y\)`
+
+--
+
+- In other words, if we change `\(x\)`, will `\(y\)` change also (and by how much)? 
+
+--
+
+- Harder than it seems! Why?
+
+--
+
+- Generally restricted to *manipulative* experiments
+
+--
+
+    + Well-designed experiments ensure that "treatment assignment is independent of the potential outcomes" (Gelman et al. 2021)
+
+
+---
+## Importance of Observational Studies 
+
+Experiments are important to show causation
+&lt;br/&gt;
+- Limits our inferences  
+  + Ex) smoking and lung cancer  
+&lt;br/&gt;
+- Limits the scale of our questions  
+  + Ex) global climate change  
+  
+&lt;br/&gt;
+Experiments are not the only way to test our hypotheses  
+&lt;br/&gt;
+- Observational studies, “natural” experiments  
+
+---
+## Importance of Observational Studies  
+
+Establishing causation may not be the goal.
+&lt;br/&gt;
+* Other methods for establishing causation
+&lt;br/&gt;
+  + modeling: relationship of temperature and atmospheric CO~2~ levels  
+&lt;br/&gt;
+* Observational data  
+  + can suggest causal theories  
+  + and direction of future research. 
+&lt;br/&gt;  
+
+Observational studies often establish a pattern which we then try to explain mechanistically  
+&lt;br/&gt;
+* Survey for density of rabbitbrush and soil texture  
+
+* Experiment to determine if rabbitbrush germinates better on sandy vs. silty loam soil texture in the greenhouse  
+
+---
+# Looking ahead
+
+### **Wednesday**: Normal Distributions  
+* Look over Normal Distribution Lecture notes before next class!  
+
+### **Friday**: HW02  
+* Not graded
+
+&lt;br/&gt;
+
+### **Reading**: Hector chp. 5
+
+### **Video Resources**: on D2L
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

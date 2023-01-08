@@ -1,5 +1,5 @@
 ---
-title: 'LECTURE 0: Course Overview'
+title: 'LECTURE 00: Course Overview'
 subtitle: "ENVS475 Experimental Analysis and Design"
 author: "Dr. Justin Pomeranz"
 date: "Spring 2023"
