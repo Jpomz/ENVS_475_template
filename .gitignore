@@ -3,6 +3,6 @@
 .RData
 .Ruserdata
 token
-ignore/
-cheatsheets/
+ignore_dir/
+cheat-sheets/
 
