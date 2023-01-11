@@ -2,8 +2,10 @@
 title: "Improving your workflow through projects"
 subtitle: "ENVS475: Experimental Analysis and Design"
 date: "`r format(Sys.time(), '%B, %Y')`"
-output: html_document
-
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
 ---
 
 

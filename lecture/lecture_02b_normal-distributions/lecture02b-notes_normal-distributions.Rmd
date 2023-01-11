@@ -1,5 +1,5 @@
 ---
-title: "Normal Distributions"
+title: "Lecture 02b notes: Normal Distributions"
 author: "Justin Pomeranz"
 date: "`r format(Sys.time(), '%B, %Y')`"
 output: 
@@ -355,13 +355,16 @@ The distribution of test scores on the SAT and the ACT are both nearly normal, b
 
 Suppose that one student scores an 1800 on the SAT (Student A) and another student scores a 24 on the ACT (Student B). Which student performed better?
 
-- SAT scores are ${Normal}( \mu = 1500, \sigma = 300)$. ACT scores are ${Normal}(\mu = 21, \sigma = 5)$.
+- SAT scores are ${Normal}( \mu = 1500, \sigma = 300)$  
+- ACT scores are ${Normal}(\mu = 21, \sigma = 5)$  
 
 - $x_A$ represents the score of Student A; $x_B$ represents the score of Student B.  
 
-\[Z_{A} = \frac{x_{A} - \mu_{SAT}}{\sigma_{SAT}} = \frac{1800-1500}{300} = 1 \]
+\[Z_{A} = \frac{x_{A} - \mu_{SAT}}{\sigma_{SAT}} = \frac{1800-1500}{300} = 1 \]  
 
-\[Z_{B} = \frac{x_{B} - \mu_{ACT}}{\sigma_{ACT}} = \frac{24 - 21}{5} = 0.6\]
+
+\[Z_{B} = \frac{x_{B} - \mu_{ACT}}{\sigma_{ACT}} = \frac{24 - 21}{5} = 0.6\]  
+
 
 Student A has a z-score of 1, which is higher than the z-score for student B of 0.6. So student A was further away from the mean then student B and because the value was positive it's closer to the right side of the distribution. In other words, student A performed better than student B. 
 

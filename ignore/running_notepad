@@ -19,6 +19,13 @@ make new assignment for dplyr (if keeping)
 -- make a distribution plot
 
 dplyr - lab and homework done
-
+ggplot lab and hw done
+  maybe add more summary stats, i.e., boxplot
+    or just do this later in course when it comes up, but be sure to use ggplot
+    
+Downloaded "xaringan" package [https://bookdown.org/yihui/rmarkdown/xaringan.html] for moon_reader template, to match slide format from Rushing. 
+  each lecture in own folder
+  Xaringan auto Makes a "libs" folder for each
+  
 
 To-do: 

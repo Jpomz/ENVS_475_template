@@ -37,6 +37,31 @@ ul {
 
 * Tuesday: Zoom, by appointment.
 
+## About me
+
+* Grew up in Leadville, CO  
+* Red Rocks Community College  
+  + AS Biology  
+* Colorado State University  
+  + BS Biology  
+  + MS Ecology  
+* University of Canterbury, New Zealand  
+  + PhD Ecology  
+  
+## About me  
+* Undergrad: Hated math, wanted to work outside  
+* PhD: math intensive thesis  
+* Taught myself R and programming  
+* Fell in love with it  
+* I hope you do too!  
+* Even if you don't, the skills in this course will benefit your future career, regardless of what you do  
+
+
+## About you  
+* Name  
+* Year (Junior, Senior, other?)  
+* Favorite song or animal (or both)  
+* What you want to do next (Grad school, job, \#vanlife)  
 
 ## Course schedule and materials
 
@@ -83,7 +108,13 @@ All learning materials on D2L
 
 * Course taught in R
 
-* No prior experience needed
+* No prior experience needed  
+
+* R is an incredible skill to develop  
+
+* I'm here to help you do that  
+
+* No test or trick questions here. If you don't know how to do something in R, **ask me** and I will do everything I can to help!  
 
 * If using your own computer, ensure that R and R Studio are downloaded before next class
   
@@ -144,6 +175,8 @@ Two exams (40% of grade)
   + It will be explicit which ones are graded and not. 
 
 * Material builds on itself throughout semester. You are strongly encouraged to complete **ALL** assignments. 
+
+  + If you turn in all ungraded assignments, you can "replace" one graded assignment  
 
 * Assignments are due Friday at 5 pm of the following week
   + Automatic 2 day grace period, afterwards - 50% 

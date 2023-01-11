@@ -2,7 +2,10 @@
 title: "Basic Statistic Terms and Definitions"
 author: "ENVS475 Experimental Analysis and Design"
 date: 'Spring, 2023'
-output: html_document
+output: 
+  html_document:
+    toc: TRUE
+    toc_depth: 2
 ---
 
 ```{r setup, include=FALSE}
@@ -153,8 +156,12 @@ ggplot(df, aes(x = x,
 ```
 We describe normal distributions with the following mathematical notation:
 
-$$\Huge X \sim \text{Normal} (\mu,~ \sigma)$$
-### Empirical Rule 
+$$\Huge X \sim \text{Normal} (\mu,~ \sigma)$$  
+
+
+### Empirical Rule  
+
+
 In a Normal Distribution, the mean + and - 1 standard deviation contains about 68% of the total observations ($\mu \pm \sigma$). Likewise, 95% of the observations are within 2 standard deviations ($\mu \pm 2\sigma$) and 99.7% are within 3 standard deviations ($\mu \pm 3\sigma$). 
 
 ## Null Hypothesis Signifigance Testing (NHST)

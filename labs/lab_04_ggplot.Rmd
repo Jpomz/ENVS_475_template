@@ -2,7 +2,10 @@
 title: "Graphing using ggplot"
 subtitle: "ENVS475: Experimental Analysis and Design"
 date: "`r format(Sys.time(), '%B, %Y')`"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
 ---
 
 ```{r setup, include=FALSE}
@@ -81,7 +84,7 @@ summary(acacia)
   * **Note** that there are `NA` values in the HEIGHT column  
     * These refer to trees which were "dead"  
 
-### `ggplot2`
+## `ggplot2`
 
 * Very popular plotting package
 * Good plots quickly

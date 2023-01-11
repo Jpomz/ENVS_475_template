@@ -1,7 +1,7 @@
 ---
 title: 'Lab 07: Introduction to R Markdown'
 subtitle: "ENVS475: Experimental Analysis and Design"
-date: "`r format(Sys.time(), '%B, %Y')`"
+date: "Spring, 2023"
 output: 
   html_document:
     toc: true
@@ -28,9 +28,11 @@ As you're writing, the text won't look bold or italic or whatever (this is not '
 
 ## What is R Markdown?
 
-In this course, we will use a specific 'flavor' of Markdown called 'R Markdown'. R Markdown gives us all of the formatting options available for Markdown *plus* the ability to embed, display, and run R code in our documents. By mixing R code with plain text, we can create dynamic reports that replicate the analytical processes, show the code underlying these processes, create the output from our analysis (figures, summary statistics, etc.), and provide all of the necessary text explanations to go along with the code and output. 
+In this course, we will use a specific 'flavor' of Markdown called 'R Markdown'. R Markdown gives us all of the formatting options available for Markdown *plus* the ability to embed, display, and run R code in our documents. By mixing R code with plain text, we can create dynamic reports that replicate the analytical processes, show the code underlying these processes, create the output from our analysis (figures, summary statistics, etc.), and provide all of the necessary text explanations to go along with the code and output.
 
 This will be particularly important for assignments in the remainder of this class. As we perform more advanced statistical models, it will be necessary to interpret the results. R Markdown will allow us to run the code for the models in the document, and include text for interpretation. This will be much easier to read than including long comments in our scripts. Likewise, being able to include things like *italics*, **boldface**, sub and superscripts will make interpretation easier and much nicer presentation. 
+
+You may have figured this out by now, but if you haven't: **Everything in this class so far has been produced using R Markdown.** You can see the source material for this course at my [GitHub Page](https://github.com/Jpomz/ENVS_475). GitHub is a place where you can store your R-projects (and other coding projects). A detailed description of Git and GitHub is beyond the scope of this course, but if you are going to grad school or get a job which involves lots of coding and collaboration, *I highly recommend you spend the time to learn Git on your own.*  
 
 # Why use R Markdown
 
@@ -99,9 +101,12 @@ output:
 ---
 ```
 
-Notice that the `output` section has changed and there are now additional arguments included which are indented. 
-* `toc: true` means that we will include a table of contents
-* `toc_depth: 3` means that we will include an entry for all headers from level 1 to 3. 
+Notice that the `output` section has changed and there are now additional arguments included which are indented.  
+
+* `toc: true` means that we will include a table of contents  
+
+* `toc_depth: 3` means that we will include an entry for all headers from level 1 to 3.   
+
 
 # Headers
 

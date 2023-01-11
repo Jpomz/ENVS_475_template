@@ -1,9 +1,11 @@
 ---
-title: "Lab 01: Introduction to R"
+title: "Lab 01A: Introduction to R"
 subtitle: "ENVS475: Experimental Analysis and Design"
-date: "`r format(Sys.time(), '%B, %Y')`"
-output: html_document
-
+date: "Spring, 2023"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
 ---
 
 ```{r setup, include = FALSE}
