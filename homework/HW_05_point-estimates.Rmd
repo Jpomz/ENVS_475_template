@@ -46,6 +46,7 @@ library(ggplot2)
 
 ## Data
 
+`beak <- read.csv("data/g-fortis-beak-1975.csv")`
 
 # Exercises Homework 05: point estimates
 
