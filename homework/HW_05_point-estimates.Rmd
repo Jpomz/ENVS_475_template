@@ -47,6 +47,8 @@ library(ggplot2)
 ## Data
 
 `beak <- read.csv("data/g-fortis-beak-1975.csv")`
+https://datadryad.org/stash/dataset/doi:10.5061/dryad.g6g3h
+https://medium.com/analytics-vidhya/darwins-finch-beak-evolution-statistical-analysis-bd95e5b9145e
 
 # Exercises Homework 05: point estimates
 
