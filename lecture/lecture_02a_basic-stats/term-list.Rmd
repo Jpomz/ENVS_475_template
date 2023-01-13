@@ -164,6 +164,22 @@ $$\Huge X \sim \text{Normal} (\mu,~ \sigma)$$
 
 In a Normal Distribution, the mean + and - 1 standard deviation contains about 68% of the total observations ($\mu \pm \sigma$). Likewise, 95% of the observations are within 2 standard deviations ($\mu \pm 2\sigma$) and 99.7% are within 3 standard deviations ($\mu \pm 3\sigma$). 
 
+## t-distribution
+
+The t-distribution is defined by one parameter, the degrees of freedom. At large degrees of freedom (i.e., large sample size), the t-distribution is identical to a standard normal distribution. However, at small sample sizes, there is more uncertainty in the variability (i.e., $\sigma$) of the distribution. Hence, the t-distribution is "fatter" at the tails. 
+
+```{r t, fig.width=8, fig.height=6}
+curve(dt(x, 1), -5, 5, ylim=c(0, 0.5),
+      xlab="t value", ylab="Probability density",
+      cex.lab=1.5, lwd=1.5)
+curve(dt(x, 5), -5, 5, add=TRUE, col="blue", lwd=1.5)
+curve(dnorm(x, 0, 1), -5, 5, add=TRUE,  lty=3, lwd=1.5)
+legend(-5, 0.5, c("Standard normal distribution", "t distribution (df=5)", "t distribution (df=1)"),
+       lty=c(3, 1, 1), col=c("black", "blue", "black"), lwd=1.5)
+```
+
+The t-distribution is especially useful when working with small sample sizes. 
+
 ## Null Hypothesis Signifigance Testing (NHST)
 **NULL Hypothesis**
 
@@ -219,6 +235,34 @@ Variations on the TSS formula will come up frequently throughout class. For exam
 
 $$\Huge TSS = n_j \sum_{j=1}^a (\overline{y_j} - \overline{y.})^2$$
 Where $a$ is the number of groups, $n_j$ and $y_j$ are the number of observations and mean of group $j$, respectively, and $\overline{y.}$ is the sample mean. 
+
+Likewise, the variance ($\sigma^2$) is just the average of the sum of squares:
+
+$$\Large Var = \frac{TSS}{n} = \frac{\sum_{i=1}^n (y_i - \overline{y})^2}{n}$$
+
+The standard deviation ($\sigma$) is the square root of the Variance:
+
+$$\Large \sigma = \sqrt(\sigma^2)$$
+
+### Standard erro of the mean: SEM
+
+If we were to repeat an experiment over and over again, we would have variation in the estimated mean. We can estimate this variation using the Standard Error of the mean. 
+
+$$\Large SEM = \frac{s} {\sqrt(n)} $$
+Where $s$ is the sample standard deviation, and $n$ is the number of observations in our sample. 
+
+
+### Confidence intervals 
+
+The general form of a confidence interval is:
+
+$$\Large \overline{y} \pm x*SEM $$
+
+Where $\overline{y}$ is the sample mean, $x$ is a multiplier, and $SEM$ is the standard error of the mean, based on the sample data. 
+
+If the data are assumed to come from a normal distribution, you can estimate a 95% and 99% CI by setting $x = 2$ and $x = 3$, respectively. When working with a t-distribution, the value of $x$ will vary according to the degrees of freedom in your sample. You can calculate the critical t-value (also sometimes called $t^\star$, pronounced "t-star") using the `qt()` function. For a 95% CI, and with a sample size of 10 ($df = n - 1 =9$), you can calculate $t^\star$ as `qt(0.975, df = 9)`. Notice that you use `0.975` instead of `0.95`. This is because you have "5%" of the area to distribute (1 - 0.95) in the t-distribution, but you have to split it equally into either tail. In other words, your $t^\star$ value is calculated based on the 97.5th percentile. Likewise, for a 99% CI, you can calculate $t^\star$ as `qt(0.995, df = 9)`.  
+
+
 
 ## R Terminology
 
