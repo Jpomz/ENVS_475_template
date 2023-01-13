@@ -1,0 +1,464 @@
+---
+title: "LECTURE 05: Estimation"
+subtitle: "ENVS475: Exp. Design and Analysis"
+author: "<br/><br/><br/>Spring 2023"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: true
+---
+
+```{r setup, echo = FALSE, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(echo = FALSE, fig.align = 'center', warning=FALSE, message=FALSE, fig.retina = 2)
+
+library(ggplot2) 
+
+set.seed(2052)
+wolf_x <- rnorm(8, 38, 4)
+wolf_x2 <- rnorm(8, 38, 4)
+
+```
+
+class: inverse
+
+# Outline
+
+<br/>
+#### 1) Descriptive Statistics
+
+<br/>  
+
+#### 2) Inferential Statistics
+
+<br/> 
+
+#### 3) Confidence Intervals
+
+<br/> 
+
+---
+# Review: populations vs samples
+
+#### Population  
+- A collection of subjects of interest  
+
+- Often, a biologically meaningful unit  
+
+- Sometimes a process of interest  
+
+#### Sample
+
+- A finite subset of the population of interest, i.e. the data we collect  
+
+- Samples allow us to draw inferences about the population  
+
+- Good samples are:
+    + Random  
+    + Representative  
+    + Sufficiently large  
+
+---
+
+# Review: parameters vs statistics
+
+### Parameters 
+- Attributes of the population  
+  + Mean ( $\mu$ )  
+  + Variance ( $\sigma^2$ )  
+  + Standard deviation ( $\sigma$ )  
+
+- Parameters are the quantities of interest, and usually unknown  
+
+--
+
+### Statistics
+- Attributes of the sample  
+  + Mean ( $\bar{y}$ or $\hat{\mu}$ )  
+  + Variance ( $s^2$ or $\hat{\sigma}^2$ )  
+  + Standard deviation ( $s$ or $\hat{\sigma}$ )  
+
+- Often treated as estimates of parameters
+
+---
+
+class: inverse, center, middle
+# Descriptive Statistics
+
+---
+# Descriptive Statistics
+
+### Measures of central tendency
+
+- **Sample mean**
+
+$$\large \bar{y} = \frac{\sum_{i=1}^n y_i}{n}$$
+
+<br/>
+
+--
+- **Median**: "middle" of the data  
+
+  + 50% of data is below, 50% of data is above median  
+  
+  + Useful for non-normal, or skewed data  
+  
+  + If data is truly normal, mean = median  
+  
+
+<br/>
+--
+
+- **Mode**: Most frequent observation in the data
+
+---
+
+### Central Tendency Example:
+
+* Weight of Wolves (kg) from Yellowstone:
+`40, 35, 32, 37, 35, 37, 35, 35`
+
+<br/>
+
+* Mean (rounded): `r round(mean(wolf_x),1)`  
+  * `mean()`
+
+<br/>
+
+* Median (rounded): `r round(median(wolf_x),1)`  
+  * `median()`  
+
+<br/>
+
+* Mode: 35  
+  * no default in function in R  
+  * For small data sets, `sort()` vector and count repeats
+  * `r sort(round(wolf_x))`  
+
+---
+
+### Measures of dispersion
+
+- Sample variance  
+  - How far, on average, are the *observations* from the mean?  
+  - squared scale - different from data
+
+$$\large s^2 = \frac{\sum_{i=1}^n (y_i - \bar{y})^2}{n-1}$$
+
+<br/>
+
+--
+- Sample standard deviation  
+  - How far, on average, are the *observations* from the mean?  
+  - same scale as data
+
+$$\large s = \sqrt{s^2}$$
+
+<br/>
+
+--
+- Range  
+  * min and max values of data
+
+---
+### Dispersion Example:
+
+* Weight of Wolves (kg) from Yellowstone:
+`40, 35, 32, 37, 35, 37, 35, 35`
+
+<br/>
+
+* Variance: `r round(var(wolf_x),1)`  
+  * `var()`  
+  * Remember, different scale!
+
+<br/>
+
+* Standard Deviation: `r round(sd(wolf_x),1)`  
+  * `sd()`  
+  * same scale as data  
+  * SD is mostly what we will use  
+
+<br/>
+
+* Range: `r round(range(wolf_x))`  
+  * `range()`  
+---
+# Describing the sample  
+
+* When describing the data, always include the mean and a measure of dispersion  
+
+  + be sure to label measure of dispersion (var or SD?)
+  
+> The weight of Yellowstone wolves is `r round(mean(wolf_x), 1)` $\pm$ `r round(sd(wolf_x),1)` kg (mean $\pm$ SD)  
+
+* Alternate:  
+
+> The average ( $\pm$ SD)  weight of wolves in Yellowstone is `r round(mean(wolf_x), 1)` $\pm$ `r round(sd(wolf_x),1)` kg 
+
+---
+# Inferential Statistics
+
+* So far, we've been discussing *descriptive statistics* for our observations  
+
+* Analyses often interested in comparing means, or estimates of $\mu$.  
+
+* This requires *inferential statistics*  
+---
+# Inferential Statistics
+
+* Weight of Wolves (kg) from Yellowstone:
+`40, 35, 32, 37, 35, 37, 35, 35`
+* Mean: `r round(mean(wolf_x),1)`  
+* SD: `r round(sd(wolf_x),1)`  
+
+<br/>
+### How confident are we in this value?  
+* If we measured another 8 wolves, what would our estimates be?  
+
+* 2nd Sample: `33, 28, 40, 43, 35, 31, 40, 42` 
+* 2nd Mean: `r round(mean(wolf_x2), 1)`  
+* 2nd SD: `r round(sd(wolf_x2), 1)`  
+
+---
+
+# Inferential Statistics
+### Standard error of the mean: SEM  
+
+<br/>
+
+* How far, on average, is the sample mean $\bar{y}$ from the true mean $\mu$?  
+
+<br/>
+
+* We could repeat experiment over and over again to get a *sampling distribution*  
+
+<br/>
+
+  * Rarely done due to time, logistics, funding, etc.  
+  
+<br/>
+
+* Luckily, we can estimate the SEM from a single sample
+
+---
+# Inferential Statistics
+### Standard error of the mean: SEM  
+
+$$\Large SEM = \frac{s}{\sqrt{n}}$$
+<br/>
+
+* Remember, SEM tells us how far, on average, the sample mean $\bar{y}$ is from the true mean $\mu$  
+
+* SEM is like a standard deviation *of the mean*
+
+
+---
+### Helpful(?) mnemonic 
+
+<br/>
+
+* SD: dispersion for the data (**D**)  
+
+  * How far is an individual observation from the sample mean?  
+
+<br/>
+
+* SEM: dispersion for the mean (**M**)  
+
+  * How far is the sample mean from the true mean?  
+
+<br/>
+
+  * Note that SEM is sometimes just abbreviated as SE, so this mnemonic isn't always obvious. 
+  
+---
+### Point estimates  
+
+* $\bar{y}$ is a point estimate of the true mean, $\mu$  
+* point estimates on their own are of limited value  
+
+* Always include a measure of precision when you report a mean
+
+$$\Large \bar{y} \pm SEM$$
+
+--
+
+#### Wolf sample 1:  
+* Mean: `r round(mean(wolf_x),1)`
+* SEM: `r round(sd(wolf_x)/sqrt(length(wolf_x)),1)`  
+
+--
+
+$35.6 \pm 0.8$ (mean $\pm$ SEM)
+
+--
+
+* Note similarity with sample description previously  
+
+--
+
+  * Always label your dispersion estimate! 
+
+--
+
+* You can also present the interval by completing the equation:
+
+* Interval = `(34.8, 36.4)`
+
+---
+
+class: inverse, center, middle
+# Confidence Intervals
+
+---
+# Confidence Intervals  
+- Confidence Intervals (CI) is a range of estimates for an unknown parameter.  
+- CI computed for different confidence levels: most often 95%  
+- Assuming a normal distribution, 95% CI is approximately:
+
+$$\Large 95\%CI =\bar{y} \pm 2*SEM$$  
+
+  + Recall empirical rule: 95% of data within $\pm 2~SD$  
+  
+  + In future classes we will discuss equation for CI from a *t*-distribution, i.e., modify value of 2 in above equation    
+
+- If we calculated a 95% CI from $n$ samples, about 95% of them would contain the true population mean  
+
+  + **NOTE** it *does not mean* that we are 95% sure that the true mean is in the CI  
+  
+---
+
+### Repeated samples from Population  
+- 100 repeated samples of wolf weights  
+- Increased to 25 wolves per sample  
+
+```{r CI-plot, fig.height=5.6, fig.width=9, echo=FALSE}
+library(dplyr)
+set.seed(4251)
+true_mean = 38
+true_sd = 4
+
+samp <- data.frame(Experiment = 1:100,
+                   time = 1:100,
+                   Estimate = numeric(length = 100),
+                   SE = numeric(length = 100))
+
+for(i in 1:100){
+  x <- rnorm(25, true_mean, true_sd)
+  samp$Estimate[i] = mean(x)
+  samp$SD[i] = sd(x)
+  samp$SE = sd(x)/sqrt(25)
+}
+
+samp <- dplyr::mutate(samp,
+                      LCI = Estimate - 1.96 * SE,
+                      UCI = Estimate + 1.96 * SE,
+                      Coverage = 
+                        ifelse(LCI <=true_mean & UCI >= true_mean, "Yes", "No"))
+
+ggplot(samp,
+       aes(x = Experiment,
+           y = Estimate)) +
+  geom_errorbar(
+    aes(ymin = LCI,
+        ymax = UCI,
+        color = Coverage),
+    width = 0) +
+  geom_point(aes(color = Coverage)) +
+  scale_color_manual(values = c("red", "black")) +
+  geom_hline(yintercept = true_mean,
+             color = "red",
+             linetype = "longdash") +
+  scale_y_continuous(name = "",
+                     limits = c(33, 44),
+                     breaks = seq(from = 33, to = 44)) +
+  scale_x_continuous(limits = c(0, 100)) +
+  theme_classic() +
+  geom_segment(
+    aes(y = 43, yend = 43,
+        x = 1, xend = 12), 
+               color = "red", linetype = "longdash") +
+  annotate(
+    x = 15,
+    y = 43,
+    label = "True parameter value",
+    geom = "text",
+    hjust = 0) +
+  geom_point(
+    aes(y = 42,
+        x = 6)) +
+  annotate(x = 15,
+           y = 42,
+           label = "Sample mean and 95% confidence interval",
+           geom = "text",
+           hjust = 0) 
+```
+
+* 97 / 100 CIs contain true mean ~97%  
+---
+
+### Using Confidence Intervals to test hypotheses  
+
+* Previous research has indicated that mean wolf weight in the Arctic is 33 kg.  
+
+* Does this differ from the wolves in Yellowstone?  
+
+* CI for Yellowstone wolf weight (1st sample)  
+
+$$95\%CI =\bar{y} \pm 2*SEM$$  
+
+<br/>
+
+$$35.6 \pm 2 * 0.8 = (34,~37.2)$$
+
+* Arctic weight of 33 is outside (below) 95% CI for Yellowstone wolves.  
+
+* **Interpretation**: The data support the conclusion, with 95% confidence, that the weight of Yellowstone Wolves is between 34 and 37.2 kg, and this is higher than the mean estimated weight for wolves in the Arctic of 33 kg. 
+
+---
+
+### Using Confidence Intervals to test hypotheses  
+
+* Data from British Columbia indicates that the mean weight of wolves there is 34.2 kg.  
+
+--
+
+* Do the weight of wolves in BC differ from those in Yellowstone?  
+
+--
+
+* 34.2 falls within the 95% CI (34, 37.2) for Yellowstone Wolves.
+
+--
+
+* **Interpretation**: The data support the conclusion that the weight of Yellowstone Wolves is between 34 and 37.2 kg (95% CI), and that this is not different from the mean estimated weight of 34.2 for wolves in British Columbia.  
+
+--
+
+* Note we did not use CI's for Arctic or BC wolves.  
+  
+  * Using CI's is one form of (rough) hypothesis testing  
+  
+  * We can more formally test these hypotheses with t-test and general linear models  
+  
+  * We will get to this later in the course.  
+
+---
+
+
+# Looking ahead
+
+### **Wednesday**: Point estimates and CI Lab
+
+<br/>
+
+### **Friday**: Hw 05 - For a grade
+
+<br/>
+
+### **Reading**: Hector Chapter 5
+

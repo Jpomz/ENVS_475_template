@@ -795,7 +795,7 @@ volume
 
 ```
 
-# Homework 1
+# Homework 1 - For a grade
 
 Create an assignment script, put it in your class folder and name it according to the convention above. 
 

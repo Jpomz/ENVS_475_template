@@ -1,0 +1,61 @@
+---
+title: "ENVS475 Homework 5: point estimates"
+subtitle: "Complete for a grade"
+date: "Spring, 2023"
+output: 
+  html_document:
+    toc: true
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+   warning = FALSE, message = FALSE,
+   eval = FALSE,
+   fig.align = 'center', fig.retina = 2,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Complete this assignment for a grade.
+
+# Assignment Format
+
+* Open a new R script
+* Save your R script in the `homework/` folder
+* Name your script according to: `full_name_hw##.R`
+  + For example: `justin_pomeranz_hw01.R`
+* Comment before each problem, and each sub-problem
+* Make sure your results print out on `Source with echo`
+  + If you're answer is saved in an object, make sure you print out that object afterwards
+  
+# Setup
+
+## Load packages
+
+* Make sure that the `dplyr` and `ggplot2` packages are downloaded on the machine you're using
+  + You can check this by clicking on the `Packages` tab in the *Files, Plots, Packages...* panel and scrolling down
+  + If you need to download the package, copy the following code into your Console panel and run it **Do not put it in your homework script*
+  + `install.packages("dplyr")` 
+* Copy the following code into the beginning of your homework script to load the `dplyr` package:
+```{r, eval=FALSE}
+# load libraries
+library(dplyr)
+library(ggplot2)
+```
+
+## Data
+
+
+# Exercises Homework 05: point estimates
+
+## Problem 1
+
+## Problem 2
+
+## Problem 3
+
+## Problem 4
+
+## Problem 5 Challenge (optional)
+

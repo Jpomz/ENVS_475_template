@@ -1,0 +1,284 @@
+---
+title: "Lab 05: Point Estimates and Confidence Intervals"
+subtitle: "ENVS475: Experimental Analysis and Design"
+date: "Spring, 2023"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggplot2)
+bt_samp <- read.csv(here::here("data/body_temp_hr.csv"))
+```
+
+## About
+
+This lab will explore concepts of point estimates and confidence intervals in R. 
+
+## Preliminaries 
+
+### Packages  
+
+For this lab, we will be using the `dplyr` and `ggplot2` packages. Make sure both packages are installed on your computer, and then run the following code:
+
+```{r, eval=FALSE}
+library(dplyr)
+library(ggplot2)
+```
+
+
+### Data  
+
+For this lab, we will be using the `body_temp_hr.csv` data. You can download the csv file from D2L. Be sure to put it into your `data/` folder. When we read in the data, we will assign it to the object called `bt_samp` which stands for "body temperature sample". 
+
+```{r load-body-temp, eval=FALSE}
+bt_samp <- read.csv("data/body_temp_hr.csv")
+```
+
+You should always look at the data after you load it:
+
+```{r}
+dim(bt_samp)
+head(bt_samp)
+summary(bt_samp)
+names(bt_samp)
+```
+
+This data contains 130 observations of individual body temperatures and heart rates for patients. It also indicates the biological sex of the patient. 
+
+
+# One sample  
+
+For this exercise, we will be focusing on the `body_temp` variable. 
+
+## Descriptive Statistics  
+
+Let's first calculate descriptive statistics (mean and standard deviation) for the sample of body temperatures. We will store them in new variables called `bt_mean` and `bt_sd` respectively. We repeat the call to the objects below to have R print out their values. 
+
+```{r}
+bt_mean <- mean(bt_samp$body_temp)
+bt_sd <- sd(bt_samp$body_temp)
+bt_mean
+bt_sd
+```
+
+With this information, we can write out the mean ($\pm$ SD), rounded to one decimal place. 
+> Our data indicates that the average temperature was 98.2 $\pm$ 0.73 (mean $\pm 1 SD$) 
+
+## Inferential Statistics  
+
+How confident are we in this average? In order to do that, we can calculate the standard error of the mean, SEM. Unfortunately, there is no built in function to calculate SE in R. But recall that the formula for SEM is:
+
+$$\large SEM = \frac{s}{\sqrt{n}}$$
+
+We already have $s$ stored in the `bt_sd` object. Now we just need to calculate $\sqrt(n)$. The `sqrt()` function can be used to calculate the square root, but how do we get $n$?
+
+Because there are no `NA` values in the `body_temp` variable, we can use the `length()` function to get the number of observations. You might be tempted to enter the following to get $n$:
+```{r}
+length(bt_samp)
+```
+
+However, the `bt_samp` object is a `data.frame`. 
+
+```{r}
+class(bt_samp)
+```
+
+And the default behavior for `length()` when used on a data frame is to give the number of columns. We need to supply a `vector` in order to get the number of observations. We can accomplish this by subsetting the data frame to just the `body_temp` variable using the `$` syntax. 
+
+```{r}
+length(bt_samp$body_temp)
+```
+
+Let's calculate the SEM of body temperature and call it `bt_sem`. But first, lets store the number of observations in this data as `bt_n`. 
+
+```{r}
+bt_n <- length(bt_samp$body_temp)
+bt_sem <- bt_sd / sqrt(bt_n)
+bt_sem
+```
+
+So the mean body temperature is estimated to be `r round(bt_mean, 1)` $\pm$ `r round(bt_sem,1)` (mean $\pm$ SEM). 
+
+We can also calculate the full interval as:
+```{r}
+round(c(bt_mean - bt_sem, bt_mean + bt_sem), 3)
+```
+Recall that we use the `c()` to combine multiple values into a single vector. Note I also used the `round()` function to simplify the output. 
+
+As a bit of review, we can do the same thing using pipes, which may or may not be easier at this point than reading the functions "inside out":
+```{r}
+c(bt_mean - bt_sem, bt_mean + bt_sem) %>%
+  round(3)
+```
+
+
+## Confidence Intervals 
+
+Assuming that our data is from a normal distribution, 95% Confidence intervals can approximated with the following equation:
+
+$$\large 95\%CI =\bar{y} \pm 2*SEM$$  
+
+We can estimate the lower and upper limit of the 95% CI in R with the following:
+```{r}
+bt_mean - 2 * bt_sem
+bt_mean + 2 * bt_sem
+```
+
+Therefore, the data supports, with 95% confidence, that the mean body temperature is within 98.121 and 98.38 degrees Fahrenheit. 
+
+### Changing the confidence level
+
+We can change the confidence level of our estimate by modifying the "2" value above. Briefly, recall that the empirical rule states that ~95% of the observed data falls within 2 standard deviations of the sample. Here, we are not comparing observations and sample means, but instead comparing sample means with the true mean. (We will explore the distribution of sample means more below.) However, the same general pattern applies. Namely, that 95% of the sample means falls within 2 standard deviations of the true mean.  
+
+Also recall that ~99% falls within 3 standard deviations. So, we can calculate a 99% CI by changing the 2 to a 3 in the equation above:
+
+$$\large 99\%CI =\bar{y} \pm 3*SEM$$  
+Likewise in R:
+```{r}
+bt_mean - 3 * bt_sem
+bt_mean + 3 * bt_sem
+```
+So we can estimate, with 99% confidence, that the mean body temperature lies within the range of 98.056 and 98.442. 
+
+
+# Testing Hypotheses with CIs
+
+You might be familiar with the popular notion that average body temperature is around 98.6 degrees Fahrenheit. Based on the 95 and 99% confidence intervals calculated above, what can we say about this hypothesis?
+
+Formally (more on formal hypotheses later in class):
+
+$$H_0: \mu = 98.6^\circ ~Fahrenheit$$
+$$H_A: \mu \ne 98.6^\circ ~Fahrenheit$$
+
+**95% CI Interpretation**: Based on the data, with 95% confidence, the interval of average body temperature does not include 98.6 degrees. Therefore, we can reject the null hypothesis ($H_0$) and accept the alternative that the true mean of the population does not equal 98.6 degrees. 
+
+**99% CI interpretation**: Complete this interpretation based on the 99% Confidence Interval on your own. 
+
+# Repeated Experiments: Simulation  
+
+In order to explore the distribution of sample means in greater detail, let's repeat the above experiment by sampling 130 random observations of temperature from a hypothetical population. 
+
+Let's assume that the mean and SD for the original sample is the "true parameters" i.e., $\mu$ = `r bt_mean` and $\sigma$ = `r bt_sd`. This is most certainly not the case, but it's a good enough estimate for now.  
+
+In order to draw a new sample from this distribution, we can use the `rnorm()` function. Type in `?rnorm` to pull up the help page for this function. 
+
+Note that the arguments are `n`, `mean`, and `sd`. We can enter numbers for these arguments, or we can use the objects that we've already saved. 
+
+Recall the values stored in each of these objects:
+
+```{r}
+bt_n
+bt_mean
+bt_sd
+```
+
+In order to draw a new sample of observations, we can enter the following:
+
+```{r}
+set.seed(444)
+new_bt <- rnorm(n = bt_n, mean = bt_mean, sd = bt_sd)
+```
+
+Note that the `set.seed()` function fixes the random number generator for consistency. They are still "random" numbers, but we will get the same sequence of random numbers every time, as long as we run the `set.seed(444)` each time. 
+
+As an example, run the following code a few times:
+
+```{r, eval = FALSE}
+rnorm(n = 5)
+```
+
+And now try the following a few times:
+```{r, eval=FALSE}
+set.seed(444)
+rnorm(n = 5)
+```
+
+Back to our new sample. We can calculate the mean, sd, SEM, and 95%CI of our new sample as follows:
+
+```{r}
+new_mean <- mean(new_bt)
+new_sd <- sd(new_bt)
+new_sem <- new_sd / sqrt(length(new_bt))
+new_mean
+new_sd
+new_sem
+# 95% CI
+c(new_mean - 2*new_sem, new_mean + 2*new_sem)
+```
+
+We can see there is some variation in these estimates, but that they are relatively similar. 
+
+Now, we could keep doing the above over and over again to get a distribution of samples, but that would require lots of typing, and almost certainly we would make a number of errors. 
+
+Instead, we can use the power of R to automate this for us with minimal typing. Don't worry too much about what the code below is doing. Essentially, I'm going to use a "for loop" to repeat our sampling procedure 100 times. You will need to do something similar in the homework assignment, but you can just copy the below code and make a couple of minor modifications. If you have any questions on the homework assignment, ask we and I can help you with it in class. 
+
+### Replicate experiment 100 times
+
+```{r}
+# set.seed so we all have the same numbers
+set.seed(2562)
+# define our variables
+true_mean <- bt_mean
+true_sd <- bt_sd
+obs_n <- 130
+
+# make a dataframe called "samp" to hold our simulation estimates
+samp <- data.frame(Experiment = 1:100,
+                   Estimate = numeric(length = 100),
+                   SE = numeric(length = 100))
+
+# repeat sample 100 times
+for(i in 1:100){
+  x <- rnorm(obs_n, true_mean, true_sd)
+  samp$Estimate[i] = mean(x)
+  samp$SD[i] = sd(x)
+  samp$SEM = sd(x)/sqrt(obs_n)
+  samp$true_mean = true_mean
+}
+
+```
+
+We now have a new object called `samp` in our R environment which has the "experiment" replicate (from 1 to 100). And for each experiment we have a mean, sd, and SEM. Notice I also repeated the "true_mean" value. This is for use in `ggplot` a few steps below. Now, we can use the `mutate()` function from `dplyr` to add estimates of our lower and upper confidence interval values. 
+
+```{r}
+# overwrite the old "samp" to include our new variables
+
+samp <- samp %>%
+  mutate(
+    # Estimate is the mean for our sample
+    LCI = Estimate - 2 * SEM, # Lower CI
+    UCI = Estimate + 2 * SEM, # Upper CI
+    Color = # make a categorical value 
+      ifelse(LCI <=true_mean & UCI >= true_mean, "Yes", "No"))
+# print out head() of new "samp" to see new variables
+head(samp)
+```
+
+Now, we can use `ggplot` to illustrate which confidence intervals from our repeated experiments had the "true mean" within them. 
+
+```{r}
+ggplot(samp,
+       aes(x = Experiment,
+           y = Estimate, 
+           ymin = LCI,
+           ymax = UCI,
+           color = Color)) +
+  geom_pointrange() +
+  # add reference line for "true" mean
+  geom_hline(
+    yintercept = true_mean,
+    linetype = "dashed",
+    color = "blue") +
+  theme_bw()
+```
+
+Here, we hav 96/100 samples which have the "true" mean which is close to our approximated 95% CI. 
+
+### Coda
+
+You should now be able to complete the homework for this week. 
