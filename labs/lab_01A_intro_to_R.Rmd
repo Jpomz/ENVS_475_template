@@ -526,7 +526,6 @@ mean(count_na, na.rm = TRUE)
 
 One of the most useful properties of vectors in `R` is that we can use them to simplify basic arithmetic operations that need to be done on multiple observations. For example, consider the following data on wing chord (a measure of wing length) and body mass of Swainson's thrushes (*Catharus ustulatus*):
 
-
 ```{r echo = FALSE, out.width="50%", fig.align="c", fig.cap="Swainson's Thrush. Image courtesy of VJAnderson via Wikicommons"}
 knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/1/1e/Swainson%27s_Thrush_0777vv.jpg")
 
@@ -564,6 +563,11 @@ As you can see, when we divide one vector by another, `R` divides the first elem
 
 
 # Packages
+
+
+**NOTE** When writing this tutorial I forgot that installing the `devtools` package can be a little tricky, and may require additional steps not described here. If you have trouble with the `install.packages("devtools")` command bellow, just skip it for now and read through the rest of the tutorial to get an idea of how it works. If many people have issues I will rewrite this section with an "easier installation" version and let you know when it's updated. 
+
+**Sorry for any confusion!!** -- jpz
 
 One of `R`'s primary strengths is the large number of *packages* available to users. Packages are units of shareable code and data that have been created by other `R` users. We have already seen the built-in functions that `R` comes with. Packages allow users to share lots and lots of other functions that serve specific purposes. Packages also allow users to share [data sets](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/00Index.html). There are packages for cleaning data, visualizing data, making maps, fitting specialized models, and basically anything else you can think of. 
 
