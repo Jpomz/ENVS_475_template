@@ -86,6 +86,17 @@ The operator `<-` is how we do assignments in `R`. Whatever is to the left of `<
 
 RStudio has built in shorcuts for the `<-` operator: `Alt + -` (Windows) or `Option + -` (Mac).
 
+### Removing objects
+
+If you no longer want an object to be in your working environment, you can use the `rm()` command. If you ran the `x <- 3` command above, you should see an `x` object in your Environment panel. After you confirm that you have an `x` object there, run the following code:
+
+```{r}
+rm(x)
+```
+
+After running this, the `x` object should no longer be in your Environment. 
+
+
 ***
 
 You try it - change the code to create an object called `new_x`. Instead of assigning `new_x` a number, give it a calculation, for example `25/5`. What do you think the value of `new_x` is?
@@ -181,7 +192,7 @@ str("hello world")
     * Type `?round` in the console
     * in the help window that pops up, scroll down to the **Usage** which shows there are two arguments: 
       * `x`: Number to be rounded 
-      *`digits`: number of digits
+      * `digits`: number of digits  
 
 ```{r}
 round(x = weight_lb, digits = 1)
@@ -526,10 +537,9 @@ mean(count_na, na.rm = TRUE)
 
 One of the most useful properties of vectors in `R` is that we can use them to simplify basic arithmetic operations that need to be done on multiple observations. For example, consider the following data on wing chord (a measure of wing length) and body mass of Swainson's thrushes (*Catharus ustulatus*):
 
-```{r echo = FALSE, out.width="50%", fig.align="c", fig.cap="Swainson's Thrush. Image courtesy of VJAnderson via Wikicommons"}
-knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/1/1e/Swainson%27s_Thrush_0777vv.jpg")
+![Swainson's Thrush. Image courtesy of VJAnderson via Wikicommons](Swainson_Thrush.jpg){width=50%}
 
-```
+[Image link]("https://upload.wikimedia.org/wikipedia/commons/1/1e/Swainson%27s_Thrush_0777vv.jpg") 
 
 ```{r echo = FALSE}
 swth <- data.frame(Individual = 1:6, 
@@ -564,38 +574,28 @@ As you can see, when we divide one vector by another, `R` divides the first elem
 
 # Packages
 
-
-**NOTE** When writing this tutorial I forgot that installing the `devtools` package can be a little tricky, and may require additional steps not described here. If you have trouble with the `install.packages("devtools")` command bellow, just skip it for now and read through the rest of the tutorial to get an idea of how it works. If many people have issues I will rewrite this section with an "easier installation" version and let you know when it's updated. 
-
-**Sorry for any confusion!!** -- jpz
-
 One of `R`'s primary strengths is the large number of *packages* available to users. Packages are units of shareable code and data that have been created by other `R` users. We have already seen the built-in functions that `R` comes with. Packages allow users to share lots and lots of other functions that serve specific purposes. Packages also allow users to share [data sets](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/00Index.html). There are packages for cleaning data, visualizing data, making maps, fitting specialized models, and basically anything else you can think of. 
 
 Accessing the code in a package first requires installing the package. This only needs to be done **once per computer** and is usually done using the `install.packages()` function:
 
 ```{r eval = FALSE}
-install.packages("devtools")
+install.packages("dplyr")
 ```
 
-Note that the name of the package (in this case `devtools`) must be in quotation marks. Packages installed using `install.packages()` are stored in a centralized repository called CRAN (Comprehensive R Archive Network). Once `devtools` (or any package) is installed on your computer, you do not need to re-run the `install.packages()` function unless you re-install/update `R` or need to update the package to a newer version.
+Note that the name of the package (in this case `dplyr`) must be in quotation marks. Packages installed using `install.packages()` are stored in a centralized repository called CRAN (Comprehensive R Archive Network). Once `dplyr` (or any package) is installed on your computer, you do not need to re-run the `install.packages()` function unless you re-install/update `R` or need to update the package to a newer version.
+
+`dplyr` is a powerful package for summarizing and modifying data which we will use extensively in class. We will have a more thorough introduction to `dplyr` later this semester. 
 
 **Note** if you will be using your own personal laptop for this course, you will only need to run the `install.packages()` function once. However, if you will be using the department laptops in class, and then a desktop computer at home or in the library, computer labs, etc., you will need to run `install.packages()` the first time you use each computer. Likewise, if you are using university computers in the library or computer labs, you may need to `install.packages()` each time you log on (it's unclear if the University IT security procedures will remove these regularly or not). 
 
 Installing a package does not automatically make the functions from that package available in a given `R` session. To tell `R` where the functions come from, you must *load* the package using the `library()` function:
 
 ```{r}
-library(devtools)
+library(dplyr)
 ```
 
 Unlike `install.packages()`, `library()` must be re-run each time you open `R`. Most people include a few calls to `library()` at the beginning of each script so that all packages needed to run the code are loaded at the beginning of the script. 
 
-Occasionally, some packages are stored in other places (e.g., github). These packages can be installed using different functions. For example, this course is largely based on a course created by Clark Rushing at the University of Georgia. He created a package for the course that contains small data sets which we will use in labs throughout the semester. His package is stored on github and can be installed by running:
-
-```{r eval = FALSE}
-install_github("RushingLab/FANR6750")
-```
-
-Note that the `install_github()` function is from the `devtools` package so you need to run `library(devtools)` before you install the package. Make sure you install the `FANR6750` package now so you have access to the data sets. 
 
 # Data frames
 
@@ -603,96 +603,109 @@ So far, we have only discussed one particular class of `R` object - vectors. Vec
 
 This is where data frames become useful. Perhaps the most common type data object you will use in `R` is the data frame. Data frames are tabular objects (rows and columns) similar in structure to spreadsheets (think Excel or GoogleSheets). In effect, data frames store multiple vectors - each column of the data frame is a vector. As such, each column can be a different class (numeric, character, etc.) but all values within a column must be the same class. Just as the first row of an Excel spreadsheet can be a list of column names, each column in a data frame has a name that (hopefully) provides information about what the values in that column represent. The names of columns in data frames are often referred to as `variables` while the rows are generally referred to as `observations`.   
 
-To see how data frames work, let's load a data frame called `jayData` that comes with the `FANR6750` package. 
+To see how data frames work, let's load a data frame called `starwars` that comes with the `dplyr` package. 
+
+```{r}
+library(dplyr)
+# the data() function loads data sets which are built-in 
+# or that come with packages
+data("starwars") 
+```
+
+If you ran the `library(dplyr)` function above, you do not strictly need to run it here again, but i included it here to ensure that you have this package loaded. The `data()` function access the built-in data set called `"starwars"` and makes it accessible in your working session. After running that call, you should see a `starwars` data object in your Environment tab. 
 
 ***
 
-Note - As discussed above, if you want to access function or data sets that come with packages, you first need to *load* the package in your current working environment. To do that, use the `library()` function, with the unquoted package name as the argument. Once loaded, all of the package's functions are available to use. 
+Note - As discussed above, if you want to access function or data sets that come with packages, you first need to *load* the package in your current working environment. To do that, use the `library()` function, with the unquoted package name as the argument. Once loaded, all of the package's functions and built-in data sets are available to use. 
 
 Alternatively, you can access functions from a given package without loading the package using `package.name::function.name()`. For example, if you want to use the `filter()` function from the `dplyr` package, you could type `dplyr::filter()`. Although less commonly used, this method has a few advantages:
 
 1) Sometimes different packages have functions with the same names. `R` will default to using the function from the package that was loaded last. For example, the `raster` package also has a function called `filter()` so if you load `dplyr` first (using `library() `and then `raster`, `R` will default to using `raster`'s `filter()` function, which could cause problems. 
 
-2) If you share your code with others, the `::` method makes it clear which packages are being use for which functions. That additional clarity is often helpful and is the reason I will often use `::` in this course.
+2) If you share your code with others, the `::` method makes it clear which packages are being use for which functions. That additional clarity is often helpful and is the reason I will occasionally use `::` in this course.
 
 ***
 
-To get a quick idea of what information this data frame contains, we can use the `head()` and `tail()` functions, which will print the first and last 6 rows of the data frame:
+To get a quick idea of what information the `starwars` data frame contains, we can use the `names()` function, which returns the names of the columns, and the `head()` and `tail()` functions, which will print the first and last 6 rows of the data frame:
 
 ```{r}
-library(FANR6750)
-data("jayData") # the data() function loads data sets the come with packages
-
-head(jayData)
-
-tail(jayData)
+names(starwars)
+head(starwars)
+tail(starwars)
 ```
-
-We can see that `jayData` contains eight columns: `x`, `y`, `elevation`, `forest`, `chaparral`, `habitat`, `seeds`, and `jays`. We'll learn more about what each of these columns represents later in the semester. 
-Several other useful functions for investigating the structure of data frames are `names()` `str()` and `summary()`
-
-```{r}
-
-names(jayData) 
-
-str(jayData)
-
-summary(jayData)
-```
-
 `names()` just tells us the names of the columns (aka variables) in the data frame. We also get this information from some of the other functions, but it is often helpful to get a reminder on the column names, and the output from `names()` is easier to interpret quickly. 
 
-`str()` tells us about the structure of the data frame, for example `x` and `y`  are numeric columns and `habitat` contains character strings. `summary()` provides some simple summary statistics for each variable. 
+We can see that `starwars` contains 14 columns with information on different characters in the star wars universe. The `head()` and `tail()` functions abbreviated the data presentation and only show the columns that easily fit on your screen. This is because the `starwars` object is a special kind of data.frame called a "tibble". 
+
+```{r}
+class(starwars)
+```
+
+If we converted it to be just a data frame, it will show the first rows for all the columns:
+
+```{r}
+head(as.data.frame(starwars))
+```
+
+Several other useful functions exist for investigating the structure of data frames such as `str()` and `summary()`. I have not included the output of these in the tutorial, but you should run them to see what values they return.
+
+`str()` tells us about the structure of the data frame, for example which columns are numeric or character class. `summary()` provides some simple summary statistics for each variable. 
 
 Other useful functions are `dim()`, `nrow()` and `ncol()`, which tells us the dimensions (number of rows and columns, in that order) number of columns, and how many rows are in the data frame (similar to `length()` for vectors):
 
 ```{r}
-dim(jayData)
-nrow(jayData)
-ncol(jayData)
+dim(starwars)
+nrow(starwars)
+ncol(starwars)
 ```
 
 ### Subsetting data frames
 
-As you will see shortly, one of the most common tasks when working with data frames is creating new objects from *parts* of the full data frame. This task involves subsetting the data frame - selecting specific rows and columns. There are **many** ways of subsetting data frames in `R`, too many to discuss so we will only learn about a few. 
+As you will see shortly, one of the most common tasks when working with data frames is creating new objects from *parts* of the full data frame. This task involves subsetting the data frame - selecting specific rows and columns. There are **many** ways of subsetting data frames in `R`, too many to discuss so we will only learn about a few.
 
 #### Selecting columns
 
-First, we may want to select a subset of all of the columns in a big data frame. Data frames are essentially tables, which means we can reference both rows and columns by their number: `data.frame[row#, column#]`. The row and column numbers have to put inside of square brackets following the name of the data frame object. The row number always comes first and the column number second. If you want to select all rows of a specific column, you just leave the `row#` blank. For example, if we wanted a vector containing the number of jays at each survey location:
+First, we may want to select a subset of all of the columns in a big data frame. Data frames are essentially tables, which means we can reference both rows and columns by their number: `data.frame[row#, column#]`. The row and column numbers have to put inside of square brackets following the name of the data frame object. The row number always comes first and the column number second. If you want to select all rows of a specific column, you just leave the `row#` blank. For example, if we wanted a vector containing just the homeworld's (the 10th column) of all the characters: 
 
 ```{r}
-jayData[,8]
+starwars[,10]
 ```
 
 
 We can also select columns using `data.frame$column` (where `data.frame` is the name of the data frame object and `column` is the name of the column). For example,
 
 ```{r}
-jayData$jays
+starwars$homeworld
 ```
 
-Notice that if you hit `tab` after you type the `$`, RStudio will bring up all of the columns and you can use the up or down buttons to find the one you want. 
+Notice that if you hit `tab` after you type the `$`, RStudio will bring up all of the column names in that dataframe and you can use the up or down buttons to find the one you want. 
 
 Sometimes you may want to select more than one column. The easiest way to do that is to use the `select()` function in the `dplyr` package. Remember to run `install.packages("dplyr")` before the `library(dplyr)` call below if this is you're first time using the `dplyr` package on the computer you are using. 
 
 ```{r}
 library(dplyr)
 
-head(select(.data = jayData, x, y, jays))
+head(select(.data = starwars, name, height, homeworld))
 
 ```
 
-**Quick note** I used the `head()` function around the `select()` function above to shorten the display of the `jayData` to save room. Nesting functions like this (`head(select(...))`) can be very useful. However, it can also be confusing because you have to read the functions "inside out". Likewise it can be easy to miss or add additional `()` to either the beginning or the end of the function call. To help reduce this risk, I recommend turning on "rainbow brackets":
+**Quick note** I used the `head()` function around the `select()` function above to shorten the display of the `starwars` to save room. Nesting functions like this (`head(select(...))`) can be very useful. However, it can also be confusing because you have to read the functions "inside out". Likewise it can be easy to miss or add additional `()` or `,` to either the beginning or the end of the function call. To help reduce this risk, I recommend turning on "rainbow brackets":
 1. Open Global Options from the Tools menu
 2. Select Code -> Display
 3. Enable the Rainbow Parentheses option at the bottom
 
 Back to the `select()` function... 
 
-Notice that select requires us to first provide the data frame object (`.data = jayData`) and then we provide the column names (unquoted!) we want to select. You can also use select to remove columns:
+Notice that select requires us to first provide the data frame object (`.data = starwars`) and then we provide the column names (unquoted!) we want to select. You can also use select to remove columns:
 
 ```{r}
-head(select(.data = jayData, -seeds))
+head(select(.data = starwars, -height))
+```
+
+You can also select all the columns that occur between two names using the `:`
+
+```{r}
+head(select(.data = starwars, name:eye_color))
 ```
 
 ***
@@ -701,62 +714,69 @@ It's important to realize that even though there are different ways to accomplis
 
 For example, what type of object did the `data.frame[,col#]` and `data.frame$column.name` options return? What type of object did `select(data.frame, col1, col2)` return? Modify the code above by nesting it into the `class()` function to see what type of objects they are. 
 
-Those are very different results and knowing what the output will be can be useful when deciding the best way to accomplish your task.  
+For example:
+
+```{r}
+class(starwars$homeworld)
+class(select(.data = starwars, -height))
+```
+
+Those are very different results and knowing what the output will be can be useful when deciding the best way to accomplish your task i.e. if you want to have a vector or data.frame at the end.  
 
 ***
 
 #### Filtering rows
 
-To select specific rows, we can use the `row#` method we learned above, this time leaving the columns blank:
+To select specific rows, we can use the `[row#, col#]` method we learned above, this time leaving the columns blank:
 
 ```{r}
-jayData[1,]
+starwars[1,]
 ```
 
 If we want more than one row, we just put in a vector with all of the rows we want:
 
 ```{r}
 # rows 1 and 2
-jayData[1:2,]
+starwars[1:2,]
 
 # rows 1 and 30
-jayData[c(1,30),]
+starwars[c(1,30),]
 ```
 
 Note that we can use the square brackets to also subset vectors, in which case we don't need the comma as long as you tell `R` which column you want first:
 
 ```{r}
-jayData$jays[1]
+starwars$name[1]
 ```
 
-Sometimes, we may not know the specific row number(s) we want but we do know the value of one of the columns we want to keep. Using the `filter()` function in the `dplyr` package allows us to filter rows based on the value of one of the variables. For example, if we want just surveys that were conducted in oak habitat, we use:
+Sometimes, we may not know the specific row number(s) we want but we do know the value of one of the columns we want to keep. Using the `filter()` function in the `dplyr` package allows us to filter rows based on the value of one of the variables. For example, if we want just characters from Tatooine, we use:
 
 ```{r}
-head(filter(jayData, habitat == "Oak"))
+head(filter(starwars, homeworld == "Tatooine"))
 ```
 
-Notice the need for two equals signs (`==`) when telling `R` we want the row where `habitat` equals `Oak`. A related task might be to filter out all the rows *that are not* `Oak`. In this case we would use the `!=` operator which can be read "is not equal to":
+Notice the need for two equals signs (`==`) when telling `R` we want the row where `homeworld` *is* `Tatooine`. A related task might be to filter out all the rows *that are not* `Tatooine`. In this case we would use the `!=` operator which can be read "is not equal to":
 
 ```{r}
-head(filter(jayData, habitat != "Oak"))
+head(filter(starwars, homeworld != "Tatooine"))
 ```
 
 Filter makes it very easy to select multiple rows using operators like greater than, less than, etc. 
 
 ```{r}
-head(filter(jayData, elevation > 1000))
+head(filter(starwars, height > 200))
 ```
 
-It is also possible to use the "or" operator (`|`) when we want to select observations which meet different values. For example, we want observations of less than 800 *OR* > 1200:
+It is also possible to use the "or" operator (`|`) when we want to select observations which meet different values. For example, we want observations of less than 80 *OR* > 200:
 
 ```{r}
-head(filter(jayData, elevation < 800 | elevation > 1200))
+head(filter(starwars, height < 80 | height > 200))
 ```
 
-We can also filter out observations based on multiple columns using the "and" (`&`) operator. For example, we want the rows which have an elevation less than 1000, **AND** are in the Oak habitat:
+We can also filter out observations based on multiple columns using the "and" (`&`) operator. For example, we want the rows which have an height greater than 200, **AND** are from Tatooine:
 
 ```{r}
-head(filter(jayData, elevation < 1000 & habitat == "Oak"))
+head(filter(starwars, height > 200 & homeworld == "Tatooine"))
 ```
 
 # Assignment Formats: R Scripts
@@ -767,9 +787,9 @@ For your assignments, you will be writing R scripts with comments and code which
 
 Each assignment should follow this naming convention:
 
-full_name_hw#
+full_name_hwXX
 
-For example: justin_pomeranz_hw1
+For example: justin_pomeranz_hw01
 
 You can capitalize words in the file name if you choose, but it should follow the general convention above. 
 
