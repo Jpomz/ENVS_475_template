@@ -670,14 +670,21 @@ As you will see shortly, one of the most common tasks when working with data fra
 
 #### Selecting columns
 
-First, we may want to select a subset of all of the columns in a big data frame. Data frames are essentially tables, which means we can reference both rows and columns by their number: `data.frame[row#, column#]`. The row and column numbers have to put inside of square brackets following the name of the data frame object. The row number always comes first and the column number second. If you want to select all rows of a specific column, you just leave the `row#` blank. For example, if we wanted a vector containing just the homeworld's (the 10th column) of all the characters: 
+First, we may want to select a subset of all of the columns in a big data frame. Data frames are essentially tables, which means we can reference both rows and columns by their number: `data.frame[row#, column#]`. 
+**Note** that you don't actually type "row#", you just enter the numer you want. for example, if you want the observation in the 1st row and the first column you would type:
+```{r}
+starwars[1,1]
+```
+
+
+The row and column numbers have to put inside of square brackets following the name of the data frame object. The row number always comes first and the column number second. If you want to select all rows of a specific column, you just leave the `row#` blank. For example, if we wanted a vector containing just the home worlds (the 10th column) of all the characters: 
 
 ```{r}
 starwars[,10]
 ```
 
 
-We can also select columns using `data.frame$column` (where `data.frame` is the name of the data frame object and `column` is the name of the column). For example,
+We can also select columns using `data.frame$column_name` (where `data.frame` is the name of the data frame object and `column_name` is the name of the column). In this case, you do actually need to type the `$`. For example,
 
 ```{r}
 starwars$homeworld

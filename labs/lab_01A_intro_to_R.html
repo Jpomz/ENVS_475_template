@@ -1397,12 +1397,21 @@ only learn about a few.</p>
 <p>First, we may want to select a subset of all of the columns in a big
 data frame. Data frames are essentially tables, which means we can
 reference both rows and columns by their number:
-<code>data.frame[row#, column#]</code>. The row and column numbers have
-to put inside of square brackets following the name of the data frame
-object. The row number always comes first and the column number second.
-If you want to select all rows of a specific column, you just leave the
-<code>row#</code> blank. For example, if we wanted a vector containing
-just the homeworld’s (the 10th column) of all the characters:</p>
+<code>data.frame[row#, column#]</code>. <strong>Note</strong> that you
+don’t actually type “row#”, you just enter the numer you want. for
+example, if you want the observation in the 1st row and the first column
+you would type:</p>
+<pre class="r"><code>starwars[1,1]
+#&gt; # A tibble: 1 x 1
+#&gt;   name          
+#&gt;   &lt;chr&gt;         
+#&gt; 1 Luke Skywalker</code></pre>
+<p>The row and column numbers have to put inside of square brackets
+following the name of the data frame object. The row number always comes
+first and the column number second. If you want to select all rows of a
+specific column, you just leave the <code>row#</code> blank. For
+example, if we wanted a vector containing just the home worlds (the 10th
+column) of all the characters:</p>
 <pre class="r"><code>starwars[,10]
 #&gt; # A tibble: 87 x 1
 #&gt;    homeworld
@@ -1418,9 +1427,10 @@ just the homeworld’s (the 10th column) of all the characters:</p>
 #&gt;  9 Tatooine 
 #&gt; 10 Stewjon  
 #&gt; # ... with 77 more rows</code></pre>
-<p>We can also select columns using <code>data.frame$column</code>
+<p>We can also select columns using <code>data.frame$column_name</code>
 (where <code>data.frame</code> is the name of the data frame object and
-<code>column</code> is the name of the column). For example,</p>
+<code>column_name</code> is the name of the column). In this case, you
+do actually need to type the <code>$</code>. For example,</p>
 <pre class="r"><code>starwars$homeworld
 #&gt;  [1] &quot;Tatooine&quot;       &quot;Tatooine&quot;       &quot;Naboo&quot;          &quot;Tatooine&quot;      
 #&gt;  [5] &quot;Alderaan&quot;       &quot;Tatooine&quot;       &quot;Tatooine&quot;       &quot;Tatooine&quot;      
