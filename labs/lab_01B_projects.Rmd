@@ -18,6 +18,8 @@ knitr::opts_chunk$set(
 
 Everything that follows in this tutorial should be a viewed as *suggestions* for how to organize your data, code, and results. These suggestions are based on hard-won lessons from my own work as well as advice from people who spend a lot of time thinking about efficient and reproducible workflows. The lessons below are unabashedly R/RStudio focused. However, they are just suggestions. There are many other ways of accomplishing these objectives so you are free to use whatever workflow works best for you. Even if you choose to use different workflows or tools that are not as R-focused, hopefully the concepts presented here will help make your process more efficient and organized.
 
+**One exception:** Everything here is a suggestion *EXCEPT* for creating a folder in your project called "data". This is required. For future homework assignments, you will have to load data objects into R. In order for your code to work on my computer, your folder structure must match mine. In other words, if you don't have a folder called "data", or if you name it something differently or have it in another sub folder, I won't be able to correctly run/grade your homework script and you will then receive a zero on that assignment. Please help us avoid this by making a folder claled "data". THANKS!
+
 # Common workflows and their problems
 
 A common workflow used by many novice R users goes something like this:
@@ -189,18 +191,21 @@ ENVS_475/
   |─── homework/
         |─── Justin_Pomeranz_HW1.R
         |─── Justin_Pomeranz_HW2.R
-  |─── other_resources/
+  |─── other-resources/
         |─── cheat-sheets/
               |─── data-transformation.pdf
               |─── data-visualization.pdf
 ```
 
-* `data/` contains data files provided by me in class to complete labs and/or homeworks
-  + We will also be using many of the datasets built directly into `R`.
+* `data/` contains data files provided by me in class to complete labs and/or homework  
+  + We will also be using many of the datasets built directly into `R`.  
+  
 * `scripts/` contains `R` scripts created during class and in labs.  
 
 * `homework/` contains scripts (`.R`) files associated with each homework.
-  + may also include subdirectories with Rmarkdown (`.Rmd`) and `.html` files in the second half of the class (we will return to this later, if needed)
+  + may also include subdirectories with Rmarkdown (`.Rmd`) and `.html` files in the second half of the class (we will return to this later, if needed)  
+  
+* `other-resources/` contains anything else you might find useful in class. I recommend having a `cheat-sheets/` sub folder here where you can download all available ones from Rstudio. 
 
 
 ## A note on handling raw data  

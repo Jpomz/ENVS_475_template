@@ -173,17 +173,18 @@ sqrt(weight_lb)
 str(weight_lb)
 ```
 
-* Another data type is for text data
-* We right text inside of quotation makes
+* Another data type is for text data, called "character"
+* We write text inside of quotation makes
 
 ```{r}
 "hello world"
 ```
 
-* If we look at the structure of some text we see that it is type character
+* We can use the `str()` and `class()` functions to look at the "structure" and "class of the object
 
 ```{r}
 str("hello world")
+class("hello world")
 ```
 
 ### Function Arguments 
@@ -210,9 +211,13 @@ Likewise, if you name the arguments, you can put them in different order and it 
 ```{r diff_argument_order}
 round(digits = 1, x = weight_lb)
 ```
-***
+
+***  
+
 You try it - modify the code above to round `weight_lb` to the 4th decimal point. 
-***
+
+***  
+
 
 If you do name the arguments, you can switch their order:
 
@@ -390,7 +395,7 @@ What is the class of a vector with both numeric and characters entries? Hint:
 mixed <- c(1, 2, "3", "4")
 ```
 
-Print out the `mixed` object in the console. What does it look like? What happend to the `numbers` and the `characters` in the vector?
+Print out the `mixed` object in the console. What does it look like? What happend to the `numbers` and the `characters` in the vector? You can also type `class(mixed)` to confirm what R "thinks" it is. 
 
 You can also use the `c()` function to add other elements to your vector:
 

@@ -254,7 +254,6 @@ if (window.hljs) {
 
 
 
-
 <style type="text/css">
 .main-container {
   max-width: 940px;
@@ -275,9 +274,6 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
-}
-details > summary > p:only-child {
-  display: inline;
 }
 pre code {
   padding: 0;
@@ -628,17 +624,19 @@ sqrt(weight_lb)
 <pre class="r"><code>str(weight_lb)
 #&gt;  num 0.11</code></pre>
 <ul>
-<li>Another data type is for text data</li>
-<li>We right text inside of quotation makes</li>
+<li>Another data type is for text data, called “character”</li>
+<li>We write text inside of quotation makes</li>
 </ul>
 <pre class="r"><code>&quot;hello world&quot;
 #&gt; [1] &quot;hello world&quot;</code></pre>
 <ul>
-<li>If we look at the structure of some text we see that it is type
-character</li>
+<li>We can use the <code>str()</code> and <code>class()</code> functions
+to look at the “structure” and “class of the object</li>
 </ul>
 <pre class="r"><code>str(&quot;hello world&quot;)
-#&gt;  chr &quot;hello world&quot;</code></pre>
+#&gt;  chr &quot;hello world&quot;
+class(&quot;hello world&quot;)
+#&gt; [1] &quot;character&quot;</code></pre>
 <div id="function-arguments" class="section level3">
 <h3>Function Arguments</h3>
 <ul>
@@ -672,7 +670,8 @@ order and it will still run correctly:</p>
 #&gt; [1] 0.1</code></pre>
 <hr />
 <p>You try it - modify the code above to round <code>weight_lb</code> to
-the 4th decimal point. ***</p>
+the 4th decimal point.</p>
+<hr />
 <p>If you do name the arguments, you can switch their order:</p>
 <pre class="r"><code>round(digits = 0, x = y)
 #&gt; [1] 12</code></pre>
@@ -879,7 +878,8 @@ entries? Hint:</p>
 <pre class="r"><code>mixed &lt;- c(1, 2, &quot;3&quot;, &quot;4&quot;)</code></pre>
 <p>Print out the <code>mixed</code> object in the console. What does it
 look like? What happend to the <code>numbers</code> and the
-<code>characters</code> in the vector?</p>
+<code>characters</code> in the vector? You can also type
+<code>class(mixed)</code> to confirm what R “thinks” it is.</p>
 <p>You can also use the <code>c()</code> function to add other elements
 to your vector:</p>
 <pre class="r"><code># first, recall what value you stored in &quot;x&quot;
@@ -1299,31 +1299,29 @@ rows of the data frame:</p>
 #&gt;  [6] &quot;eye_color&quot;  &quot;birth_year&quot; &quot;sex&quot;        &quot;gender&quot;     &quot;homeworld&quot; 
 #&gt; [11] &quot;species&quot;    &quot;films&quot;      &quot;vehicles&quot;   &quot;starships&quot;
 head(starwars)
-#&gt; # A tibble: 6 × 14
-#&gt;   name         height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵
-#&gt;   &lt;chr&gt;         &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
-#&gt; 1 Luke Skywal…    172    77 blond   fair    blue       19   male  mascu… Tatooi…
-#&gt; 2 C-3PO           167    75 &lt;NA&gt;    gold    yellow    112   none  mascu… Tatooi…
-#&gt; 3 R2-D2            96    32 &lt;NA&gt;    white,… red        33   none  mascu… Naboo  
-#&gt; 4 Darth Vader     202   136 none    white   yellow     41.9 male  mascu… Tatooi…
-#&gt; 5 Leia Organa     150    49 brown   light   brown      19   fema… femin… Aldera…
-#&gt; 6 Owen Lars       178   120 brown,… light   blue       52   male  mascu… Tatooi…
-#&gt; # … with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,
-#&gt; #   starships &lt;list&gt;, and abbreviated variable names ¹​hair_color, ²​skin_color,
-#&gt; #   ³​eye_color, ⁴​birth_year, ⁵​homeworld
+#&gt; # A tibble: 6 x 14
+#&gt;   name     height  mass hair_color  skin_color eye_color birth_year sex   gender
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+#&gt; 1 Luke Sk~    172    77 blond       fair       blue            19   male  mascu~
+#&gt; 2 C-3PO       167    75 &lt;NA&gt;        gold       yellow         112   none  mascu~
+#&gt; 3 R2-D2        96    32 &lt;NA&gt;        white, bl~ red             33   none  mascu~
+#&gt; 4 Darth V~    202   136 none        white      yellow          41.9 male  mascu~
+#&gt; 5 Leia Or~    150    49 brown       light      brown           19   fema~ femin~
+#&gt; 6 Owen La~    178   120 brown, grey light      blue            52   male  mascu~
+#&gt; # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;
 tail(starwars)
-#&gt; # A tibble: 6 × 14
-#&gt;   name         height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵
-#&gt;   &lt;chr&gt;         &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
-#&gt; 1 Finn             NA    NA black   dark    dark         NA male  mascu… &lt;NA&gt;   
-#&gt; 2 Rey              NA    NA brown   light   hazel        NA fema… femin… &lt;NA&gt;   
-#&gt; 3 Poe Dameron      NA    NA brown   light   brown        NA male  mascu… &lt;NA&gt;   
-#&gt; 4 BB8              NA    NA none    none    black        NA none  mascu… &lt;NA&gt;   
-#&gt; 5 Captain Pha…     NA    NA unknown unknown unknown      NA &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;   
-#&gt; 6 Padmé Amida…    165    45 brown   light   brown        46 fema… femin… Naboo  
-#&gt; # … with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,
-#&gt; #   starships &lt;list&gt;, and abbreviated variable names ¹​hair_color, ²​skin_color,
-#&gt; #   ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
+#&gt; # A tibble: 6 x 14
+#&gt;   name     height  mass hair_color skin_color eye_color birth_year sex    gender
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; 
+#&gt; 1 Finn         NA    NA black      dark       dark              NA male   mascu~
+#&gt; 2 Rey          NA    NA brown      light      hazel             NA female femin~
+#&gt; 3 Poe Dam~     NA    NA brown      light      brown             NA male   mascu~
+#&gt; 4 BB8          NA    NA none       none       black             NA none   mascu~
+#&gt; 5 Captain~     NA    NA unknown    unknown    unknown           NA &lt;NA&gt;   &lt;NA&gt;  
+#&gt; 6 Padmé A~    165    45 brown      light      brown             46 female femin~
+#&gt; # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 <p><code>names()</code> just tells us the names of the columns (aka
 variables) in the data frame. We also get this information from some of
 the other functions, but it is often helpful to get a reminder on the
@@ -1406,7 +1404,7 @@ If you want to select all rows of a specific column, you just leave the
 <code>row#</code> blank. For example, if we wanted a vector containing
 just the homeworld’s (the 10th column) of all the characters:</p>
 <pre class="r"><code>starwars[,10]
-#&gt; # A tibble: 87 × 1
+#&gt; # A tibble: 87 x 1
 #&gt;    homeworld
 #&gt;    &lt;chr&gt;    
 #&gt;  1 Tatooine 
@@ -1419,7 +1417,7 @@ just the homeworld’s (the 10th column) of all the characters:</p>
 #&gt;  8 Tatooine 
 #&gt;  9 Tatooine 
 #&gt; 10 Stewjon  
-#&gt; # … with 77 more rows</code></pre>
+#&gt; # ... with 77 more rows</code></pre>
 <p>We can also select columns using <code>data.frame$column</code>
 (where <code>data.frame</code> is the name of the data frame object and
 <code>column</code> is the name of the column). For example,</p>
@@ -1459,7 +1457,7 @@ using the <code>dplyr</code> package on the computer you are using.</p>
 <pre class="r"><code>library(dplyr)
 
 head(select(.data = starwars, name, height, homeworld))
-#&gt; # A tibble: 6 × 3
+#&gt; # A tibble: 6 x 3
 #&gt;   name           height homeworld
 #&gt;   &lt;chr&gt;           &lt;int&gt; &lt;chr&gt;    
 #&gt; 1 Luke Skywalker    172 Tatooine 
@@ -1484,22 +1482,21 @@ Enable the Rainbow Parentheses option at the bottom</p>
 (unquoted!) we want to select. You can also use select to remove
 columns:</p>
 <pre class="r"><code>head(select(.data = starwars, -height))
-#&gt; # A tibble: 6 × 13
-#&gt;   name   mass hair_…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵ species films
-#&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;   &lt;lis&gt;
-#&gt; 1 Luke…    77 blond   fair    blue       19   male  mascu… Tatooi… Human   &lt;chr&gt;
-#&gt; 2 C-3PO    75 &lt;NA&gt;    gold    yellow    112   none  mascu… Tatooi… Droid   &lt;chr&gt;
-#&gt; 3 R2-D2    32 &lt;NA&gt;    white,… red        33   none  mascu… Naboo   Droid   &lt;chr&gt;
-#&gt; 4 Dart…   136 none    white   yellow     41.9 male  mascu… Tatooi… Human   &lt;chr&gt;
-#&gt; 5 Leia…    49 brown   light   brown      19   fema… femin… Aldera… Human   &lt;chr&gt;
-#&gt; 6 Owen…   120 brown,… light   blue       52   male  mascu… Tatooi… Human   &lt;chr&gt;
-#&gt; # … with 2 more variables: vehicles &lt;list&gt;, starships &lt;list&gt;, and abbreviated
-#&gt; #   variable names ¹​hair_color, ²​skin_color, ³​eye_color, ⁴​birth_year,
-#&gt; #   ⁵​homeworld</code></pre>
+#&gt; # A tibble: 6 x 13
+#&gt;   name    mass hair_color skin_color eye_color birth_year sex   gender homeworld
+#&gt;   &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;    
+#&gt; 1 Luke ~    77 blond      fair       blue            19   male  mascu~ Tatooine 
+#&gt; 2 C-3PO     75 &lt;NA&gt;       gold       yellow         112   none  mascu~ Tatooine 
+#&gt; 3 R2-D2     32 &lt;NA&gt;       white, bl~ red             33   none  mascu~ Naboo    
+#&gt; 4 Darth~   136 none       white      yellow          41.9 male  mascu~ Tatooine 
+#&gt; 5 Leia ~    49 brown      light      brown           19   fema~ femin~ Alderaan 
+#&gt; 6 Owen ~   120 brown, gr~ light      blue            52   male  mascu~ Tatooine 
+#&gt; # ... with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,
+#&gt; #   starships &lt;list&gt;</code></pre>
 <p>You can also select all the columns that occur between two names
 using the <code>:</code></p>
 <pre class="r"><code>head(select(.data = starwars, name:eye_color))
-#&gt; # A tibble: 6 × 6
+#&gt; # A tibble: 6 x 6
 #&gt;   name           height  mass hair_color  skin_color  eye_color
 #&gt;   &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;    
 #&gt; 1 Luke Skywalker    172    77 blond       fair        blue     
@@ -1534,36 +1531,33 @@ you want to have a vector or data.frame at the end.</p>
 <p>To select specific rows, we can use the <code>[row#, col#]</code>
 method we learned above, this time leaving the columns blank:</p>
 <pre class="r"><code>starwars[1,]
-#&gt; # A tibble: 1 × 14
-#&gt;   name         height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵
-#&gt;   &lt;chr&gt;         &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
-#&gt; 1 Luke Skywal…    172    77 blond   fair    blue         19 male  mascu… Tatooi…
-#&gt; # … with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,
-#&gt; #   starships &lt;list&gt;, and abbreviated variable names ¹​hair_color, ²​skin_color,
-#&gt; #   ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
+#&gt; # A tibble: 1 x 14
+#&gt;   name     height  mass hair_color skin_color eye_color birth_year sex   gender 
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  
+#&gt; 1 Luke Sk~    172    77 blond      fair       blue              19 male  mascul~
+#&gt; # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 <p>If we want more than one row, we just put in a vector with all of the
 rows we want:</p>
 <pre class="r"><code># rows 1 and 2
 starwars[1:2,]
-#&gt; # A tibble: 2 × 14
-#&gt;   name         height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵
-#&gt;   &lt;chr&gt;         &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
-#&gt; 1 Luke Skywal…    172    77 blond   fair    blue         19 male  mascu… Tatooi…
-#&gt; 2 C-3PO           167    75 &lt;NA&gt;    gold    yellow      112 none  mascu… Tatooi…
-#&gt; # … with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,
-#&gt; #   starships &lt;list&gt;, and abbreviated variable names ¹​hair_color, ²​skin_color,
-#&gt; #   ³​eye_color, ⁴​birth_year, ⁵​homeworld
+#&gt; # A tibble: 2 x 14
+#&gt;   name     height  mass hair_color skin_color eye_color birth_year sex   gender 
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  
+#&gt; 1 Luke Sk~    172    77 blond      fair       blue              19 male  mascul~
+#&gt; 2 C-3PO       167    75 &lt;NA&gt;       gold       yellow           112 none  mascul~
+#&gt; # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;
 
 # rows 1 and 30
 starwars[c(1,30),]
-#&gt; # A tibble: 2 × 14
-#&gt;   name         height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵
-#&gt;   &lt;chr&gt;         &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
-#&gt; 1 Luke Skywal…    172    77 blond   fair    blue         19 male  mascu… Tatooi…
-#&gt; 2 Nien Nunb       160    68 none    grey    black        NA male  mascu… Sullust
-#&gt; # … with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,
-#&gt; #   starships &lt;list&gt;, and abbreviated variable names ¹​hair_color, ²​skin_color,
-#&gt; #   ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
+#&gt; # A tibble: 2 x 14
+#&gt;   name     height  mass hair_color skin_color eye_color birth_year sex   gender 
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  
+#&gt; 1 Luke Sk~    172    77 blond      fair       blue              19 male  mascul~
+#&gt; 2 Nien Nu~    160    68 none       grey       black             NA male  mascul~
+#&gt; # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 <p>Note that we can use the square brackets to also subset vectors, in
 which case we don’t need the comma as long as you tell <code>R</code>
 which column you want first:</p>
@@ -1575,18 +1569,17 @@ do know the value of one of the columns we want to keep. Using the
 us to filter rows based on the value of one of the variables. For
 example, if we want just characters from Tatooine, we use:</p>
 <pre class="r"><code>head(filter(starwars, homeworld == &quot;Tatooine&quot;))
-#&gt; # A tibble: 6 × 14
-#&gt;   name         height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵
-#&gt;   &lt;chr&gt;         &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
-#&gt; 1 Luke Skywal…    172    77 blond   fair    blue       19   male  mascu… Tatooi…
-#&gt; 2 C-3PO           167    75 &lt;NA&gt;    gold    yellow    112   none  mascu… Tatooi…
-#&gt; 3 Darth Vader     202   136 none    white   yellow     41.9 male  mascu… Tatooi…
-#&gt; 4 Owen Lars       178   120 brown,… light   blue       52   male  mascu… Tatooi…
-#&gt; 5 Beru Whites…    165    75 brown   light   blue       47   fema… femin… Tatooi…
-#&gt; 6 R5-D4            97    32 &lt;NA&gt;    white,… red        NA   none  mascu… Tatooi…
-#&gt; # … with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,
-#&gt; #   starships &lt;list&gt;, and abbreviated variable names ¹​hair_color, ²​skin_color,
-#&gt; #   ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
+#&gt; # A tibble: 6 x 14
+#&gt;   name     height  mass hair_color  skin_color eye_color birth_year sex   gender
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+#&gt; 1 Luke Sk~    172    77 blond       fair       blue            19   male  mascu~
+#&gt; 2 C-3PO       167    75 &lt;NA&gt;        gold       yellow         112   none  mascu~
+#&gt; 3 Darth V~    202   136 none        white      yellow          41.9 male  mascu~
+#&gt; 4 Owen La~    178   120 brown, grey light      blue            52   male  mascu~
+#&gt; 5 Beru Wh~    165    75 brown       light      blue            47   fema~ femin~
+#&gt; 6 R5-D4        97    32 &lt;NA&gt;        white, red red             NA   none  mascu~
+#&gt; # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 <p>Notice the need for two equals signs (<code>==</code>) when telling
 <code>R</code> we want the row where <code>homeworld</code> <em>is</em>
 <code>Tatooine</code>. A related task might be to filter out all the
@@ -1594,61 +1587,57 @@ rows <em>that are not</em> <code>Tatooine</code>. In this case we would
 use the <code>!=</code> operator which can be read “is not equal
 to”:</p>
 <pre class="r"><code>head(filter(starwars, homeworld != &quot;Tatooine&quot;))
-#&gt; # A tibble: 6 × 14
-#&gt;   name         height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵
-#&gt;   &lt;chr&gt;         &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
-#&gt; 1 R2-D2            96    32 &lt;NA&gt;    white,… red          33 none  mascu… Naboo  
-#&gt; 2 Leia Organa     150    49 brown   light   brown        19 fema… femin… Aldera…
-#&gt; 3 Obi-Wan Ken…    182    77 auburn… fair    blue-g…      57 male  mascu… Stewjon
-#&gt; 4 Wilhuff Tar…    180    NA auburn… fair    blue         64 male  mascu… Eriadu 
-#&gt; 5 Chewbacca       228   112 brown   unknown blue        200 male  mascu… Kashyy…
-#&gt; 6 Han Solo        180    80 brown   fair    brown        29 male  mascu… Corell…
-#&gt; # … with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,
-#&gt; #   starships &lt;list&gt;, and abbreviated variable names ¹​hair_color, ²​skin_color,
-#&gt; #   ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
+#&gt; # A tibble: 6 x 14
+#&gt;   name     height  mass hair_color  skin_color eye_color birth_year sex   gender
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+#&gt; 1 R2-D2        96    32 &lt;NA&gt;        white, bl~ red               33 none  mascu~
+#&gt; 2 Leia Or~    150    49 brown       light      brown             19 fema~ femin~
+#&gt; 3 Obi-Wan~    182    77 auburn, wh~ fair       blue-gray         57 male  mascu~
+#&gt; 4 Wilhuff~    180    NA auburn, gr~ fair       blue              64 male  mascu~
+#&gt; 5 Chewbac~    228   112 brown       unknown    blue             200 male  mascu~
+#&gt; 6 Han Solo    180    80 brown       fair       brown             29 male  mascu~
+#&gt; # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 <p>Filter makes it very easy to select multiple rows using operators
 like greater than, less than, etc.</p>
 <pre class="r"><code>head(filter(starwars, height &gt; 200))
-#&gt; # A tibble: 6 × 14
-#&gt;   name         height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵
-#&gt;   &lt;chr&gt;         &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
-#&gt; 1 Darth Vader     202   136 none    white   yellow     41.9 male  mascu… Tatooi…
-#&gt; 2 Chewbacca       228   112 brown   unknown blue      200   male  mascu… Kashyy…
-#&gt; 3 Roos Tarpals    224    82 none    grey    orange     NA   male  mascu… Naboo  
-#&gt; 4 Rugor Nass      206    NA none    green   orange     NA   male  mascu… Naboo  
-#&gt; 5 Yarael Poof     264    NA none    white   yellow     NA   male  mascu… Quermia
-#&gt; 6 Lama Su         229    88 none    grey    black      NA   male  mascu… Kamino 
-#&gt; # … with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,
-#&gt; #   starships &lt;list&gt;, and abbreviated variable names ¹​hair_color, ²​skin_color,
-#&gt; #   ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
+#&gt; # A tibble: 6 x 14
+#&gt;   name     height  mass hair_color skin_color eye_color birth_year sex   gender 
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  
+#&gt; 1 Darth V~    202   136 none       white      yellow          41.9 male  mascul~
+#&gt; 2 Chewbac~    228   112 brown      unknown    blue           200   male  mascul~
+#&gt; 3 Roos Ta~    224    82 none       grey       orange          NA   male  mascul~
+#&gt; 4 Rugor N~    206    NA none       green      orange          NA   male  mascul~
+#&gt; 5 Yarael ~    264    NA none       white      yellow          NA   male  mascul~
+#&gt; 6 Lama Su     229    88 none       grey       black           NA   male  mascul~
+#&gt; # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 <p>It is also possible to use the “or” operator (<code>|</code>) when we
 want to select observations which meet different values. For example, we
 want observations of less than 80 <em>OR</em> &gt; 200:</p>
 <pre class="r"><code>head(filter(starwars, height &lt; 80 | height &gt; 200))
-#&gt; # A tibble: 6 × 14
-#&gt;   name         height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵
-#&gt;   &lt;chr&gt;         &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
-#&gt; 1 Darth Vader     202   136 none    white   yellow     41.9 male  mascu… Tatooi…
-#&gt; 2 Chewbacca       228   112 brown   unknown blue      200   male  mascu… Kashyy…
-#&gt; 3 Yoda             66    17 white   green   brown     896   male  mascu… &lt;NA&gt;   
-#&gt; 4 Roos Tarpals    224    82 none    grey    orange     NA   male  mascu… Naboo  
-#&gt; 5 Rugor Nass      206    NA none    green   orange     NA   male  mascu… Naboo  
-#&gt; 6 Yarael Poof     264    NA none    white   yellow     NA   male  mascu… Quermia
-#&gt; # … with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,
-#&gt; #   starships &lt;list&gt;, and abbreviated variable names ¹​hair_color, ²​skin_color,
-#&gt; #   ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
+#&gt; # A tibble: 6 x 14
+#&gt;   name     height  mass hair_color skin_color eye_color birth_year sex   gender 
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  
+#&gt; 1 Darth V~    202   136 none       white      yellow          41.9 male  mascul~
+#&gt; 2 Chewbac~    228   112 brown      unknown    blue           200   male  mascul~
+#&gt; 3 Yoda         66    17 white      green      brown          896   male  mascul~
+#&gt; 4 Roos Ta~    224    82 none       grey       orange          NA   male  mascul~
+#&gt; 5 Rugor N~    206    NA none       green      orange          NA   male  mascul~
+#&gt; 6 Yarael ~    264    NA none       white      yellow          NA   male  mascul~
+#&gt; # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 <p>We can also filter out observations based on multiple columns using
 the “and” (<code>&amp;</code>) operator. For example, we want the rows
 which have an height greater than 200, <strong>AND</strong> are from
 Tatooine:</p>
 <pre class="r"><code>head(filter(starwars, height &gt; 200 &amp; homeworld == &quot;Tatooine&quot;))
-#&gt; # A tibble: 1 × 14
-#&gt;   name        height  mass hair_c…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵
-#&gt;   &lt;chr&gt;        &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
-#&gt; 1 Darth Vader    202   136 none     white   yellow     41.9 male  mascu… Tatooi…
-#&gt; # … with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,
-#&gt; #   starships &lt;list&gt;, and abbreviated variable names ¹​hair_color, ²​skin_color,
-#&gt; #   ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
+#&gt; # A tibble: 1 x 14
+#&gt;   name     height  mass hair_color skin_color eye_color birth_year sex   gender 
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  
+#&gt; 1 Darth V~    202   136 none       white      yellow          41.9 male  mascul~
+#&gt; # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 </div>
 </div>
 </div>
