@@ -34,6 +34,7 @@ Before we begin, make sure you have the following packages installed: `dplyr`, `
 If you need to install `dplyr` or `nycflights13`, run the following lines of code, as needed. Also note that the package name is inside of "" in the function call: 
 ```{r, eval=FALSE}
 install.packages("dplyr")
+install.packages("ggplot2")
 install.packages("nycflights13")
 ```
 
@@ -41,6 +42,7 @@ As a reminder, you only have to run the `install.packages(...)` line once per ma
 
 ```{r eval = FALSE}
 library(dplyr)
+library(ggplot2)
 library(nycflights13)
 ```
 
@@ -58,6 +60,7 @@ It is worth noting that this data is already in the "tidydata" format. Unfortuna
 Whenever you start working with a new dataset, you should also run some quick commands to get an idea of what the data looks like, and how it is set up. I generally run the following commands (note that I have suppressed the display in this document for room, but you should run each of these on your computer):
 ```{r, eval=FALSE}
 dim(flights)
+names(flights)
 head(flights)
 tail(flights)
 str(flights)
@@ -173,13 +176,20 @@ You may also see old scripts or tutorials using the `subset()` command. `filter(
 
 #### Other Boolean operators
 Other Boolean operators include:
-* `|` which means "or"
-* `&` which means "and"
-* `!=` which means "not equal to"
-* `>=`which means "greater than or equal to"
-* `<=`which means "less than or not equal to"
-* `>`which means "greater than"
-* `<`which means "less than"
+* `|` which means "or"  
+
+* `&` which means "and"  
+
+* `!=` which means "not equal to"  
+
+* `>=`which means "greater than or equal to"  
+
+* `<=`which means "less than or not equal to"  
+
+* `>`which means "greater than"  
+
+* `<`which means "less than"  
+
 
 You can use boolean operators, singly and in combination:
 
