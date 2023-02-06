@@ -5,6 +5,7 @@ date: "Spring 2023"
 output: 
   html_document:
     toc: true
+    toc_depth: 2
 ---
 
 ```{r setup, include = FALSE}
@@ -82,16 +83,21 @@ Complete the following tasks.
 7. Filter the data to include only plants with heights greater than 4 and widths greater than 2 (using `,` or `&` to include two conditions).
 8. Filter the data to include only plants from Experiment 1 or Experiment 3 (using `|` for "or").
 9. Filter the data to remove rows with null values in the `height` column (using `!is.na`)
-10. Create a new data frame called `shrub_volumes` that includes all of the original data and a new column containing the volumes (length * width * height), and display it.
-Footer
+10. Create a new data frame called `shrub_volumes` that includes all of the original data and a new column containing the volumes (length * width * height), and display it.  
+  + Make sure to include `shrub_volumes` at the end of this section so it prints out when you run the "source with echo" (shortcut: `Ctrl+Shift+Enter`) option.  
 
 ## Problem 2
 
+### `surveys` Data  
+
 If the file `surveys.csv` is not already in your working `data/` folder then download a copy from D2L.
 
-Load the file into R using `read.csv()`.
-* Use the example above from the `shrub_data` as a guide
-* Make sure `surveys.csv` is in the `data/` folder and that you put the file path into `read.csv()` correctly
+Load the file into R using `read.csv()`.  
+
+* Use the example above from the `shrub_data` as a guide  
+
+* Make sure `surveys.csv` is in the `data/` folder and that you put the file path into `read.csv()` correctly  
+
 
 ***Do not use pipes for this exercise.***
 
@@ -113,9 +119,10 @@ Use pipes (either `|>` or `%>%`) to combine the following operations to manipula
 
 2. Use the `filter()` and `select()` to get the `year`, `month`, `day`, and `species_id` columns for all of the rows in the data frame where `species_id` is `SH`.
 
-# Problem 4
-Summarize the `surveys` data
-1. Use `summarize` to calculate the mean `weight` in the `surveys` data. There are `NA`'s in the `weight` column, so be sure to use `na.rm = TRUE`.
+## Problem 4
+Summarize the `surveys` data  
+
+1. Use `summarize` to calculate the mean `weight` in the `surveys` data. There are `NA`'s in the `weight` column, so be sure to use `na.rm = TRUE`.  
 
 2. Use `summarize`, `group_by()` and `n()` to get the count of each species in the `surveys` data. 
 
@@ -123,6 +130,6 @@ Summarize the `surveys` data
 
 4. Calculate the average weight for the "DO" species by year in the `surveys` data. 
 
-# Problem 5 Challenge (optional)
+## Problem 5 Challenge (optional)
 
 Develop a data manipulation pipeline for the Portal `surveys` table that produces a table of data for only the three *Dipodomys* species (`DM`, `DO`, `DS`). The species IDs should be presented as lower case, not upper case. The table should contain information on the date, the species ID, the weight and hindfoot length. The data should not include null values for either weight or hindfoot length. The table should be sorted first by the species (so that each species is grouped together) and then by weight, with the largest weights at the top.
