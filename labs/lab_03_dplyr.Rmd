@@ -184,7 +184,7 @@ Other Boolean operators include:
 
 * `>=`which means "greater than or equal to"  
 
-* `<=`which means "less than or not equal to"  
+* `<=`which means "less than or equal to"  
 
 * `>`which means "greater than"  
 

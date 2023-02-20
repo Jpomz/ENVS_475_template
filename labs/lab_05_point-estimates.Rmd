@@ -199,11 +199,15 @@ ggplot(ci_df,
 ```
 
 
-# Repeated Experiments: Simulation  
+# Repeated Experiments: Simulation (Optional)  
+
+#### **NOTE The following section is optional for those interested in exploring how to simulate repeated experimental observations.**  
+
+#### **This will not be on the homework and is supplied for your personal edification only**  
 
 In order to explore the distribution of sample means in greater detail, let's repeat the above experiment by sampling 130 random observations of temperature from a hypothetical population. 
 
-Let's assume that the mean and SD for the original sample is the "true parameters" i.e., $\mu$ = `r bt_mean` and $\sigma$ = `r bt_sd`. This is most certainly not the case, but it's a good enough estimate for now.  
+Let's assume that the mean and SD for the original sample are the "true parameters" i.e., $\mu$ = `r bt_mean` and $\sigma$ = `r bt_sd`. This is most certainly not the case, but it's a good enough estimate for now.  
 
 In order to draw a new sample from this distribution, we can use the `rnorm()` function. Type in `?rnorm` to pull up the help page for this function. 
 
