@@ -181,15 +181,13 @@ $$\underbrace{\LARGE E[y_i] = \beta_0 + \beta_1 \times x_i}_{Deterministic}$$
 
 --
 $$\underbrace{\LARGE y_i \sim normal(E[y_i], \sigma)}_{Stochastic}$$  
-
-???
-
+--
 Note that the deterministic portion of the model has the same form as the equation for a line: $y = a + b \times x$, which is why we call these linear models
 
 ---
 # the linear model
 
-#### A "simple" example
+#### A "simple" example: X is categorical  
 
 $$\underbrace{\LARGE E[y_i] = -2 + 0.5 \times x_i}_{Deterministic}$$
 
@@ -206,11 +204,48 @@ ggplot(df, aes(x, y)) +
   scale_x_continuous(breaks = c(0, 1)) +
   theme_bw()
 ```
+---
+# Categorical groups  
+
+We are often interested in comparing different groups together.  
+
+* Control vs. Treatment  
+* Burned vs. Un-burned  
+* High Elevation vs. Low Elevation  
+
+We can treat these categories as 0's and 1's
+
+$$\LARGE E[y_i] = -2 + 0.5 \times x_i$$
+
+$$\LARGE x_{control} = 0$$
+$$\LARGE x_{treatment} = 1$$
+
+---
+# Categorical groups  
+
+$$\LARGE E[y_i] = -2 + 0.5 \times x_i$$
+
+<br/>
+--
+$$\Large x_{control} = 0$$
+
+<br/>
+--
+$$\LARGE E[y_{control}] = -2 + 0.5 \times 0 = -2$$
+
+<br/>
+<br/>
+--
+$$\Large x_{treatment} = 1$$
+
+<br/>
+--
+$$\LARGE E[y_{treatment}] = -2 + 0.5 \times 1 = -2.5$$
 
 ---
 # the linear model
 
-#### A "simple" example
+#### A "simple" example: X is categorical
 
 $$\underbrace{\LARGE E[y_i] = -2 + 0.5 \times x_i}_{Deterministic}$$
 

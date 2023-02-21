@@ -119,16 +119,16 @@ class: inverse, center, middle
 ### Central Tendency Example:
 
 * Weight of Wolves (kg) from Yellowstone:
-`40, 35, 32, 37, 35, 37, 35, 35`
+40, 35, 32, 37, 35, 37, 35, 35
 
 &lt;br/&gt;
 
-* Mean (rounded): 35.6  
+* Mean (rounded): 35.8  
   * `mean()`
 
 &lt;br/&gt;
 
-* Median (rounded): 35.2  
+* Median (rounded): 35  
   * `median()`  
 
 &lt;br/&gt;
@@ -167,7 +167,7 @@ class: inverse, center, middle
 ### Dispersion Example:
 
 * Weight of Wolves (kg) from Yellowstone:
-`40, 35, 32, 37, 35, 37, 35, 35`
+40, 35, 32, 37, 35, 37, 35, 35
 
 &lt;br/&gt;
 
@@ -193,11 +193,11 @@ class: inverse, center, middle
 
   + be sure to label measure of dispersion (var or SD?)
   
-&gt; The weight of Yellowstone wolves is 35.6 `\(\pm\)` 2.3 kg (mean `\(\pm\)` SD)  
+&gt; The weight of Yellowstone wolves is 35.8 `\(\pm\)` 2.3 kg (mean `\(\pm\)` SD)  
 
 * Alternate:  
 
-&gt; The average ( `\(\pm\)` SD)  weight of wolves in Yellowstone is 35.6 `\(\pm\)` 2.3 kg 
+&gt; The average ( `\(\pm\)` SD)  weight of wolves in Yellowstone is 35.8 `\(\pm\)` 2.3 kg 
 
 ---
 # Inferential Statistics
@@ -211,16 +211,16 @@ class: inverse, center, middle
 # Inferential Statistics
 
 * Weight of Wolves (kg) from Yellowstone:
-`40, 35, 32, 37, 35, 37, 35, 35`
-* Mean: 35.6  
+40, 35, 32, 37, 35, 37, 35, 35
+* Mean: 35.8  
 * SD: 2.3  
 
 &lt;br/&gt;
 ### How confident are we in this value?  
 * If we measured another 8 wolves, what would our estimates be?  
 
-* 2nd Sample: `33, 28, 40, 43, 35, 31, 40, 42` 
-* 2nd Mean: 36.8  
+* 2nd Sample: 33, 28, 40, 43, 35, 31, 40, 42
+* 2nd Mean: 36.5  
 * 2nd SD: 5.5  
 
 ---
@@ -245,6 +245,7 @@ class: inverse, center, middle
 * Luckily, we can estimate the SEM from a single sample
 
 ---
+
 # Inferential Statistics
 ### Standard error of the mean: SEM  
 
@@ -288,12 +289,12 @@ class: inverse, center, middle
 --
 
 #### Wolf sample 1:  
-* Mean: 35.6
+* Mean: 35.8
 * SEM: 0.8  
 
 --
 
-`\(35.6 \pm 0.8\)` (mean `\(\pm\)` SEM)
+`\(35.8 \pm 0.8\)` (mean `\(\pm\)` SEM)
 
 --
 
@@ -307,7 +308,7 @@ class: inverse, center, middle
 
 * You can also present the interval by completing the equation:
 
-* Interval = `(34.8, 36.4)`
+* Interval = 35, 36.6
 
 ---
 
@@ -336,9 +337,31 @@ class: inverse, center, middle
 - 100 repeated samples of wolf weights  
 - Increased to 25 wolves per sample  
 
-&lt;img src="lecture_05_estimation_files/figure-html/CI-plot-1.png" width="648" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture_05_estimation_files/figure-html/CI-plot-1.png" width="504" style="display: block; margin: auto;" /&gt;
 
 * 97 / 100 CIs contain true mean ~97%  
+---
+### Approximate 95% CI for Yellowstone Wolves  
+
+`$$\Large 95\%CI =\bar{y} \pm 2*SEM$$`
+--
+&lt;br/&gt;
+
+$$ \large \bar{y} = 35.8$$  
+--
+&lt;br/&gt;
+
+$$ \large SEM = 0.8 $$
+--
+&lt;br/&gt;
+
+`$$\large 2 * SEM = 1.6$$`
+
+--
+&lt;br/&gt;
+
+`$$\Large 95\%CI = 34.2, 37.4$$`   
+
 ---
 
 ### Using Confidence Intervals to test hypotheses  

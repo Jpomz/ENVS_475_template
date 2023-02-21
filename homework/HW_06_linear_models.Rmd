@@ -1,0 +1,131 @@
+---
+title: "ENVS475 Homework 06: Linear Models"
+subtitle: "Not Graded"
+date: "Spring, 2023"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+   warning = FALSE, message = FALSE,
+   eval = FALSE,
+   fig.align = 'center', fig.retina = 2,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# This assignment will not be graded.
+
+# Assignment Format
+
+* Open a new R script
+* Save your R script in the `homework/` folder
+* Name your script according to: `full_name_hw##.R`
+  + For example: `justin_pomeranz_hw06.R`
+* Comment before each problem, and each sub-problem
+* Make sure your results print out on `Source with echo`
+  + If you're answer is saved in an object, make sure you print out that object afterwards
+  
+# Setup
+
+## Load packages
+
+* Make sure that the `dplyr`, `ggplot2`, and `arm` packages are downloaded on the machine you're using
+  + You can check this by clicking on the `Packages` tab in the *Files, Plots, Packages...* panel and scrolling down
+  + If you need to download the package, copy the following code into your Console panel and run it **Do not put it in your homework script*
+  + `install.packages("dplyr")` 
+* Copy the following code into the beginning of your homework script to load the `dplyr` package:
+```{r, eval=FALSE}
+# load libraries
+library(dplyr)
+library(ggplot2)
+library(arm)
+```
+
+# Data
+
+For this homework assignment, we will once again be working with the real finch data from the Galapagos Islands collected by the Grants. This time, we will just focus on the *Geospiza scandens* data which was collected on Daphne Major Island in 1975 and 2012. We will use a simple linear model to determined of the beak depth changed across the time period. 
+
+## Load and wrangle the data
+
+Be sure to download the data `galapago-finches.csv` and from D2L and place them both in your `data/` folder in your R project. 
+
+Copy the following code and put it at the top of your homework script:
+
+```{r}
+# read in full data set
+finch <- read.csv("data/galapago-finches.csv")
+# filter out scandens data and make a tibble
+scandens <- finch %>%
+  filter(species == "scandens") %>%
+  as_tibble()
+
+# change the year column to a character data type
+scandens$year <- as.character(scandens$year)
+
+```
+
+
+
+# Exercises Homework 06: Linear Models
+
+## Problem 1: Intercept only
+
+1. Print out the `names()`, and `dim()` of the columns in your `scandens` data object.  
+2. Use `distinct()` or `unique()` to show each of the values in both the `year` and `species` column. Each value in both columns should only be printed once.  
+3. Make a scatter plot of the `blength` variable in the complete data set, ignoring any grouping variables (i.e., set `x = 0`)  
+4. Fit an intercept-only model using the `lm()` function, and save it in an object called `flm0` (short for "finch linear model 0").  
+5. Use the `display()` function to show the results of `flm0`.  
+  + hint: if `display(flm0)` doesn't work, either the `arm` package was not successfully installed or loaded, OR you did not save the output from the `lm()` function properly.  
+  
+6. Write a comment in your script with the value for each of the following: 
+  a. the global mean  
+  b. the SE for the global mean  
+  c. the sample size  
+  d. the number of parameters estimated in the model  
+  e. the residual standard deviation  
+  f. the value of R^2  
+  
+7. Calculate and print the global mean of `blength`. Is this in agreement with the global mean you wrote in problem 1.6a  above?  
+
+8. Calculate and print the sd for `blength`. Is this in agreement with the global mean you wrote in problem 1.6e above?  
+
+## Problem 2: Categorical predictor  
+
+1. Make a scatter plot of the `blength` observations separated by year.  
+2. Make the same plot as in 2.1 above but "jitter" the points. Make sure to set `width = 0.1` and `height = 0`  
+3. Use `lm()` to fit a model which includes `year` as a predictor variable. Save this model output in an object called `flm1`, and use `display()` to print out the results in your console.  
+5. Based on the information from 2.4 above, what is the mean beak length for the *scandens* species in 1975?  
+6. Using the information displayed in 2.4 above, write out a calculation which shows the mean beak length for *scandens* in 2012.  
+7. Make a scatter plot of this data which separates the observations by year, and includes an point for the estimated group means.  
+  + In the `stat_summary()` function, set `shape = 18` and `size = 6`.  
+  
+## Problem 3: Confidence Intervals  
+1. Using `confint()`, calculate and display a 95% confidence interval for the estimated difference in beak length between 1975 and 2012.  
+2. Use `coefplot()` to display a graphical representation of the approximate 95% CI for the estimated difference in beak length between 1975 and 2012.  
+
+3. Use a comment in your script to interpret the results of problem 3.1 and 3.2. Are these interpretations in agreement with each other?  
+
+4. Use `confint()` to calculate and display a 99% CI for the estimated difference in beak length between 1975 and 2012.  
+5. Use `coefplot()` to display a graphical representation of the approximate 99% CI for the estimated difference in beak length between 1975 and 2012.  
+6. Use a comment to interpret the results of problem 4.4 and 4.5 above. Are these results in agreement? Why do you think this is?  
++ **Hint** use `dplyr`, `group_by()` and `summarize(n())` to show the number of observations within each year.  
+
+## Problem 4: Assumptions  
+
+1. Make a Q-Q plot to test the assumption of normally distributed residuals for the `blength` variable in the `scandens` data set.  
+  + **Hint** make sure to use `aes(sample = blength)` inside the `ggplot()` function.  
+2. Use a comment to interpret the graph you made in problem 4.1 above.  
+3. Test the assumption of equal variance in the `flm1` model output.  
+  + **Hint** make sure to use the model output and not the raw data.  
+  + Be sure to include `aes(x = .fitted, y = .resid)` inside the `ggplot()` function.  
+4. Use a comment to interpret the graph you made in problem 4.3 above.  
+
+## Problem 5: Relevel `year` variable (optional)
+1. Copy the `scandens` data set into a new object called `scandens_factor`. Make the `year` column a factor and order the levels so that 2012 is first. Fit the same linear model as in problem 2.3 but use the new `scandens_factor` data object as the input, and display the results of this new model.  
+
+
