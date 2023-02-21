@@ -53,7 +53,27 @@ This data contains 130 observations of individual body temperatures and heart ra
 
 # One sample  
 
-For this exercise, we will be focusing on the `body_temp` variable. 
+For this exercise, we will be focusing on the `body_temp` variable.  
+
+## Data distribution  
+
+First, let's make a histogram and density plot of the data to see if it looks normal.  
+
+```{r}
+ggplot(bt_samp,
+       aes(x = body_temp)) +
+  geom_histogram(bins = 30) +
+  theme_bw()
+```
+
+```{r}
+ggplot(bt_samp,
+       aes(x = body_temp)) +
+  geom_density() +
+  theme_bw()
+```
+
+This data looks a little skewed. There's a bit of a "hump" to the left side, and a couple of really large (high temperatures) in 100-101 range. However, this is probably close enough that we can use a normal approximation. 
 
 ## Descriptive Statistics  
 
@@ -171,16 +191,22 @@ $$H_A: \mu \ne 98.6^\circ ~Fahrenheit$$
 In the above, we were just interested to see if a specific value (98.6) was within our interval. We can also compare the 95% confidence interval for the means of two different groups. 
 
 Below is a plot of CIs from three different scenarios. These are basic "rules of thumb". We will get into more formal analyses and calculate exact p-values in future classes.  
-  A. Means are definitely different (i.e., low p-value)  
-    * intervals are completely outside of each other  
-  B. Means are different (p-value < 0.05, but maybe not much less).  
-    * Edges of CIs overlap slightly, but means are pretty far away from each other.  
-  C. Means are **NOT** different.  
-    * Means are close together, much overlap in CIs. 
+
+A. Means are definitely different (i.e., low p-value)  
+
+  * intervals are completely outside of each other  
+  
+B. Means are different (p-value < 0.05, but maybe not much less).  
+
+  * Edges of CIs overlap slightly, but means are pretty far away from each other.  
+
+C. Means are **NOT** different.  
+
+  * Means are close together, much overlap in CIs. 
   
 ```{r, echo=FALSE}
 ci_df <- data.frame(
-  group = rep(c("a", "b", "c"), each = 2),
+  group = rep(c("A", "B", "C"), each = 2),
   trt = rep(c("control", "treatment"), 3),
   means = c(90, 95, 89, 92, 90, 90),
   l95 =   c(89, 94, 87.75, 90, 89, 88),
@@ -194,9 +220,120 @@ ggplot(ci_df,
            ymax = u95)) +
   geom_pointrange() +
   facet_wrap(~group) +
-  theme_bw()
+  theme_bw() +
+  labs(title= "Rules of thumb plot")
 
 ```
+
+# Point estimates with `dplyr`
+
+Let's say that we are interested in comparing the mean body temperatures between males and females in this data set. We could split the data and perform all of the same tasks above on each data frame. Alternatively, we could harness the power of `dplyr` and calculate everything in a few short steps. For the following example, I will only be calcualting the 95% confidence interval. 
+
+The steps will break down to the following:  
+1. group the data based on `sex`  
+2. Calculate summary statistics using `mean()` and `sd()` inside of a `summarise()` function  
+3. `mutate` the summarized data to calculate 95 and 99% confidence intervals.  
+4. select only variables of interest  
+5. Plot confidence intervals in `ggplot()`
+
+But first, I'm going to make `bt_samp` a tibble to shorten the display output in this lab. 
+
+```{r}
+bt_samp %>%
+  as_tibble()
+```
+
+Now I'm going to perform steps 1-3 one at a time in the following code blocks.  
+* I'm presenting these blocks one at a time to emphasize the iterative process when figuring out to code your problems  
+* in reality, I would run these and build upon each step, but my final script would just have one  call to perform the whole thing  
+
+```{r}
+# step 1, group the data by sex
+bt_samp %>%
+  as_tibble() %>%
+  group_by(sex)
+```
+
+
+
+```{r}
+# step 2 summarize the data
+bt_samp %>%
+  as_tibble() %>%
+  group_by(sex) %>%
+  summarize(mean_bt = mean(body_temp, na.rm = TRUE),
+            sd_bt = sd(body_temp, na.rm = TRUE),
+            n_bt = n())
+```
+
+
+
+```{r}
+# step 3, calculate SEM and CI's
+# be sure to match new variable names that you created
+bt_samp %>%
+  as_tibble() %>%
+  group_by(sex) %>%
+  summarize(mean_bt = mean(body_temp, na.rm = TRUE),
+            sd_bt = sd(body_temp, na.rm = TRUE),
+            n_bt = n()) %>%
+  mutate(sem = sd_bt / sqrt(n_bt),
+         ci95_low = mean_bt - 2 * sem,
+         ci95_high = mean_bt + 2 * sem)
+
+```
+
+
+```{r}
+# step 4, select CI variables and save into a new object for plotting
+bt_sex <- bt_samp %>%
+  as_tibble() %>%
+  group_by(sex) %>%
+  summarize(mean_bt = mean(body_temp, na.rm = TRUE),
+            sd_bt = sd(body_temp, na.rm = TRUE),
+            n_bt = n()) %>%
+  mutate(sem = sd_bt / sqrt(n_bt),
+         ci95_low = mean_bt - 2 * sem,
+         ci95_high = mean_bt + 2 * sem) %>%
+  select(sex, ci95_low, mean_bt, ci95_high)
+
+# print out the new object so we can see the values
+bt_sex
+```
+
+Draw a number line and mark the mean and the lower and upper confidence intervals for each group. Do the confidence interval overlap? At the 95% confidence level, what can we say about the average body temperatures for males and females based on this data?  
+
+Now let's use ggplot to display these confidence intervals. 
+```{r}
+# step 5, plot point estimates
+bt_sex %>%
+  ggplot(aes(y = sex,
+           x = mean_bt,
+           xmin = ci95_low, 
+           xmax = ci95_high,
+           color = sex)) +
+  geom_pointrange(size = 1.5) +
+  theme_bw() +
+  labs(x = "Average body temperature",
+       y = "Sex",
+       title = "95% CIs for average body temperature.")
+
+```
+
+How would you interpret this result? Look at the "Rules of thumb" plot above as a guideline. 
+
+You may have realized that this is close to our two different rules, CI's only overlap a little bit, but the means are quite close together. This is a case that may be too close to call based on our rules of thumb. Here we would likely need to run a more formal hypothesis test such as Student's t-test.  
+
+Just in case you're wondering, here is the results of a simple t-test.  
+
+```{r}
+t.test(body_temp ~ sex,
+       var.equal = TRUE,
+       alternative = "two.sided",
+       data = bt_samp)
+```
+
+Here, a p-value of 0.02 is less than $\alpha = 0.05$ so this difference in temperature *IS* significant. Don't worry if you don't remember all these details right now, we will come to this in due course. 
 
 
 # Repeated Experiments: Simulation (Optional)  
