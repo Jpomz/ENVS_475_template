@@ -294,7 +294,7 @@ This is the next paragraph</code></pre>
 <div id="highlight-code-in-text" class="section level2">
 <h2>Highlight Code in Text</h2>
 <p>To highlight code, for example <code>mean()</code> surround the text with back ticks `mean()`. Note, this does not actually insert functioning code, just formats text to show that it is code rather than plain text.</p>
-<p>You can include multiple lines of code by including three back ticks (```) on the line before the code and then three back ticks on the line after the code:</p>
+<p>You can include multiple lines of code by including three back ticks (```) and <code>{r}</code> on the line before the code and then three back ticks on the line after the code:</p>
 <pre><code>Multiple lines of code
 look like 
 this</code></pre>
@@ -350,6 +350,14 @@ B. or uppercase letters</li>
 <p><span class="math display">\[e=mc^2\]</span></p>
 <p>Inline equations are added by putting a single dollar sign <code>$</code> on either side of the equation (<code>$e=mc^2$</code>). Equation blocks are create by starting and ending a new line with double dollar signs</p>
 <p><code>$$e=mc^2$$</code></p>
+<div id="fractions" class="section level3">
+<h3>Fractions</h3>
+<p>For simple fractions, such as <span class="math inline">\(SEM = \sigma / \sqrt(n)\)</span> you can just type a <code>/</code>. For example <code>$SEM = \sigma / \sqrt(n)$</code>.</p>
+<p>For more complex fractions, you need to distinguish it using <code>\frac { top }{ bottom }</code>.</p>
+<p>For instance, to write the equation for Bayes theorem:</p>
+<p><span class="math display">\[ P(A|B) = \frac{ P(B|A)\times P(A) } { P(B) }\]</span></p>
+<p>you would type the following: <code>$$ P(A|B) = \frac{ P(B|A)\times P(A) }{ P(B) }$$</code></p>
+</div>
 </div>
 <div id="greek-letters" class="section level2">
 <h2>Greek letters</h2>
