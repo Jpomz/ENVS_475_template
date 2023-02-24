@@ -109,7 +109,7 @@ Load the file into R using `read.csv()`.
 * Since no pipes are being used, you will need to create a new data object for each step
   + Make sure to give them new names so you don't overwrite the original `surveys` object
   + make sure the last line in this section is just the name of the last object you create so the results print out when you source the script. 
-3. Use the `filter()` function to get all of the rows in the data frame for the species ID `SH`.
+4. Use the `filter()` function to get all of the rows in the data frame for the species ID `SH`.
 
 ## Problem 3
 
@@ -124,11 +124,16 @@ Summarize the `surveys` data
 
 1. Use `summarize` to calculate the mean `weight` in the `surveys` data. There are `NA`'s in the `weight` column, so be sure to use `na.rm = TRUE`.  
 
-2. Use `summarize`, `group_by()` and `n()` to get the count of each species in the `surveys` data. 
+2. Use the `group_by()`, `summarize`, and `n()` to get the count of each species in the `surveys` data.  
+  + **NOTE**  use `n()` without any arguments inside of `summarize()`  
+    + i.e., after goruping the data, your summary call should look somehting like this: `summarize(species_count = n())`
+  + there are species observations in this data that could not be identified. They appear in the `species_id` column as `""`.  
+  + You're output may contain values of `""` in the `species_id` column.  
 
-3. Use `summarize`, `group_by()` and `n()` to get the count of each species for each year in the `surveys` data. 
+3. Use `summarize`, `group_by()` and `n()` to get the count of each species for each year in the `surveys` data.  
+  + See note above about `species_id == ""` above.  
 
-4. Calculate the average weight for the "DO" species by year in the `surveys` data. 
+4. Calculate the mean `weight` for the `"DO"` `species_id` by year in the `surveys` data. 
 
 ## Problem 5 Challenge (optional)
 
