@@ -1,0 +1,139 @@
+---
+title: "Lab 08: t-tests"
+subtitle: "ENVS475: Experimental Analysis and Design"
+date: "Spring, 2023"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggplot2)
+bt_samp <- read.csv(here::here("data/body_temp_hr.csv"))
+```
+
+## About
+
+This lab will explore formal hypothesis testing by considering classic t-tests from a linear modelling perspective.  
+
+## Preliminaries 
+
+### Packages  
+
+For this lab, we will be using the `dplyr` and `ggplot2` packages. Make sure both packages are installed on your computer, and then run the following code:
+
+```{r, eval=FALSE}
+library(dplyr)
+library(ggplot2)
+```
+
+
+### Data  
+
+For this lab, we will be creating data sets in R. No data needs to be downloaded or read in to R. 
+
+# One sample t-test: Stream pH  
+
+You may expect that streams around Grand Junction should have an approximately neutral pH of 7. Let's look at some simulated data and formally tests whether or not the average stream pH is significantly different from 7. Here, the value of interest is $\mu_0 = 7$  
+
+## Formal Hypotheses  
+
+We can state our hypotheses formally using Null and Alternatives as follows:
+
+$$H_0: \mu = 7$$
+$$H_A: \mu \ne 7$$
+
+Since our Alternative hypothesis is $\ne$ this is a 2-tailed test. In other words we have to account for the fact that pH could be higher or lower than our null value of 7.  
+
+
+We can express this as a simple linear model:  
+
+$$y_i = \mu + \epsilon_i$$
+where $y_i$ is a single observation of stream pH, $\mu$ is the population mean, and $\epsilon_i$ is the deviation from the expected value. Further, we expect the deviations to be distributed normally:
+
+$$\epsilon \sim N(0, \sigma)$$
+
+## Analysis: Manual   
+
+Let's look at some simulated data, and load it into R as a vector. 
+
+```{r}
+# simulated data values
+y <- c(6.2, 6.8, 7.3, 6.4, 6.3)
+```
+
+For the one-sample t-test, we will calculate all necessary variables manually, and then compare it to using the `lm()` function.  
+
+Recall that we calculate a one-sample t-statistic with the following:
+
+$$t_{statistic} =\frac{\bar{y} - \mu_{0} }{SEM_y}$$
+
+Where $\bar{y}$ is the mean, $\mu_0$ is the value of interest (pH = 7) and $SEM$ is calculated as $s / \sqrt(n)$. Let's calculate these values in R and store them as objects. 
+
+```{r}
+y_bar <- mean(y)
+y_bar
+mu_0 <- 7
+mu_0
+y_sd <- sd(y)
+y_sd
+y_sem <- y_sd / sqrt(length(y))
+y_sem
+```
+
+Now let's calculate the t-statistic
+
+```{r}
+t_stat <- (y_bar - mu_0) / y_sem
+t_stat
+```
+
+Now we need to calculate the t-critical value for this t-distribution. We can use the `qt()` function. This is similar to the `qnorm()` function we used previously for the normal distribution, but now we are looking at the t-distribution. for `qt()`, we need to supply the quantile (0.025) and the degrees of freedom (df = n - 1 = 4). The standard $\alpha$ value is 0.05, but since this is a 2-tailed test we have to divide it by 2 (hence 0.025) in order to account for both tails. 
+
+```{r}
+t_crit <- qt(0.025, df = 4)
+round(t_crit, 2)
+```
+
+Is our `t_stat` value $\ge$ our critical value? Note that we are going to use the absolute values so that we do not need to worry about using the proper > or < with negative numbers. 
+
+```{r}
+abs(t_stat) > abs(t_crit)
+```
+
+It is not, so we would fail to reject our null hypothesis. We can also calculate a p-value for our `t_critical` value by using the `pt()` function. We first calculate the probability of observing out `t_stat`, and then multiply it by 2 since this is a 2-tailed test. Also, we are going to use the absolute value of our `t_stat` and set the `lower.tail = FALSE` argument within `pt()`. This ensures that we don't need to worry about mixing up our + and - signs when calculating a p-value.  
+
+```{r}
+one_samp_p_val <- pt(abs(t_stat), df = 4, lower.tail = FALSE) * 2
+one_samp_p_val
+```
+
+## Analysis: using `lm()`
+
+We can use the `lm()` function to automatically calculate our values and test the hypothesis formally. 
+
+Recall that `y` is our observations of data, and our null value is 7. When we run a one-sample t-test in `lm()`, we have to subtract the value of interest from our data. Review the numerator in the formula for the one-sample t-statistic above. 
+
+```{r}
+one_sample_fit <- lm(y - mu_0 ~ 1)
+summary(one_sample_fit)
+```
+
+We can also reprint the values we calculated by hand and locate them in the output table (note that we are subtracting mu_0 from y_bar to put it on the same scale as our `(Intercept)` estimate in the table):
+
+```{r}
+y_bar - mu_0
+y_sd
+y_sem
+t_crit
+one_samp_p_val
+```
+**You should now be able to complete problem 1 in the homework assignment**
+
+# Two-sample t-tests: Tree Densities  
+
+# Paired t-tests: Herbicide Treatments
+
