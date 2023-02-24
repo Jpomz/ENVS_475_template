@@ -142,7 +142,7 @@ You can also add subscripts: H~2~O (`H~2~O`) and superscripts: x^10^ (`x^10^`)
 
 To highlight code, for example `mean()` surround the text with back ticks \`mean()\`. Note, this does not actually insert functioning code, just formats text to show that it is code rather than plain text. 
 
-You can include multiple lines of code by including three back ticks (\`\`\`) on the line before the code and then three back ticks on the line after the code:
+You can include multiple lines of code by including three back ticks (\`\`\`) and `{r}` on the line before the code and then three back ticks on the line after the code:
 
 ```
 Multiple lines of code
@@ -198,6 +198,20 @@ $$e=mc^2$$
 Inline equations are added by putting a single dollar sign `$` on either side of the equation (`$e=mc^2$`). Equation blocks are create by starting and ending a new line with double dollar signs
 
 `$$e=mc^2$$`
+
+### Fractions  
+
+For simple fractions, such as $SEM = \sigma / \sqrt(n)$ you can just type a `/`. For example `$SEM = \sigma / \sqrt(n)$`.  
+
+For more complex fractions, you need to distinguish it using `\frac { top }{ bottom }`.  
+
+For instance, to write the equation for Bayes theorem: 
+
+$$ P(A|B) = \frac{ P(B|A)\times P(A) } { P(B) }$$
+
+you would type the following:
+`$$ P(A|B) = \frac{ P(B|A)\times P(A) }{ P(B) }$$`  
+
 
 ## Greek letters
 
