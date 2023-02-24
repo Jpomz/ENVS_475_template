@@ -118,7 +118,7 @@ The table also shows us the residual standard deviation, which in this case is t
 ```{r}
 sd(darwin_maize$height)
 ```
-**You should now be able to complete problem 1 in the homework assignment**
+### **You should now be able to complete problem 1 in the homework assignment**
 
 ## Model with a categorical predictor  
 
@@ -205,6 +205,7 @@ $$\large SED = \sqrt{\frac{s^2_{1}}{n_1} + \frac{s^2_{2}}{n_2}}$$
 However, the linear model doesn't calculate the variance from each group separately but does a more accurate "pooled" calculation. I won't ask you yo do this manually in class, but just know that if you used `var()` on each group and tried to plug it into the formula above you would not get exactly the same result. 
 
 The SED is always wider than the SEM of either group. This is because there is uncertainty in the estimate of each group mean (SEM), and these uncertainties are carried through the calculation of the difference between the means.  
+
 ## Confidence intervals of coefficients  
 
 Recall that a 95% CI is approximated by:
@@ -235,7 +236,6 @@ I added the `xlim = c(-5, 0)` argument to ensure that the plot displayed 0, whic
 
 So, at the 95% confidence level, we can say that the there is a decrease in mean plant height in self-pollinated plants. 
 
-**You should now be able to complete problem 3 in the homework assignment.**  
 
 We can test this same hypothesis at a higher level of confidence, i.e., 99% CI
 
@@ -250,7 +250,7 @@ coefplot(dlm1, sd = 3)
 
 Notice that at the 99% confidence level (or at 3 * the standard deviation), the interval now crosses 0. In other words, at this more strict level of confidence, we cannot say that there is a difference in height between the two plant groups.  
 
-**You should now be able to complete problem 3 in the homework assignment. **  
+### **You should now be able to complete problem 3 in the homework assignment. **  
 
 # Assumptions  
 
@@ -293,6 +293,8 @@ ggplot(dlm1,
 What we are looking for here is that the minimum and maximum y-values are the same across the x-values, and that they are approximately equally distributed above and below the reference line (y = 0). 
 
 Here, we have a few points that are well below the rest (difference in range), and it appears to be unequal (most points above the 0 reference line). Similar to the results above, this is not perfect, but also not terrible. 
+
+### **You should now be able to complete problem 4 in the homework assignment. **  
 
 
 ## Relevelling the groups

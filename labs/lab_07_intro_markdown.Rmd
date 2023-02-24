@@ -246,17 +246,6 @@ Code chunks can take a lot of options to control how the code is run and what is
 
 - `cache = TRUE` save the results of the `R` code and doesn't rerun the chunk unless the code is changed (useful for chunks that take a long time to run)  
 
-- `out.height` and `out.width` control the size of figures in a pdf document in inches or centimeters (e.g., `out.height = "3in", notice the quotation marks)
-See the main [R Markdown page](http://yihui.name/knitr/options/) for a complete list of possible options.
-### Setting defaults for all chunks
-Often it is useful to set the default behavior for all chunks rather that including, for example, `warning = FALSE` at the beginning of each one. To do this, you can include a chunk at the beginning of the document:
-`` `r "\u0060\u0060\u0060{r include = FALSE}"` ``  
-`` `r "opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE)"` ``  
-`` `r "\u0060\u0060\u0060"` ``
-
-
-Any options can be included in this chuck to set the default behaviors. You can over-ride these defaults within chunks as needed. You can also load common packages in this chunk to streamline chunks later in the document. 
-
 # Additional resources
 
 All of the information necessary to complete the homework assignment should be available in this document. For further information, you can visit the following:
