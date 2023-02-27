@@ -240,7 +240,7 @@ $$\Large x_{treatment} = 1$$
 
 <br/>
 --
-$$\LARGE E[y_{treatment}] = -2 + 0.5 \times 1 = -2.5$$
+$$\LARGE E[y_{treatment}] = -2 + 0.5 \times 1 = -1.5$$
 
 ---
 # the linear model
@@ -438,7 +438,9 @@ Because virtually every model we will use this semester is a linear model, these
 
 <br/>
 
-**Next time:** t-tests and Null Hypothesis Testing
+**Next time:** Linear Models Lab
+
+**Friday:** HW 08: Linear Models
 
 <br/>
 
