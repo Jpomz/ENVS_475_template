@@ -111,6 +111,10 @@ one_samp_p_val <- pt(abs(t_stat), df = 4, lower.tail = FALSE) * 2
 one_samp_p_val
 ```
 
+## Interpretation  
+
+Based on our data, we fail to reject the null hypothesis that stream pH is equal to 7 ($t_{statistic} = -1.96, df = 4, p = 0.12$)
+
 ## Analysis: using `lm()`
 
 We can use the `lm()` function to automatically calculate our values and test the hypothesis formally. 
@@ -131,9 +135,128 @@ y_sem
 t_crit
 one_samp_p_val
 ```
-**You should now be able to complete problem 1 in the homework assignment**
+
+### **You should now be able to complete problem 1 in the homework assignment**
 
 # Two-sample t-tests: Tree Densities  
 
+Is the density of trees at high elevations different from low elevations?
+
+$$H_0: \mu_{high} = \mu_{low}$$
+$$H_A: \mu_{high} \ne \mu_{low}$$
+## Data
+
+We will make a data.frame of the data and call it `tree`. 
+
+```{r}
+tree <- data.frame(
+  elevation = rep(c("Low", "High"), each = 10),
+  dens = c(16, 14, 18, 17, 29, 31, 14, 16, 22, 15, 2, 11, 6, 8, 0, 3, 19, 1, 6, 5))
+```
+
+Calculate statistics with dplyr. Recall that for a two-sample t-test we need the:
+
+$$\large t = \frac{\bar{y}_1 -\bar{y}_2}{SEDM}$$
+Where SEDM:
+
+$$\large SEDM = \sqrt{SEM_1^2 + SEM^2_2}$$
+
+And that the $SEM_i$ is caluclated as:
+
+$$\large SEM_i = \frac{s}{\sqrt(n)}$$
+
+To summarize, we need the `mean()`, `sd()` and `sqrt(n())` for each `elevation` group in the data. 
+
+```{r}
+tree_summary <- tree %>%
+  group_by(elevation) %>%
+  summarise(mean_density = mean(dens),
+            sd_density = sd(dens),
+            sqrt_n = sqrt(n())) %>%
+  mutate(sem = sd_density / sqrt_n) %>%
+  # change it from a tibble to a data.frame to make
+  # next steps easier
+  as.data.frame()
+tree_summary
+```
+
+
+Unfortunately there is not an easy way to calculate the t-statistic using `dplyr`, so we will need to extract the variables individually (when we use the `lm()` all of these steps are automated, but we will continue to calculate it manually so you can see the process). We will use the `data_object[row_number,column_number]` function to subset the values into new variables. This is also why we converted `tree_summary` into a data.frame. 
+
+```{r}
+y_high <- tree_summary[1,2]
+y_high
+y_low <- tree_summary[2,2]
+y_low
+sem_high <- tree_summary[1,5]
+sem_high
+sem_low <- tree_summary[2,5]
+sem_low
+```
+
+```{r}
+t_stat_trees <- (y_low - y_high) / sqrt(sem_high^2 + sem_low^2)
+t_stat_trees
+```
+
+Now that we have a t-statistic, we need to calculate our t-critical value to compare it with and decide if we can formally rejct or fail to reject our null hypothesis. To calculate the t-critical value, we will once again use `qt()` funciton. Our degrees of freedom here is 18 (total n = 20, but we need to subtract 1 for each group: 20 - (1 + 1) = 18).  
+
+```{r}
+t_crit_trees <- qt(0.025, df = 18)
+t_crit_trees
+```
+
+To compare our t-critical and t-statistic, we will once again use the absolute values to avoid mixing up our signs. 
+
+```{r}
+abs(t_stat_trees) > abs(t_crit_trees)
+```
+
+```{r}
+two_samp_p_val <- pt(abs(t_stat_trees), df = 18, lower.tail = FALSE) * 2
+two_samp_p_val
+```
+ 
+When you have a really low p-value like this, it's best to round instead of reporting the full value. Reporting the exact value adds a false sense of specificity. The three levels of significance are generally p < 0.05, p < 0.01, and p < 0.001. Here we would just say that the p-value is < 0.001. 
+ 
+ ### Interpretation  
+ 
+Based on the data, we can reject the null hypothesis and accept the alternative that tree densities are not equal at different elevations ($t_{statistic} = 4.97, df = 18, p < 0.001$). 
+
+## 2-sample t-test using `lm()`  
+
+The hand calculations for a 2-sample t-test are tedious. Luckily we can run the same analysis in just a few lines of code using the `lm()` function. 
+
+```{r}
+two_sample_fit <- lm(dens ~ elevation, data = tree)
+summary(two_sample_fit)
+```
+
+### **You should now be able to complete problem 2 in the homework assignment**
+ 
 # Paired t-tests: Herbicide Treatments
+
+## Data
+
+For this section of the lab, you will need to download the `caterpillar.csv` file from D2L. 
+
+```{r, eval=FALSE}
+caterpillar <- read.csv("data/caterpillar.csv")
+```
+
+For a paired t-test, the null hypothesis is that the avergae difference between the two groups is 0. 
+
+$$H_0:\large \mu_D = 0$$
+$$H_A:\large \mu_D \ne 0$$
+
+For this, we need to calculate the difference between the two treatments. If we look at the way the data is organized, there is not a simple solution using `dplyr` functions. 
+
+```{r}
+caterpillar
+```
+Luckily, there is a special helper function called `diff()` that we can use inside of `mutate()`. First, we need to group the data so that it uses the correct numbers. Here, we want to know what the difference is between `treatment` groups *within* each `plot_number`. So we will use `group_by(plot_number)`. 
+
+```{r}
+
+```
 

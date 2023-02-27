@@ -16,6 +16,25 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+# data1
+bt_samp <- read.csv("data/body_temp_hr.csv")
+
+# data 2
+finch <- read.csv("data/galapago-finches.csv")
+# filter out scandens data and make a tibble
+scandens <- finch %>%
+  filter(species == "scandens") %>%
+  as_tibble()
+
+# change the year column to a character data type
+# this is necessary to run a 2-sample t-test
+# If we leave year as an integer, the lm() function 
+# will treat it as continuous and will calculate statistics for a linear regression. 
+scandens$year <- as.character(scandens$year)
+
+# data3
+darwin_maize <- read.csv("data/darwin_maize.csv")
 ```
 
 # This assignment will not be graded.
@@ -45,7 +64,7 @@ library(ggplot2)
 ## Download the data and read into R
 
 
-```{r}
+```{r, eval = FALSE}
 # read in data
 bt_samp <- read.csv("data/body_temp_hr.csv")
 ```
@@ -71,7 +90,37 @@ We will be formally testing whether the true population mean of human body tempe
   + Store your fitted model as an object, and then use the `summary()` function to print out the results  
   
 
-## Problem 2: two-sample t-test
+## Problem 2: two-sample t-test  
+
+### Data: `scandens` 
+
+We will once again be using the *Geospiza scandens* data from the `darwin-finches.csv`. 
+
+```{r, eval = FALSE}
+# read in full data set
+finch <- read.csv("data/galapago-finches.csv")
+# filter out scandens data and make a tibble
+scandens <- finch %>%
+  filter(species == "scandens") %>%
+  as_tibble()
+
+# change the year column to a character data type
+# this is necessary to run a 2-sample t-test
+# If we leave year as an integer, the lm() function 
+# will treat it as continuous and will calculate statistics for a linear regression. 
+scandens$year <- as.character(scandens$year)
+```
+
+1.1 Add a comment to your homework script stating the null and alternative hypotheses. Make sure to put each hypothesis on its own line. Make sure that your alternative hypothesis is 2-tailed.  
+
+1.2 Use `dplyr`, `group_by()`, `summarize()` and `mutate()` to calculate the following statistics for each `year`: 
+  + Average, Standard Deviation, $\sqrt(n)$, and the Standard Error of the Mean.  
+
+1.2 Use the `lm()` function to perform a 2-sample t-test on whether or not the average `blength` (in mm) is equal between the two years of data.  
+  + Make sure to save your model-fit as an object, and then use the `summary()` function to print out the results.  
+  
+1.3 Add a comment to your script interpreting the results of your analysis.  
+
 ## Problem 3: paired t-test
 
 ```{r}
@@ -83,6 +132,5 @@ darwin_diff <- darwin %>%
 ```
 
 
-## Problem 4: 
-## Problem 5: 
+
 
