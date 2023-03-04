@@ -8,7 +8,7 @@ output:
     nature:
       highlightStyle: github
       highlightLines: true
-      countIncrementalSlides: true
+      countIncrementalSlides: false
 ---
 
 ```{r setup, echo = FALSE, include=FALSE}
@@ -16,6 +16,22 @@ options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(echo = FALSE, fig.align = 'center', warning=FALSE, message=FALSE, fig.retina = 2)
 
 library(ggplot2)
+library(dplyr)
+set.seed(232)
+x_one_sample <- round(rnorm(10, mean = 0.1, sd = 0.2),1)
+
+
+ldl <- data.frame(
+  subject = factor(c(1:10, 1:10)),
+  time = factor(
+    rep(c("before", "after"),
+        each = 10),
+    levels = c("before", "after")),
+  ldl = c(236, 213, 214, 190, 240, 227,
+          220, 198, 266, 240, 230, 205,
+          215, 185, 231, 220, 210, 190,
+          257, 233))
+
 ```
 
 class: inverse
@@ -23,22 +39,71 @@ class: inverse
 # outline
 
 <br/>
-#### 1) One-sample t-test
+#### 1) t-test overview 
 
 <br/>  
 --
 
-#### 2) Null hypothesis testing
+#### 2) One-sample t-test
 
 <br/> 
 --
 
-#### 3) Two-sample t-test
+#### 3) Null hypothesis testing
 
 <br/> 
 --
 
-#### 4) Paired t-test
+#### 4) Two-sample t-test
+
+<br/> 
+--
+
+#### 5) Paired t-test
+
+---
+# t-test overview
+
+- Is my sample different?  
+
+  + Value of interest  
+  
+  + Two samples different?  
+  
+- General formula of t-test:
+
+$$t_{statistic} = \frac{difference}{variation}$$
+  + No difference: $t_{statistic} = 0$  
+  
+  + There is a difference: $t_{statistic} \ne 0$  
+
+---
+# [History of t-test](https://en.wikipedia.org/wiki/Student's_t-test)  
+
+- t-test developed by William Sealy Gossett  
+
+- Worked at Guinness, wanted to test quality of stout  
+
+- Very small sample sizes ( $n \le 4$ )  
+
+- Uses the t-distribution, which can be thought of as a small-sample-size version of a standard normal distribution  
+
+- Published under pseudonym *Student* because company policy prevented employees from publishing scientific papers  
+
+---
+# Types of t-tests  
+
+### 1) One Sample  
+
+  + Is my sample different from some value of interest?  
+  
+### 2) Two-sample  
+
+  + Are two populations different from one another?  
+  
+### 3) Paired t-test  
+
+  + Two measurements on same experimental unit  
 
 ---
 # one sample t-test
@@ -47,57 +112,108 @@ class: inverse
 
 - We want to know if a population mean ( $\mu$ ) differs from some value $\mu_0$    
 
---
-<br/>  
-- Formally, we want to test the null hypothesis: $\large H_0: \mu = \mu_0$  
+- Formally, we want to test the following hypotheses: 
 
---
-- The alternative hypothesis is either:  
+$$\large H_0: \mu-\mu_0 = 0$$  
 
-  + $\large H_a : \mu \neq \mu_0$ if we are using a two-tailed test; or  
+$$\large H_a : \mu-\mu_0 \neq 0$$ 
+
+- **Note** that this is a two-tailed test  
+
+- There is also a one-tailed alternative  
+
+- This class takes a linear model approach  
+
+- All hypotheses in this course will be two-tailed
   
-  + $\large H_a : \mu > \mu_0$ if we are using a one-tailed test  
+---
+# one sample: motivating example  
 
---
-- Examples  
-  + Is the average measurement error equal to zero?  
-  
-  + Is the average student taller than 5'?
+- We just got a new piece of equipment, and want to ensure that the measurement error is 0  
+- We take 10 measurements on a known quantity to get a sample to test  
 
-???
+- data: 
+  + `r x_one_sample`  
 
-$\mu_0$ is often zero but could be any value we are interested in treating as the null hypothesis
+- Estimate of average measurement error( $\mu$ ) = `r round(mean(x_one_sample), 3)`  
 
-Under the alternative hypothesis for the one-tailed test, we could test that the population mean is either greater than **or** less than $\mu_0$
+- $\mu$ will almost never exactly equal $\mu_0$ due to sampling variability.  
+
+- So how do we answer our original question?  
 
 ---
-# procedure
-
-1) Draw a random sample from a population (assumed to be normally distributed)  
-
---
-<br/>
-2) Compute the standard error of the mean:
-
-$$\large SEM = \frac{s}{\sqrt{n}} = \frac{\sqrt{\frac{1}{n-1}\sum^n_{i=1}(y_i-\bar{y})^2}}{\sqrt{n}}$$
---
-<br/>
-3) Compute the t statistic:  
-
-$$\large t = \frac{\bar{y} - \mu_0}{SEM}$$
-
---
-<br/>
-4) If $t$ is more extreme than the critical value(s), reject the null hypothesis  
-
---
-<br/>
-5) Equivalently, if the $p$-value is $< \alpha$, reject the null  
+class: inverse, center, middle
+# NULL HYPOTHESIS TESTING  
 
 ---
+# NHT  
+
+> Formal approach to assessing if sample data represents a statistically significant difference, or is due to sampling error.  
+
+- requires two hypotheses: 
+
+  - The null, $H_0$, which is no difference/relationship/effect  
+  
+  - Alternative, $H_A$, which is that there is some difference/relationship/effect  
+  
+  - Hypotheses refer to the **populations**  
+
+---
+# One sample t-test procedure  
+
+1) Draw a random sample from a population  
+
+--
+
+2) Calculate the mean and standard error of the mean (SEM)  
+
+--
+
+3) Compute a $t_{statistic}$  
+  $$ t_{statistic} = \frac{\bar{y} - \mu_0}{SEM}$$
+
+--
+
+4) Compare the $t_{statistic}$ with a *critical value* ( $t_{critical}$  
+
+  * If $|t_{statistic}| > |t_{critical}|$ we **Reject the NULL hypothesis**  
+
+  * If $|t_{statistic}| < |t_{critical}|$ we **FAIL to Reject the NULL hypothesis** (FTR) 
+
+5) Use $t_{statistic}$ to compute a $p_{value}$  
+
+  * If $p < \alpha$: REJECT  
+
+  * If $p > \alpha$: FTR  
+
+---
+# One sample t-test procedure  
+
+1) Data: `r x_one_sample`    
+
+--
+
+2) mean: `r round(mean(x_one_sample),3)`  
+  - SEM: `r round(sd(x_one_sample) / sqrt(length(x_one_sample)),3)`   
+
+--
+
+3) Compute a $t_{statistic}$  
+  $$ t_{statistic} = \frac{\bar{y} - \mu_0}{SEM}$$
+
+--
+
+  $$ t_{statistic} = \frac{`r round(mean(x_one_sample),3)` -  0}{`r round(sd(x_one_sample) / sqrt(length(x_one_sample)),3)`} = `r round(mean(x_one_sample) / (sd(x_one_sample) / sqrt(length(x_one_sample))), 3)`$$
+  
+--
+
+4) Compare the $t_{statistic}$ to $t_{critical}$  
+
+---
+
 # basic idea
 
-### Reject the null hypothesis if $t$ is larger than would be expected under the null hypothesis
+### Reject the null hypothesis if $t_{statistic}$ is larger than would be expected under the null hypothesis
 
 --
 ### This will happen if:  
@@ -105,10 +221,6 @@ $$\large t = \frac{\bar{y} - \mu_0}{SEM}$$
 - The sample mean is far from 0
 
 - And/or the SE is small
-
----
-class: inverse, center, middle
-# null hypothesis testing
 
 ---
 # null hypothesis testing
@@ -128,8 +240,12 @@ class: inverse, center, middle
 ---
 ## THE *t*-DISTRIBUTION
 
-<br/>
-```{r t, fig.width=8, fig.height=6}
+- t-distribution is a small-sample-size version of standard normal distribution  
+
+- with fewer samples, there is more uncertainty  
+
+- this uncertainty is represented in "fat tails"  
+```{r t, fig.width=8, fig.height=5.5}
 curve(dt(x, 1), -5, 5, ylim=c(0, 0.5),
       xlab="t value", ylab="Probability density",
       cex.lab=1.5, lwd=1.5)
@@ -140,32 +256,62 @@ legend(-5, 0.5, c("Standard normal distribution", "t distribution (df=5)", "t di
 ```
 
 ---
+# calculate $t_{critical}$ values  
+
+- There's always a chance that our data is far from the expected value by chance  
+
+- This is called the false-positive, or type I error rate, and is set as an $\alpha$ value  
+
+- By convention, $\alpha$ usually equals 0.05, and most statistical software (including R) uses it as a default  
+
+- This can vary, and you will occasionally see papers that set $\alpha$ value to 0.1, 0r 0.01  
+
+- for this class, we will leave $\alpha = 0.05$  
+
+- split $\alpha$ into both tails of distribution  
+---
 ### CRITICAL VALUES FOR $\large \alpha = 0.05$
 
 <br/>
 ```{r cv, fig.width=8, fig.height=6}
 op <- par(mai=c(0.8, 0.2, 0.2, 0.2))
-curve(dt(x, df=18), -4, 4, xlab="t value", ylab="", yaxt="n",
+curve(dt(x, df=9), -4, 4, xlab="t value", ylab="", yaxt="n",
       ylim=c(0,0.5),
-      frame=FALSE , main="t distribution with df=18", cex.main=1.5)
-xs1 <- seq(qt(.025, df=18), -4, by=-0.1)
-ys1 <- dt(xs1, df=19)
-xs2 <- seq(qt(.975, df=18), 4, by=0.1)
-ys2 <- dt(xs2, df=19)
+      frame=FALSE , main="t distribution with df=9", cex.main=1.5)
+xs1 <- seq(qt(.025, df=9), -4, by=-0.1)
+ys1 <- dt(xs1, df=9)
+xs2 <- seq(qt(.975, df=9), 4, by=0.1)
+ys2 <- dt(xs2, df=9)
 polygon(c(xs1, rev(xs1)), c(rep(0, length(xs1)), rev(ys1)), col=gray(0.7))
 polygon(c(xs2, rev(xs2)), c(rep(0, length(xs2)), rev(ys2)), col=gray(0.7))
-text(xs1[1], dt(0,18)/1.5, "critical value\nt=-2.10", pos=3)
-text(xs2[1], dt(0,18)/1.5, "critical value\nt=2.10", pos=3)
-arrows(xs1[1], dt(0,18)/1.5, xs1[1], ys1[1], length=0.1)
-arrows(xs2[1], dt(0,18)/1.5, xs2[1], ys2[1], length=0.1)
+text(xs1[1], dt(0,9)/1.5, "critical value\nt=-2.26", pos=3)
+text(xs2[1], dt(0,9)/1.5, "critical value\nt=2.26", pos=3)
+arrows(xs1[1], dt(0,9)/1.5, xs1[1], ys1[1], length=0.1)
+arrows(xs2[1], dt(0,9)/1.5, xs2[1], ys2[1], length=0.1)
 #text(-3, dt(0,18), "t=-3", pos=3)
 #text(3, dt(0,18), "t=3", pos=3)
 #arrows(-3, dt(0,18), -3, dt(-3,18), length=0.1)
 #arrows(3, dt(0,18), 3, dt(3,18), length=0.1)
 par(op)
 ```
+---
+# t-critical value in R  
 
+- Remember the `qnorm`, `dnorm`, and `pnorm` functions?  
 
+- Have equivalents for the t-distribution: `qt`, `dt`, and `pt`  
+
+- If we want to know what **value** is at a certain **quantile** of our data, we use the `qt()` function  
+
+- critical value = `qt(0.025, df = 9)` = `r round(qt(0.025, df = 9), 2)`  
+
+- We can also use the `pt()` function to calculate a p-value by hand  
+  
+- `pt(t_stat, df = 9, lower.tail = FALSE) * 2`  = `r round(pt(abs(1.581), df = 9, lower.tail = FALSE) * 2, 3)`
+
+  - Use the absolute values to avoid confusion between signs  
+  
+  - multiply value by 2 since we have 2-tails  
 ---
 ### $\Large p$-values
 
@@ -174,25 +320,25 @@ par(op)
 op <- par(mai=c(0.8, 0.2, 0.2, 0.2))
 curve(dt(x, df=18), -4, 4, xlab="t value", ylab="", yaxt="n",
       ylim=c(0,0.5),
-      frame=FALSE , main="t distribution with df=18", cex.main=1.5)
-xs1 <- seq(qt(.025, df=18), -4, by=-0.1)
-ys1 <- dt(xs1, df=19)
-xs2 <- seq(qt(.975, df=18), 4, by=0.1)
-ys2 <- dt(xs2, df=19)
-xs3 <- seq(qt(pt(-3,18), df=18), -4, by=-0.1)
-ys3 <- dt(xs3, df=19)
-xs4 <- seq(qt(pt(3,18), df=18), 4, by=0.1)
-ys4 <- dt(xs4, df=19)
+      frame=FALSE , main="t distribution with df=9", cex.main=1.5)
+xs1 <- seq(qt(.025, df=9), -4, by=-0.1)
+ys1 <- dt(xs1, df=9)
+xs2 <- seq(qt(.975, df=9), 4, by=0.1)
+ys2 <- dt(xs2, df=9)
+# xs3 <- seq(qt(pt(-3,18), df=18), -4, by=-0.1)
+# ys3 <- dt(xs3, df=19)
+# xs4 <- seq(qt(pt(3,18), df=18), 4, by=0.1)
+# ys4 <- dt(xs4, df=19)
 polygon(c(xs1, rev(xs1)), c(rep(0, length(xs1)), rev(ys1)), col=gray(0.7))
 polygon(c(xs2, rev(xs2)), c(rep(0, length(xs2)), rev(ys2)), col=gray(0.7))
-polygon(c(xs3, rev(xs3)), c(rep(0, length(xs3)), rev(ys3)), col="red")
-polygon(c(xs4, rev(xs4)), c(rep(0, length(xs4)), rev(ys4)), col="red")
-text(-3, dt(0,18), "t=-3\np=0.0038", pos=3)
-text(3, dt(0,18), "t=3\np=0.0038", pos=3)
+# polygon(c(xs3, rev(xs3)), c(rep(0, length(xs3)), rev(ys3)), col="red")
+# polygon(c(xs4, rev(xs4)), c(rep(0, length(xs4)), rev(ys4)), col="red")
+text(-1.58, dt(0,9), "t=-1.58\np=0.074", pos=3)
+text(1.58, dt(0,9), "t=1.58\np=0.074", pos=3)
 #text(-3, dt(0,18), "t=-3", pos=3)
 #text(3, dt(0,18), "t=3", pos=3)
-arrows(-3, dt(0,18), -3, dt(-3,18), length=0.1)
-arrows(3, dt(0,18), 3, dt(3,18), length=0.1)
+arrows(-1.58, dt(0,18), -1.58, dt(-3,18), length=0.1)
+arrows(1.58, dt(0,18), 1.58, dt(3,18), length=0.1)
 par(op)
 ```
 
@@ -219,13 +365,13 @@ par(op)
 op <- par(mai=c(0.8, 0.2, 0.2, 0.2))
 curve(dt(x, df=18), -4, 4, xlab="t value", ylab="", yaxt="n",
       ylim=c(0,0.5),
-      frame=FALSE , main="t distribution with df=18", cex.main=1.5)
+      frame=FALSE , main="t distribution with df=9", cex.main=1.5)
 #xs1 <- seq(qt(.025, df=18), -4, by=-0.1)
 #ys1 <- dt(xs1, df=19)
-xs2 <- seq(qt(.95, df=18), 4, by=0.1)
-ys2 <- dt(xs2, df=19)
-text(xs2[1], dt(0,18)/1.5, "critical value\nt=1.73", pos=3)
-arrows(xs2[1], dt(0,18)/1.5, xs2[1], ys2[1], length=0.1)
+xs2 <- seq(qt(.95, df=9), 4, by=0.1)
+ys2 <- dt(xs2, df=9)
+text(xs2[1], dt(0,9)/1.5, "critical value\nt=1.83", pos=3)
+arrows(xs2[1], dt(0,9)/1.5, xs2[1], ys2[1], length=0.1)
 #polygon(c(xs1, rev(xs1)), c(rep(0, length(xs1)), rev(ys1)), col=gray(0.7))
 polygon(c(xs2, rev(xs2)), c(rep(0, length(xs2)), rev(ys2)), col=gray(0.7))
 par(op)
@@ -244,7 +390,95 @@ in order to complete the calculation
 
 > Consider a set of n = 5 numbers. In the absence of any information about them, all ve are free to be any value. However, if you are also told that the sum of the set is 20, then only 4 of the numbers are free to be anything, but the fifth is constrained by your knowledge that the sum must be 20.
 Hence, $df = n - 1 = 4$
+
 ---
+# Big t-statistics = REJECT null  
+
+- What makes a big $t_{statistic}$?  
+
+--
+
+- Large difference (big numerator)  
+
+--
+
+```{r, echo = FALSE, fig.width=8, fig.height=6}
+set.seed(3987)
+y2 <- rnorm(10000, sd = 2,mean = 20)
+
+ydf <- data.frame(y = c(y2)) 
+
+ggplot(ydf, aes(x = y)) +
+  geom_density(alpha = 0.5, adjust = 2) +
+  theme_bw() +
+  geom_vline(xintercept = 0,
+             linetype = "dashed") +
+  labs(title = "Sample mean far away from value of interest")
+```
+
+
+---
+# Big t-statistics = REJECT null  
+
+- What makes a big $t_{statistic}$?  
+
+--
+
+- Little variation in data (small numerator)  
+
+--
+
+```{r, echo = FALSE, fig.width=8, fig.height=6}
+set.seed(3987)
+y3 <- rnorm(10000, sd = 0.001, mean = 0.05)
+
+ydf <- data.frame(y = c(y3)) 
+
+ggplot(ydf, aes(x = y)) +
+  geom_density(alpha = 0.5, adjust = 2) +
+  theme_bw() +
+  xlim(c(-0.05, 0.1)) +
+  geom_vline(xintercept = 0,
+             linetype = "dashed") +
+  labs(title = "Little variation in data")
+```
+---
+# simple linear model: 
+### Intercept-only  
+
+$$\large y_i = \beta_0 + \epsilon_i$$
+$$\large \epsilon_i \sim N(0, \sigma)$$
+
+- Where $\beta_0 = Intercept =  \mu$  
+
+- Equation becomes:  
+
+$$\large y_i = \mu + \epsilon_i$$
+
+---
+# Intercept-only model  
+- use `lm()` function to create intercept-only model
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+df_one <- data.frame(y = c(0.5, -0.2,  0.2,  0.1,  0.1,  0.2, 0.2, -0.1,  0.1, -0.1))
+
+lm0 <- lm(y ~ 1, data = df_one) 
+
+summary(lm0)
+
+```
+
+---
+# one sample interpretation  
+
+Based on our data, we fail to reject the null hypothesis that our measurement error is equal to 0 ($t_{statistic} = 1.58, ~p = 0.15, ~df = 9$). 
+
+--
+
+Remember that our example here was we were assessing a new piece of equipment. We fail to reject the null, which means that our device is accurate and measures the quantities within the expected amount of error. 
+
+
+---
+
 class: inverse, center, middle
 
 ## TWO-SAMPLE t-TEST
@@ -257,13 +491,17 @@ class: inverse, center, middle
 
 --
 
-- The null hypothesis is: $\large H_0 : \mu_1 = \mu_2$  
+- The null hypothesis is: $\large H_0 : \mu_1 = \mu_2$  
 
 --
 
-- The alternative hypothesis is either:  
-  + $\large H_a : \mu_1 \neq \mu_2$ for a two-tailed test, or  
-  + $\large H_a :  \mu_1 > \mu_2$ for a one-tailed test  
+- Note that this is the same as: $\large H_0 : \mu_1 - \mu_2 = 0$  
+
+--
+
+- The two-tailed alternative hypothesis is $\large H_a : \mu_1 \neq \mu_2$  
+  
+- Note that this is the same as: $\large H_0 : \mu_1 - \mu_2 \ne 0$  
 
 --
 
@@ -287,7 +525,7 @@ $$\large SEDM = \sqrt{SEM_1^2 + SEM^2_2}$$
 <br/>
 3) Compute the t statistic:
 
-$$\large t = \frac{\bar{y}_1 -\bar{y}_2}{SEDM}$$
+$$\large t = \frac{\bar{y}_1 -\bar{y}_2}{SEDM}$$
 
 --
 <br/>
@@ -310,7 +548,8 @@ $$\large t = \frac{\bar{y}_1 -\bar{y}_2}{SEDM}$$
 
 #### Hypothesis: 
 
-- Trees are more numerous at low elevations  
+- $H_0:\mu_{low} - \mu_{high} = 0$  
+- $H_A:\mu_{low} - \mu_{high} \ne 0$  
 
 --
 
@@ -359,9 +598,9 @@ ggplot(df, aes(x = Elevation, y = Trees)) + geom_boxplot()
 
 --
 
-- Mean of low group: $\large \bar{y}_L = 20.2$  
+- Mean of low group: $\large \bar{y}_L = 20.2$  
 
-- Mean of high group: $\large \bar{y}_H = 6.1$  
+- Mean of high group: $\large \bar{y}_H = 6.1$  
 
 --
 
@@ -379,108 +618,72 @@ ggplot(df, aes(x = Elevation, y = Trees)) + geom_boxplot()
 
 --
 
-- Critical value: $\large t_{0.95,df=10+10-2} = 1.73$, $\large p$-value: $< 0.001$  
-
---
-
-#### Is this a one- or two-tailed test? Why?  
+- Critical value: $\large t_{0.975,df=10+10-2} = 2.1$, $\large p$-value: $< 0.001$  
 
 ---
-#  equal variance assumption
+# simple linear model: 
+### Categorical predictor  
 
-#### Are the variances of the two populations equal?
+$$\large y_i = \beta_0 + \beta_1*x_i + \epsilon_i$$
+$$\large \epsilon_i \sim N(0, \sigma)$$
 
---
+- Where $\hat y_{high} = \beta_0$  
 
-- This is an assumption of the two-sample t-test  
-
---
-
-- Again, we use samples to make inferences about populations  
-
---
-
-- Hypotheses:
-  + $\large H_0 : \sigma^2_1 = \sigma^2_2$  
-  + $\large H_a : \sigma^2_1 \neq \sigma^2_2$  
-
---
-
-- Tested using a ratio of sample variances: $\large F = s^2_1/s^2_2$  
-
---
-
-- This is always a two-tailed test  
-
-#### Note: It makes life easier to place the larger variance in the numerator of this ratio
+- And $\hat y_{low} = \beta_0 + \beta_1$ 
 
 ---
-# f-distribution
+# Categorical predictor 
+- use `lm()` function to create intercept-only model
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+lm1 <- lm(Trees ~ Elevation, data = df) 
+summary(lm1)
 
-#### A ratio of variances follows an $\large F$-distribution
-
-.pull-left[
-#### Properties:  
-
-- $F > 0$  
-
-- $F$-distribution is not symmetrical  
-
-- Shape of distribution depends on an ordered pair of degrees of freedom, $df_1$
-and $df_2$
-]
-
-.pull-right[
-```{r f, fig.height=4, fig.width=4}
-curve(df(x, 9, 9), 0, 5, xlab="F value", ylab="Probability density",
-      main="F distribution with df=9,9")
-```
-]
-
-
----
-# f-distribution
-
-<br/>
-```{r f2, fig.width=8, fig.height=6}
-op <- par(mai=c(0.8, 0.2, 0.2, 0.2))
-curve(df(x, 9, 9), 0, 5, xlab="F value", ylab="", yaxt="n",
-      ylim=c(0,1),
-      frame=FALSE , main="F distribution with df1=9 and df2=9", cex.main=1.5)
-xs1 <- seq(qf(.025, 9, 9), 0, by=-0.01)
-ys1 <- df(xs1, 9, 9)
-xs2 <- seq(qf(.975, 9, 9), 5, by=0.01)
-ys2 <- df(xs2, 9, 9)
-polygon(c(xs1, rev(xs1)), c(rep(0, length(xs1)), rev(ys1)), col=gray(0.7))
-polygon(c(xs2, rev(xs2)), c(rep(0, length(xs2)), rev(ys2)), col=gray(0.7))
-text(xs1[1], 0.9, "critical value\nF=0.25", pos=3)
-text(xs2[1], 0.9, "critical value\nF=4.1", pos=3)
-arrows(xs1[1], 0.9, xs1[1], ys1[1], length=0.1)
-arrows(xs2[1], 0.9, xs2[1], ys2[1], length=0.1)
-par(op)
 ```
 
 ---
-# continuing with tree example
+# NHT in linear models  
 
-#### Test statistic: $\large F = 6.032/5.632 = 1.07$
+- Linear models have a null hypothesis for each coefficient (row) in the output table  
 
---
+### Intercept ( $\beta_0$ )
 
-#### Degrees of freedom: $\large df = 9, 9$  
+- $H_0: \beta_0 = 0$  
 
---
+  - Intercept is just the estimated mean for one of the groups  
+  - Often not actually relevant to the research question  
 
-#### Critical value: $\large F_{0.975,df=9,9} = 4.03$  
+### Regression coeficient ( $\beta_1$ )
 
---
+- $H_0: \beta_1 = 0$  
 
-#### Decision: Observed $F$ is lower than critical value. Fail to reject the null. No strong evidence that variances are different.
+  - $\beta_1$ is the estimated difference between means  
+  - Here, this is the question of interest  
+  - Because we have a low p-value, we can reject the null hypothesis and accept the alternative that the densities do differ based on elevation  
 
 ---
 class: inverse, middle, center
 
 ## PAIRED *t*-TEST
+
+---
+### PAIRED *t*-TEST
+
+#### Context
+
+- Used when two measurements are taken on each experimental unit  
+
+  - Measure before and after a drug treatment  
+
+  - What is the effect of mining effluent on paired streams?  
+
+--
+
+- Problem can be analyzed by taking differences of each pair and then conducting a one-sample *t*-test  
+
+
+---
+## PAIRED *t*-TEST
+
 
 ---
 ### PAIRED *t*-TEST
@@ -496,78 +699,94 @@ class: inverse, middle, center
 --
 
 - Examples:  
-  + Are right feet usually longer than left feet?  
-  + Is small mammal density higher before or after the use of prescribed fire?  
-  + Do two methods of measuring tree height yield similar results?  
+  + Does a new pharmaceutical decrease blood cholesterol?  
+  + Is small mammal density higher before or after the use of prescribed fire?  
 
 ---
 # motivation
 
-<br/>
-<br/>
+Does Pharmaceutical lower LDL levels?
 
-> Matching is done in a variety of ways, but the object is always to remove extraneous variability from the experiment
----
-# worked example
+```{r}
 
-> Plots were arranged in pairs at 12 different locations. One plot in each pair was randomly selected for treatment with the microbial pesticide *Bacillus thuringiensis* (Bt). The other plot was untreated. Surveys of nontarget caterpillars were performed by counting caterpillars on samples of 10,000 leaves on each plot. Data below are caterpillar counts on each plot, paired by location.  
-```{r tab}
-library(kableExtra)
-tab <- data.frame(Location = 1:12,
-                  Untreated = c(23, 18, 29, 22, 33, 20, 17, 25, 27, 30, 25, 27),
-                  Treated = c(19, 18, 24, 23, 31, 22, 16, 23, 24, 26, 24, 28),
-                  Difference = c(4, 0, 5, -1, 2, -2, 1, 2, 3, 4, 1, -1))
-tab %>%
-  kable("html", align = 'c') %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
-                full_width = F, font_size = 10) %>%
-  scroll_box(height = "300px")
+ggplot(ldl,
+       aes(x = time,
+           y = ldl,
+           group = subject,
+           color = subject)) +
+  geom_hline(yintercept = c(200, 240),
+             # 200 = heart healthy
+             # 240 = dangerous
+             linetype = "dashed",
+             size = 1.5,
+             color = c("black", "red")) +
+  geom_point(color = "black",
+             size = 2,
+             shape = 0) +
+  geom_smooth(method = "lm") +
+  scale_colour_viridis_d()+
+  theme_bw()
 ```
 
----
-# worked example
-
-```{r box2, fig.height=7, fig.width=7}
-untreated <- c(23, 18, 29, 22, 33, 20, 17, 25, 27, 30, 25, 27)
-treated <- c(19, 18, 24, 23, 31, 22, 16, 23, 24, 26, 24, 28)
-#diffs <- c(4,0,5,-1,2,-2,1,2,3,-6,1,-1)
-diffs <- untreated - treated
-#boxplot(untreated, treated)
-#hist(diffs)
-#plot(untreated, treated, asp=1)
-#abline(1, 1)
-boxplot(diffs, #names="Difference between untreated and treated",
-        main="Boxplot of differences", col="tan", cex.lab=1.5,
-        ylab="Caterpillers (Untreated - Treated)")
-#abline(h=0, lty=2, col=4)
-```
 
 ---
 # worked example
 
 #### Hypotheses ( $\large \mu_d$ is the mean difference )
 
-- $\large H_0 :\mu_d = 0$
+- $\large H_0 :\mu_d = 0$
 
-- $\large H_a :\mu_d > 0$
+- $\large H_a :\mu_d \ne 0$  
 
---
+#### *t*-statistic  
+
+$$\large t = \frac{\bar{y}_{Diff} - 0}{SED}$$
+
+---
+# worked example
+
+```{r, include=FALSE}
+ldl_diff <- ldl %>% 
+  group_by(subject) %>%
+  summarize(difference = diff(ldl))
+(mean_diff = mean(ldl_diff$difference))
+sd(ldl_diff$difference)
+(se_diff = sd(ldl_diff$difference) / sqrt(10))
+# t-stat
+(t_diff = mean_diff / se_diff)
+# critical
+qt(0.025, df = 9)
+# p-val
+pt(abs(t_diff), df = 9, lower.tail = FALSE) * 2
+
+summary(lm(ldl_diff$difference~1))
+```
+
 
 #### Calculations
 
-- Mean differences: $\large\bar{y}_d = 1.5$  
+- Mean differences: $\large\bar{y}_d = -6.8$  
 
-- Standard deviation of differences: $\large s_d = 2.24$  
+- Standard deviation of differences: $\large s_d = 3.12$  
 
-- Standard error of mean differences: $\large SEM_d = 0.65$  
+- Standard error of mean differences: $\large SEM_d = 0.987$  
 
-- Test statistic: $\large t = 1.5/0.65 = 2.32$, Critical value: $\large t_{0.95,11} = 1.80$
+- Test statistic: $\large t = -6.8/9.82 = -6.893$, Critical value: $\large t_{0.95,10} = -2.26$
 
---
+- $\large p < 0.001$
 
-### Decision?
-
-
+---
+```{r}
+ldl %>%
+  group_by(subject) %>%
+  summarize(difference = diff(ldl)) %>%
+  ggplot(aes(y = difference)) +
+  geom_boxplot(fill = "pink") +
+  geom_hline(yintercept = 0,
+             linetype = "dashed",
+             size = 1.5) +
+  theme_bw()
+```
 ---
 # looking ahead
 

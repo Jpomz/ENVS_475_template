@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>LECTURE 08: t-tests</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="   Spring 2023" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# LECTURE 08: t-tests
+]
+.subtitle[
+## ENVS475: Exp. Design and Analysis
+]
+.author[
+### <br/><br/><br/>Spring 2023
+]
+
+---
+
+
+
+
+class: inverse
+
+# outline
+
+&lt;br/&gt;
+#### 1) t-test overview 
+
+&lt;br/&gt;  
+--
+
+#### 2) One-sample t-test
+
+&lt;br/&gt; 
+--
+
+#### 3) Null hypothesis testing
+
+&lt;br/&gt; 
+--
+
+#### 4) Two-sample t-test
+
+&lt;br/&gt; 
+--
+
+#### 5) Paired t-test
+
+---
+# t-test overview
+
+- Is my sample different?  
+
+  + Value of interest  
+  
+  + Two samples different?  
+  
+- General formula of t-test:
+
+`$$t_{statistic} = \frac{difference}{variation}$$`
+  + No difference: `\(t_{statistic} = 0\)`  
+  
+  + There is a difference: `\(t_{statistic} \ne 0\)`  
+
+---
+# [History of t-test](https://en.wikipedia.org/wiki/Student's_t-test)  
+
+- t-test developed by William Sealy Gossett  
+
+- Worked at Guinness, wanted to test quality of stout  
+
+- Very small sample sizes ( `\(n \le 4\)` )  
+
+- Uses the t-distribution, which can be thought of as a small-sample-size version of a standard normal distribution  
+
+- Published under pseudonym *Student* because company policy prevented employees from publishing scientific papers  
+
+---
+# Types of t-tests  
+
+### 1) One Sample  
+
+  + Is my sample different from some value of interest?  
+  
+### 2) Two-sample  
+
+  + Are two populations different from one another?  
+  
+### 3) Paired t-test  
+
+  + Two measurements on same experimental unit  
+
+---
+# one sample t-test
+
+#### Context
+
+- We want to know if a population mean ( `\(\mu\)` ) differs from some value `\(\mu_0\)`    
+
+- Formally, we want to test the following hypotheses: 
+
+`$$\large H_0: \mu-\mu_0 = 0$$`  
+
+`$$\large H_a : \mu-\mu_0 \neq 0$$` 
+
+- **Note** that this is a two-tailed test  
+
+- There is also a one-tailed alternative  
+
+- This class takes a linear model approach  
+
+- All hypotheses in this course will be two-tailed
+  
+---
+# one sample: motivating example  
+
+- We just got a new piece of equipment, and want to ensure that the measurement error is 0  
+- We take 10 measurements on a known quantity to get a sample to test  
+
+- data: 
+  + 0.5, -0.2, 0.2, 0.1, 0.1, 0.2, 0.2, -0.1, 0.1, -0.1  
+
+- Estimate of average measurement error( `\(\mu\)` ) = 0.1  
+
+- `\(\mu\)` will almost never exactly equal `\(\mu_0\)` due to sampling variability.  
+
+- So how do we answer our original question?  
+
+---
+class: inverse, center, middle
+# NULL HYPOTHESIS TESTING  
+
+---
+# NHT  
+
+&gt; Formal approach to assessing if sample data represents a statistically significant difference, or is due to sampling error.  
+
+- requires two hypotheses: 
+
+  - The null, `\(H_0\)`, which is no difference/relationship/effect  
+  
+  - Alternative, `\(H_A\)`, which is that there is some difference/relationship/effect  
+  
+  - Hypotheses refer to the **populations**  
+
+---
+# One sample t-test procedure  
+
+1) Draw a random sample from a population  
+
+--
+
+2) Calculate the mean and standard error of the mean (SEM)  
+
+--
+
+3) Compute a `\(t_{statistic}\)`  
+  $$ t_{statistic} = \frac{\bar{y} - \mu_0}{SEM}$$
+
+--
+
+4) Compare the `\(t_{statistic}\)` with a *critical value* ( `\(t_{critical}\)`  
+
+  * If `\(|t_{statistic}| &gt; |t_{critical}|\)` we **Reject the NULL hypothesis**  
+
+  * If `\(|t_{statistic}| &lt; |t_{critical}|\)` we **FAIL to Reject the NULL hypothesis** (FTR) 
+
+5) Use `\(t_{statistic}\)` to compute a `\(p_{value}\)`  
+
+  * If `\(p &lt; \alpha\)`: REJECT  
+
+  * If `\(p &gt; \alpha\)`: FTR  
+
+---
+# One sample t-test procedure  
+
+1) Data: 0.5, -0.2, 0.2, 0.1, 0.1, 0.2, 0.2, -0.1, 0.1, -0.1    
+
+--
+
+2) mean: 0.1  
+  - SEM: 0.063   
+
+--
+
+3) Compute a `\(t_{statistic}\)`  
+  $$ t_{statistic} = \frac{\bar{y} - \mu_0}{SEM}$$
+
+--
+
+  $$ t_{statistic} = \frac{0.1 -  0}{0.063} = 1.581$$
+  
+--
+
+4) Compare the `\(t_{statistic}\)` to `\(t_{critical}\)`  
+
+---
+
+# basic idea
+
+### Reject the null hypothesis if `\(t_{statistic}\)` is larger than would be expected under the null hypothesis
+
+--
+### This will happen if:  
+
+- The sample mean is far from 0
+
+- And/or the SE is small
+
+---
+# null hypothesis testing
+
+&lt;br/&gt; 
+
+### Question: 
+
+&gt; How do we know the likely values of `\(t\)` under the null hypothesis?  
+&lt;br/&gt;
+
+--
+
+### Answer: 
+
+&gt; Theory says that the test statistic will follow a `\(t\)`-distribution with `\(n - 1\)` degrees of freedom, **if the null hypothesis is true**
+---
+## THE *t*-DISTRIBUTION
+
+- t-distribution is a small-sample-size version of standard normal distribution  
+
+- with fewer samples, there is more uncertainty  
+
+- this uncertainty is represented in "fat tails"  
+&lt;img src="lecture_08_t-tests_files/figure-html/t-1.png" width="576" style="display: block; margin: auto;" /&gt;
+
+---
+# calculate `\(t_{critical}\)` values  
+
+- There's always a chance that our data is far from the expected value by chance  
+
+- This is called the false-positive, or type I error rate, and is set as an `\(\alpha\)` value  
+
+- By convention, `\(\alpha\)` usually equals 0.05, and most statistical software (including R) uses it as a default  
+
+- This can vary, and you will occasionally see papers that set `\(\alpha\)` value to 0.1, 0r 0.01  
+
+- for this class, we will leave `\(\alpha = 0.05\)`  
+
+- split `\(\alpha\)` into both tails of distribution  
+---
+### CRITICAL VALUES FOR `\(\large \alpha = 0.05\)`
+
+&lt;br/&gt;
+&lt;img src="lecture_08_t-tests_files/figure-html/cv-1.png" width="576" style="display: block; margin: auto;" /&gt;
+---
+# t-critical value in R  
+
+- Remember the `qnorm`, `dnorm`, and `pnorm` functions?  
+
+- Have equivalents for the t-distribution: `qt`, `dt`, and `pt`  
+
+- If we want to know what **value** is at a certain **quantile** of our data, we use the `qt()` function  
+
+- critical value = `qt(0.025, df = 9)` = -2.26  
+
+- We can also use the `pt()` function to calculate a p-value by hand  
+  
+- `pt(t_stat, df = 9, lower.tail = FALSE) * 2`  = 0.148
+
+  - Use the absolute values to avoid confusion between signs  
+  
+  - multiply value by 2 since we have 2-tails  
+---
+### `\(\Large p\)`-values
+
+&lt;br/&gt;
+&lt;img src="lecture_08_t-tests_files/figure-html/p-1.png" width="576" style="display: block; margin: auto;" /&gt;
+
+
+---
+### MORE ON `\(\Large p\)`-VALUES
+
+&lt;br/&gt;
+#### A `\(\large p\)`-value tells us how likely the null hypothesis is, given your observations  
+
+--
+&lt;br/&gt;
+#### Our conclusion must be to either reject or "fail to reject" the null hypothesis  
+
+--
+&lt;br/&gt;
+#### A `\(\large p\)`-value does not tell us how much evidence there is in favor of a particular difference in means
+
+---
+# one-tailed vs. two-tailed tests
+
+&lt;br/&gt;
+&lt;img src="lecture_08_t-tests_files/figure-html/one-tail-1.png" width="576" style="display: block; margin: auto;" /&gt;
+
+---
+# more on degrees of freedom
+
+&lt;br/&gt;
+&gt; The degrees of freedom for a calculation on a set of numbers is the number of elements in the set (i.e., how many numbers there are) minus the number of different things you must know about the set
+in order to complete the calculation  
+&lt;br/&gt;
+
+--
+#### Example:
+
+&gt; Consider a set of n = 5 numbers. In the absence of any information about them, all ve are free to be any value. However, if you are also told that the sum of the set is 20, then only 4 of the numbers are free to be anything, but the fifth is constrained by your knowledge that the sum must be 20.
+Hence, `\(df = n - 1 = 4\)`
+
+---
+# Big t-statistics = REJECT null  
+
+- What makes a big `\(t_{statistic}\)`?  
+
+--
+
+- Large difference (big numerator)  
+
+--
+
+&lt;img src="lecture_08_t-tests_files/figure-html/unnamed-chunk-1-1.png" width="576" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Big t-statistics = REJECT null  
+
+- What makes a big `\(t_{statistic}\)`?  
+
+--
+
+- Little variation in data (small numerator)  
+
+--
+
+&lt;img src="lecture_08_t-tests_files/figure-html/unnamed-chunk-2-1.png" width="576" style="display: block; margin: auto;" /&gt;
+---
+# simple linear model: 
+### Intercept-only  
+
+`$$\large y_i = \beta_0 + \epsilon_i$$`
+`$$\large \epsilon_i \sim N(0, \sigma)$$`
+
+- Where `\(\beta_0 = Intercept =  \mu\)`  
+
+- Equation becomes:  
+
+`$$\large y_i = \mu + \epsilon_i$$`
+
+---
+# Intercept-only model  
+- use `lm()` function to create intercept-only model
+
+```r
+df_one &lt;- data.frame(y = c(0.5, -0.2,  0.2,  0.1,  0.1,  0.2, 0.2, -0.1,  0.1, -0.1))
+
+lm0 &lt;- lm(y ~ 1, data = df_one) 
+
+summary(lm0)
+```
+
+```
+## 
+## Call:
+## lm(formula = y ~ 1, data = df_one)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+##  -0.30  -0.15   0.00   0.10   0.40 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)  0.10000    0.06325   1.581    0.148
+## 
+## Residual standard error: 0.2 on 9 degrees of freedom
+```
+
+---
+# one sample interpretation  
+
+Based on our data, we fail to reject the null hypothesis that our measurement error is equal to 0 ($t_{statistic} = 1.58, ~p = 0.15, ~df = 9$). 
+
+--
+
+Remember that our example here was we were assessing a new piece of equipment. We fail to reject the null, which means that our device is accurate and measures the quantities within the expected amount of error. 
+
+
+---
+
+class: inverse, center, middle
+
+## TWO-SAMPLE t-TEST
+
+---
+### TWO-SAMPLE t-TEST
+
+#### Concept  
+- We want to determine if two population means differ  
+
+--
+
+- The null hypothesis is: `\(\large H_0 : \mu_1 = \mu_2\)`  
+
+--
+
+- Note that this is the same as: `\(\large H_0 : \mu_1 - \mu_2 = 0\)`  
+
+--
+
+- The two-tailed alternative hypothesis is `\(\large H_a : \mu_1 \neq \mu_2\)`  
+  
+- Note that this is the same as: `\(\large H_0 : \mu_1 - \mu_2 \ne 0\)`  
+
+--
+
+- Appropriate when:  
+  + The two samples, one from each population, are independent  
+  + Both populations are (approximately) normally distributed  
+  + The population variances are unknown but are the same for both populations  
+
+---
+# procedure
+
+1) Draw two random samples from two populations  
+
+--
+&lt;br/&gt;
+2) Compute the standard error of the difference in means:  
+
+`$$\large SEDM = \sqrt{SEM_1^2 + SEM^2_2}$$`
+
+--
+&lt;br/&gt;
+3) Compute the t statistic:
+
+`$$\large t = \frac{\bar{y}_1 -\bar{y}_2}{SEDM}$$`
+
+--
+&lt;br/&gt;
+4) If t is more extreme than the critical values, reject the null hypothesis  
+
+--
+&lt;br/&gt;
+5) Critical value is based on `\(\large t_{\alpha,df}=n_1+n_2-2\)`
+
+
+---
+# worked example
+
+#### Question: 
+
+- Is there a difference in the density of trees at low and high elevations?
+
+
+--
+
+#### Hypothesis: 
+
+- `\(H_0:\mu_{low} - \mu_{high} = 0\)`  
+- `\(H_A:\mu_{low} - \mu_{high} \ne 0\)`  
+
+--
+
+#### Field procedure:
+
+- `\(\large n=10\)` plots are sampled using randomly located belt transects 100m long `\(\times\)` 10m wide at both high and low elevations
+
+--
+
+#### Data:
+
+.pull-left[
+`Low elevation: 16, 14, 18, 17, 29, 31, 14, 16, 22, 15`
+]
+
+.pull-right[
+`High elevation: 2, 11, 6, 8, 0, 3, 19, 1, 6, 5`
+]
+
+---
+# worked example
+
+&lt;img src="lecture_08_t-tests_files/figure-html/box-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+---
+# worked example
+
+.pull-left[
+`Low elevation`  
+
+`16, 14, 18, 17, 29,`  
+`31, 14, 16, 22, 15`  
+]
+
+.pull-right[
+`High elevation`   
+
+`2, 11, 6, 8, 0,`  
+`3, 19, 1, 6, 5`  
+]  
+
+--
+
+- Mean of low group: `\(\large \bar{y}_L = 20.2\)`  
+
+- Mean of high group: `\(\large \bar{y}_H = 6.1\)`  
+
+--
+
+- Standard deviation of low group: `\(\large s_L = 6.03\)`  
+
+- Standard deviation of high group: `\(\large s_H = 5.63\)`  
+
+--
+
+- Standard error of difference in means `\(\large SEDM_1 = 2.61\)`  
+
+--
+
+- Test statistic: `\(\large t = (20.2 - 6.1)/2.61 = 5.4\)`  
+
+--
+
+- Critical value: `\(\large t_{0.975,df=10+10-2} = 2.1\)`, `\(\large p\)`-value: `\(&lt; 0.001\)`  
+
+---
+# simple linear model: 
+### Categorical predictor  
+
+`$$\large y_i = \beta_0 + \beta_1*x_i + \epsilon_i$$`
+`$$\large \epsilon_i \sim N(0, \sigma)$$`
+
+- Where `\(\hat y_{high} = \beta_0\)`  
+
+- And `\(\hat y_{low} = \beta_0 + \beta_1\)` 
+
+---
+# Categorical predictor 
+- use `lm()` function to create intercept-only model
+
+```r
+lm1 &lt;- lm(Trees ~ Elevation, data = df) 
+summary(lm1)
+```
+
+```
+## 
+## Call:
+## lm(formula = Trees ~ Elevation, data = df)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -6.100 -4.125 -1.700  2.125 12.900 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)     19.200      1.866  10.291 5.73e-09 ***
+## ElevationHigh  -13.100      2.638  -4.965    1e-04 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 5.9 on 18 degrees of freedom
+## Multiple R-squared:  0.578,	Adjusted R-squared:  0.5545 
+## F-statistic: 24.65 on 1 and 18 DF,  p-value: 0.0001001
+```
+
+---
+# NHT in linear models  
+
+- Linear models have a null hypothesis for each coefficient (row) in the output table  
+
+### Intercept ( `\(\beta_0\)` )
+
+- `\(H_0: \beta_0 = 0\)`  
+
+  - Intercept is just the estimated mean for one of the groups  
+  - Often not actually relevant to the research question  
+
+### Regression coeficient ( `\(\beta_1\)` )
+
+- `\(H_0: \beta_1 = 0\)`  
+
+  - `\(\beta_1\)` is the estimated difference between means  
+  - Here, this is the question of interest  
+  - Because we have a low p-value, we can reject the null hypothesis and accept the alternative that the densities do differ based on elevation  
+
+---
+class: inverse, middle, center
+
+## PAIRED *t*-TEST
+
+---
+### PAIRED *t*-TEST
+
+#### Context
+
+- Used when two measurements are taken on each experimental unit  
+
+  - Measure before and after a drug treatment  
+
+  - What is the effect of mining effluent on paired streams?  
+
+--
+
+- Problem can be analyzed by taking differences of each pair and then conducting a one-sample *t*-test  
+
+
+---
+## PAIRED *t*-TEST
+
+
+---
+### PAIRED *t*-TEST
+
+#### Context
+
+- Used when two measurements are taken on each experimental unit  
+
+--
+
+- Problem can be analyzed by taking differences of each pair and then conducting a one-sample *t*-test  
+
+--
+
+- Examples:  
+  + Does a new pharmaceutical decrease blood cholesterol?  
+  + Is small mammal density higher before or after the use of prescribed fire?  
+
+---
+# motivation
+
+Does Pharmaceutical lower LDL levels?
+
+&lt;img src="lecture_08_t-tests_files/figure-html/unnamed-chunk-5-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+
+---
+# worked example
+
+#### Hypotheses ( `\(\large \mu_d\)` is the mean difference )
+
+- `\(\large H_0 :\mu_d = 0\)`
+
+- `\(\large H_a :\mu_d \ne 0\)`  
+
+#### *t*-statistic  
+
+`$$\large t = \frac{\bar{y}_{Diff} - 0}{SED}$$`
+
+---
+# worked example
+
+
+
+
+#### Calculations
+
+- Mean differences: `\(\large\bar{y}_d = -6.8\)`  
+
+- Standard deviation of differences: `\(\large s_d = 3.12\)`  
+
+- Standard error of mean differences: `\(\large SEM_d = 0.987\)`  
+
+- Test statistic: `\(\large t = -6.8/9.82 = -6.893\)`, Critical value: `\(\large t_{0.95,10} = -2.26\)`
+
+- `\(\large p &lt; 0.001\)`
+
+---
+&lt;img src="lecture_08_t-tests_files/figure-html/unnamed-chunk-7-1.png" width="504" style="display: block; margin: auto;" /&gt;
+---
+# looking ahead
+
+
+&lt;br/&gt;
+
+**Next time:** t-tests and Null Hypothesis Testing
+
+&lt;br/&gt;
+
+**Reading:** Hector Ch. 6, 7, 9
+
+**Aknowledgements** This lecture was largely based on Clark Rushings [NR6750](https://rushinglab.github.io/FANR6750/index.html) course materials
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

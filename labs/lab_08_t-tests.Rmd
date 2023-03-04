@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(ggplot2)
 bt_samp <- read.csv(here::here("data/body_temp_hr.csv"))
+caterpillar <- read.csv(here::here("data/caterpillar.csv"))
 ```
 
 ## About
@@ -144,7 +145,7 @@ Is the density of trees at high elevations different from low elevations?
 
 $$H_0: \mu_{high} = \mu_{low}$$
 $$H_A: \mu_{high} \ne \mu_{low}$$
-## Data
+## Data  
 
 We will make a data.frame of the data and call it `tree`. 
 
@@ -219,7 +220,7 @@ two_samp_p_val
  
 When you have a really low p-value like this, it's best to round instead of reporting the full value. Reporting the exact value adds a false sense of specificity. The three levels of significance are generally p < 0.05, p < 0.01, and p < 0.001. Here we would just say that the p-value is < 0.001. 
  
- ### Interpretation  
+### Interpretation  
  
 Based on the data, we can reject the null hypothesis and accept the alternative that tree densities are not equal at different elevations ($t_{statistic} = 4.97, df = 18, p < 0.001$). 
 
@@ -232,7 +233,7 @@ two_sample_fit <- lm(dens ~ elevation, data = tree)
 summary(two_sample_fit)
 ```
 
-### **You should now be able to complete problem 2 in the homework assignment**
+### **You should now be able to complete problem 2 in the homework assignment**  
  
 # Paired t-tests: Herbicide Treatments
 

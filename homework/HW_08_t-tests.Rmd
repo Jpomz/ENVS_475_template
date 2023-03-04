@@ -16,12 +16,12 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-
+library(dplyr)
 # data1
-bt_samp <- read.csv("data/body_temp_hr.csv")
+bt_samp <- read.csv(here::here("data/body_temp_hr.csv"))
 
 # data 2
-finch <- read.csv("data/galapago-finches.csv")
+finch <- read.csv(here::here("data/galapago-finches.csv"))
 # filter out scandens data and make a tibble
 scandens <- finch %>%
   filter(species == "scandens") %>%
@@ -34,7 +34,7 @@ scandens <- finch %>%
 scandens$year <- as.character(scandens$year)
 
 # data3
-darwin_maize <- read.csv("data/darwin_maize.csv")
+darwin_maize <- read.csv(here::here("data/darwin_maize.csv"))
 ```
 
 # This assignment will not be graded.
