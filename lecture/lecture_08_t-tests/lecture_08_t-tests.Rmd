@@ -793,10 +793,16 @@ ldl %>%
 
 <br/>
 
-**Next time:** t-tests and Null Hypothesis Testing
+**This week:**  t-tests and Null Hypothesis Testing lab and HW
 
 <br/>
 
-**Reading:** Hector Ch. 6, 7, 9
+**Reading:** Hector Ch. 6, 9
+
+<br/>
+
+**Take Home Exam**: Assigned Monday after Spring Break, Due Friday after Spring Break
+
+<br/>
 
 **Aknowledgements** This lecture was largely based on Clark Rushings [NR6750](https://rushinglab.github.io/FANR6750/index.html) course materials

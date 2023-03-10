@@ -300,7 +300,7 @@ summary(one_sample_fit)</code></pre>
 <h1>Two-sample t-tests: Tree Densities</h1>
 <p>Is the density of trees at high elevations different from low elevations?</p>
 <p><span class="math display">\[H_0: \mu_{high} = \mu_{low}\]</span> <span class="math display">\[H_A: \mu_{high} \ne \mu_{low}\]</span> ## Data</p>
-<p>We will make a data.frame of the data and call it <code>tree</code>.</p>
+<p>We will make a data.frame and call it <code>tree</code>. Normally, you should type out everything in this class for practice, but copy and paste the following code in order to avoid typing a mistake.</p>
 <pre class="r"><code>tree &lt;- data.frame(
   elevation = rep(c(&quot;Low&quot;, &quot;High&quot;), each = 10),
   dens = c(16, 14, 18, 17, 29, 31, 14, 16, 22, 15, 2, 11, 6, 8, 0, 3, 19, 1, 6, 5))</code></pre>
@@ -308,8 +308,9 @@ summary(one_sample_fit)</code></pre>
 <p><span class="math display">\[\large t = \frac{\bar{y}_1 -\bar{y}_2}{SEDM}\]</span> Where SEDM:</p>
 <p><span class="math display">\[\large SEDM = \sqrt{SEM_1^2 + SEM^2_2}\]</span></p>
 <p>And that the <span class="math inline">\(SEM_i\)</span> is caluclated as:</p>
-<p><span class="math display">\[\large SEM_i = \frac{s}{\sqrt(n)}\]</span></p>
-<p>To summarize, we need the <code>mean()</code>, <code>sd()</code> and <code>sqrt(n())</code> for each <code>elevation</code> group in the data.</p>
+<p><span class="math display">\[\large SEM_i = \frac{s_i}{\sqrt(n_i)}\]</span></p>
+<p>Where <span class="math inline">\(i\)</span> represents each group or sample.</p>
+<p>To summarize, we need to group the data by <code>elevation</code> groups (using <code>group_by()</code>) and then use a <code>summary()</code> call with <code>mean()</code>, <code>sd()</code> and <code>sqrt(n())</code> functions inside of it. Remember to name your “new” summary variables and use an <code>=</code> inside the summary call. After summarizing, we will use a <code>mutate()</code> function to add a new column/variable for the SEM. Finally, I will also modify the data.frame into a tibble to make the display in future calls easier to read.</p>
 <pre class="r"><code>tree_summary &lt;- tree %&gt;%
   group_by(elevation) %&gt;%
   summarise(mean_density = mean(dens),
@@ -324,6 +325,10 @@ tree_summary</code></pre>
 ## 1      High          6.1   5.626327 3.162278 1.779201
 ## 2       Low         19.2   6.160808 3.162278 1.948219</code></pre>
 <p>Unfortunately there is not an easy way to calculate the t-statistic using <code>dplyr</code>, so we will need to extract the variables individually (when we use the <code>lm()</code> all of these steps are automated, but we will continue to calculate it manually so you can see the process). We will use the <code>data_object[row_number,column_number]</code> function to subset the values into new variables. This is also why we converted <code>tree_summary</code> into a data.frame.</p>
+<p>If we want to extract the mean values, what numbers should we place in the square brackets in the following code?</p>
+<pre><code>tree_summary[?,?]
+tree_summary[?,?]</code></pre>
+<p>The following code will extract the means and SEMs from the <code>tree_summary</code> object.</p>
 <pre class="r"><code>y_high &lt;- tree_summary[1,2]
 y_high</code></pre>
 <pre><code>## [1] 6.1</code></pre>
@@ -336,10 +341,12 @@ sem_high</code></pre>
 <pre class="r"><code>sem_low &lt;- tree_summary[2,5]
 sem_low</code></pre>
 <pre><code>## [1] 1.948219</code></pre>
+<p>Now, we will calculate the <span class="math inline">\(t_{statistic}\)</span> using this equation:</p>
+<p><span class="math display">\[\large t = \frac{\bar{y}_{low} -\bar{y}_{high}}{\sqrt{SEM_{low}^2 + SEM^2_{high}}}\]</span></p>
 <pre class="r"><code>t_stat_trees &lt;- (y_low - y_high) / sqrt(sem_high^2 + sem_low^2)
 t_stat_trees</code></pre>
 <pre><code>## [1] 4.965146</code></pre>
-<p>Now that we have a t-statistic, we need to calculate our t-critical value to compare it with and decide if we can formally rejct or fail to reject our null hypothesis. To calculate the t-critical value, we will once again use <code>qt()</code> funciton. Our degrees of freedom here is 18 (total n = 20, but we need to subtract 1 for each group: 20 - (1 + 1) = 18).</p>
+<p>Now that we have a t-statistic, we need to calculate our t-critical value to compare it with and decide if we can formally reject or fail to reject our null hypothesis. To calculate the t-critical value, we will once again use <code>qt()</code> funciton. Our degrees of freedom here is 18 (total n = 20, but we need to subtract 1 for each group: 20 - (1 + 1) = 18).</p>
 <pre class="r"><code>t_crit_trees &lt;- qt(0.025, df = 18)
 t_crit_trees</code></pre>
 <pre><code>## [1] -2.100922</code></pre>
@@ -350,8 +357,10 @@ t_crit_trees</code></pre>
 two_samp_p_val</code></pre>
 <pre><code>## [1] 0.0001001215</code></pre>
 <p>When you have a really low p-value like this, it’s best to round instead of reporting the full value. Reporting the exact value adds a false sense of specificity. The three levels of significance are generally p &lt; 0.05, p &lt; 0.01, and p &lt; 0.001. Here we would just say that the p-value is &lt; 0.001.</p>
-<p>### Interpretation</p>
+<div id="interpretation-1" class="section level3">
+<h3>Interpretation</h3>
 <p>Based on the data, we can reject the null hypothesis and accept the alternative that tree densities are not equal at different elevations (<span class="math inline">\(t_{statistic} = 4.97, df = 18, p &lt; 0.001\)</span>).</p>
+</div>
 <div id="sample-t-test-using-lm" class="section level2">
 <h2>2-sample t-test using <code>lm()</code></h2>
 <p>The hand calculations for a 2-sample t-test are tedious. Luckily we can run the same analysis in just a few lines of code using the <code>lm()</code> function.</p>
@@ -386,9 +395,11 @@ summary(two_sample_fit)</code></pre>
 <h2>Data</h2>
 <p>For this section of the lab, you will need to download the <code>caterpillar.csv</code> file from D2L.</p>
 <pre class="r"><code>caterpillar &lt;- read.csv(&quot;data/caterpillar.csv&quot;)</code></pre>
-<p>For a paired t-test, the null hypothesis is that the avergae difference between the two groups is 0.</p>
+<p>Briefly, this is data from a controlled experiment looking herbicide effects on non-target caterpillars. Twelve plots were split, and each side was randomly assigned as a control or herbicide treatment. Each plot is an experimental unit and the treatments are “paired” within it.</p>
+<p>For a paired t-test, the null hypothesis is that the average difference between the two groups is 0.</p>
 <p><span class="math display">\[H_0:\large \mu_D = 0\]</span> <span class="math display">\[H_A:\large \mu_D \ne 0\]</span></p>
-<p>For this, we need to calculate the difference between the two treatments. If we look at the way the data is organized, there is not a simple solution using <code>dplyr</code> functions.</p>
+<p>Essentially, we calculate a one-sample t-test on the <em>differences</em> between groups. If the groups are the same, there should be no difference (i.e., difference = 0). If the groups are not the same, there should be a <em>difference</em>.</p>
+<p>We need to calculate the difference between the two treatments within each plot or experimental unit. If we look at the way the data is organized, there is not a simple solution using <code>dplyr</code> functions.</p>
 <pre class="r"><code>caterpillar</code></pre>
 <pre><code>##    plot_number    treatment caterpillar_count
 ## 1            1      control                23
@@ -415,7 +426,62 @@ summary(two_sample_fit)</code></pre>
 ## 22          11 bt_herbicide                24
 ## 23          12      control                27
 ## 24          12 bt_herbicide                28</code></pre>
-<p>Luckily, there is a special helper function called <code>diff()</code> that we can use inside of <code>mutate()</code>. First, we need to group the data so that it uses the correct numbers. Here, we want to know what the difference is between <code>treatment</code> groups <em>within</em> each <code>plot_number</code>. So we will use <code>group_by(plot_number)</code>.</p>
+<p>Essentially, we need to subtract row 2 from row 1, row 4 from row 3, etc.</p>
+<p>Luckily, there is a special helper function called <code>diff()</code> that we can use inside of <code>summarise()</code>. For those interested, this is a “lag” function. First, we need to group the data so that it uses the correct observations. Here, we want to know what the difference is between <code>treatment</code> groups <em>within</em> each <code>plot_number</code>. So we will use <code>group_by(plot_number)</code>.</p>
+<pre class="r"><code>cat_diff &lt;- caterpillar %&gt;%
+  group_by(plot_number) %&gt;%
+  summarize(
+    difference = diff(caterpillar_count))
+cat_diff</code></pre>
+<pre><code>## # A tibble: 12 x 2
+##    plot_number difference
+##          &lt;int&gt;      &lt;int&gt;
+##  1           1         -4
+##  2           2          0
+##  3           3         -5
+##  4           4          1
+##  5           5         -2
+##  6           6          2
+##  7           7         -1
+##  8           8         -2
+##  9           9         -3
+## 10          10         -4
+## 11          11         -1
+## 12          12          1</code></pre>
+<p>We can quickly plot these differences to get an idea of the overall effect.</p>
+<pre class="r"><code>cat_diff %&gt;%
+  ggplot(aes(y = difference)) +
+  geom_boxplot(fill = &quot;mediumorchid1&quot;) +
+  geom_hline(yintercept = 0,
+             linetype = &quot;dashed&quot;,
+             size = 1.5) +
+  theme_bw()</code></pre>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABUAAAAPACAMAAADDuCPrAAABHVBMVEUAAAAAADoAAGYAOjoAOmYAOpAAZrYzMzM6AAA6OgA6Ojo6OmY6OpA6ZmY6ZpA6ZrY6kNtNTU1NTW5NTY5Nbo5NbqtNjshmAABmADpmOgBmOjpmZjpmZmZmZpBmkGZmkJBmkLZmkNtmtttmtv9uTU1ujqtuq+SOTU2Obm6Oq6uOyOSOyP+QOgCQOjqQZjqQZmaQkGaQkLaQtraQ2/+rbk2rjm6r5P+2ZgC2Zjq2kDq2kGa2tpC2tra2ttu229u22/+2///Ijk3Ijm7I5P/I///bkDrbkGbbtmbbtpDbtrbb27bb29vb2//b///gZv/kq27kyKvk///r6+v/tmb/yI7/25D/27b/29v/5Kv/5Mj//7b//8j//9v//+T////rl5svAAAACXBIWXMAAB2HAAAdhwGP5fFlAAAgAElEQVR4nO3d+4OcBZXn4QoitMyiVBS8DDquBuLIOO7OxuvqjgFRZ9GNhCCXXP7/P2M7nQ50uis59T3J++ak8zw/GCZY1vF45kN1urt6cweAls3THgDgWSWgAE0CCtAkoABNAgrQJKAATQIK0CSgAE0CCtAkoABNAgrQJKAATQIK0LRIQF8GOJfWCOjp37h+fYmneXwzx7KthG0lbCuxY1sCetLMsWwrYVsJ20oIaGHmWLaVsK2EbSUEtDBzLNtK2FbCthICWpg5lm0lbCthWwkBLcwcy7YStpWwrYSAFmaOZVsJ20rYVkJACzPHsq2EbSVsKyGghZlj2VbCthK2lRDQwsyxbCthWwnbSghoYeZYtpWwrYRtJQS0MHMs20rYVsK2EgJamDmWbSVsK2FbCQEtzBzLthK2lbCthIAWZo5lWwnbSthWQkALM8eyrYRtJWwrIaCFmWPZVsK2EraVENDCzLFsK2FbCdtKCGhh5li2lbCthG0lBLQwcyzbSthWwrYSAlqYOZZtJWwrYVsJAS3MHMu2EraVsK2EgBZmjmVbCdtK2FZCQAszx7KthG0lbCshoIWZY9lWwrYStpUQ0MLMsWwrYVsJ20oIaGHmWLaVsK2EbSUEtDBzLNtK2FbCthICWpg5lm0lbCthWwkBLcwcy7YStpWwrYSAFmaOZVsJ20rYVkJACzPHsq2EbSVsKyGghZlj2VbCthK2lVg6oH//yXZ78a33zj7JHoOMMHMs20rYVsK2EgsH9N3tkYu/PPMkewwywsyxbCthWwnbSiwb0Bvbiz+9c+ezK9tv/vH0k+wxyAgzx7KthG0lbCuxaEBvX9m+c/fXm5fv/XrySfYYZISZY9lWwrYStpVYNKA3Lx+/8ry6ffv0k+wxyAgzx7KthG0lbCuxzmfhBfQJs62EbSVsK7FKQG9e/uKzSC/fdx3g/HnyAb22feP+Xwooq3NtrOiJB/SGL2N60mwrcfqip5i5LbeVWOFD+BuXLp7+HLyAPibbSghowm0llg/otR2vPwX0MdlWQkATbiuxeEDf3dlPAX08tpUQ0ITbSiwc0NtXt986/U1I955kj0FGmDmWbSUENOG2EgsH9Or29Q93/g0BfSy2lRDQhNtKLBvQaw/rp4A+HttKCGjCbSUW/lbO7X1vnPpbAvpYbCshoAm3lVg0oDe2AroM20oIaMJtJbwjfWHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20o8tYBeh5W87NpYj1egJ80cy7YSXoEm3FbCh/CFmWPZVkJAE24rIaCFmWPZVkJAE24rIaCFmWPZVkJAE24rIaCFmWPZVkJAE24rIaCFmWPZVkJAE24rIaCFmWPZVkJAE24rIaCFmWPZVkJAE24rIaCFmWPZVkJAE24rIaCFmWPZVkJAE24rIaCFmWPZVkJAE24rIaCFmWPZVkJAE24rIaCFmWPZVkJAE24rIaCFmWPZ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aGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20oIaGHmWLaVENCE20qsEdBPL73+4Zkn2WOQEWaOZVsJAU24rcQKAb19ZSugT5htJQQ04bYSKwT02lZAnzTbSghowm0llg/op5cE9ImzrYSAJtxWYvGAHn4A/6/+DPRJs62EgCbcVmLxgF7dvuGTSE+cbSUENOG2EksH9Mbhh+8nA/ryfddhJa6NFT3JgN68fPGXdwSUp8q1saInGdCr27d9HegCbCvhQ/iE20os+yH8taPPvwvoE2dbCQFNuK3EIgG9sT3yzqeXDj+AF9AF2FZCQBNuK7FoQK9tv/DNP556kj0GGWHmWLaVENCE20os+iG8gC7FthICmnBbCW8mUpg5lm0lBDThthICWpg5lm0lBDThthICWpg5lm0lBDThthICWpg5lm0lBDThthLekb4wcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSiUsJGMAAAh2SURBVAhowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lBLQwcyzbSghowm0lnlpArwOcP16BnjRzLNtK2FbCthI+hC/MHMu2EraVsK2EgBZmjmVbCdtK2FZCQAszx7KthG0lbCshoIWZY9lWwrYStpUQ0MLMsWwrYVsJ20oIaGHmWLaVsK2EbSUEtDBzLNtK2FbCthICWpg5lm0lbCthWwkBLcwcy7YStpWwrYSAFmaOZVsJ20rYVkJACzPHsq2EbSVsKyGghZlj2VbCthK2lRDQwsyxbCthWwnbSghoYeZYtpWwrYRtJQS0MHMs20rYVsK2EgJamDmWbSVsK2FbCQEtzBzLthK2lbCthIAWZo5lWwnbSthWQkALM8eyrYRtJWwrIaCFmWPZVsK2EraVENDCzLFsK2FbCdtKCGhh5li2lbCthG0lBLQwcyzbSthWwrYSAlqYOZZtJWwrYVsJAS3MHMu2EraVsK2EgBZmjmVbCdtK2FZCQAszx7KthG0lbCshoIWZY9lWwrYStpUQ0MLMsWwrYVsJ20oIaGHmWLaVsK2EbSUEtDBzLNtK2FbCthICWpg5lm0lbCthWwkBLcwcy7YStpWwrYSAFmaOZVsJ20rYVkJACzPHsq2EbSVsKyGghZlj2VbCthK2lRDQwsyxbCthWwnbSghoYeZYtpWwrYRtJZ5aQAHOJQEFaFohoDuKusrTnBO2lbCthG0l9tiWgM5jWwnbSthWQkCfSbaVsK2EbSUE9JlkWwnbSthWQkCfSbaVsK2EbSUE9JlkWwnbSthWYkxAAc4hAQVoElCAJgEFaBJQgCYBBWgSUIAmAQVoWjagt39xabt9673Tv/3ppdc/XPR5n007tvX3n2y3F88u8Hm3Y1MPOTXcVSZs1qIBvXl5e9c3//jgb9++shXQs3Zs692j39le/OXTm2qiHZt6yKnhrjJpsxYN6NXt6+/d+ezMU1/bCugOZ7d1Y3vxp3fu/pYuPGDHXT3k1HBXmbRZSwb000tH/wPdvPzgP+k+vSSgO5zd1uE/9d65c/Rb937lnh139ZBTw11l4mYtGdBr2zeOf337xO8e/s/3r/4M9Kyz27p5+fgVwtUHFvjc23FXu0+NO+4qEzdryYBePf4H3I3joe7/7hs+ibTD7m0d/y2HfsKOTT1iec87d5WIm7VgQG9fOX4Z/MBz3zh8KSygZ+3e1hEfmD5gx6YesbznnbtK5M1aO6BH/6M587MecejXvKw6SUAT7iqRN2udgH752b6jjxqc+Vk7t3Xkhi83ecCOTT18ec89d5XIm7XyK9BrR5/LEtCzHvpK4caliz5XepJXoAl3lcibtUBAb9z7Kt13dgzz6aWj33LmX3rEto5c8zrhFAFNuKtE3qwFA7rjM1rXtl/wodY9j9jWXe+68zN8Fj7hrhJxs5b9OtC3H/hVQB/l7LYO/4F4dfstezptx6Z2LY8j7ioRN+spfCeSD7R22rWtq75lawffiZRwV4m4WUsG9PaV7bd2foOygO6wY1vX3PkuOzb10FPDXSXiZi36ZiKfnXhnk+M/i33kMM+3M9s6fmOYu/zJ3kk77uoz78b0MO4qkTZr2fcD/ewXh7O89eGdPYd5zp3e1o2tQ99tx12d+C0e5K4SYbO8Iz1Ak4ACNAkoQJOAAjQJKECTgAI0CShAk4ACNAkoQJOAAjQJKECTgAI0CShAk4ACNAkoQJOAAjQJKECTgAI0CShA0/8HkketRPlF3McAAAAASUVORK5CYII=" width="672" /></p>
+<p>In this plot, the reference value (<span class="math inline">\(\mu_0 = 0\)</span>) is represented with the dashed line, and is right on the edge of the upper quantile (75th percentile). It’s difficult to tell if the differences are close enough to zero or not, so we will need to calculate a formal statistical test.</p>
+<p>Recall that we calculate a paired t-test statistic with the following formula:</p>
+<p><span class="math display">\[\large t = \frac{\bar{y}_{Diff} - 0}{SED}\]</span></p>
+<p>Here, SED is the standard error of the <em>difference</em>. For this example, we will skip the hand calculation and jump straight to using <code>lm()</code>. We already have the differences stored in the <code>cat_diff</code> object. We will use that object to calculate a one-sample t-test. Using the <code>lm()</code> function, a one sample t-test is the same as an intercept-only model.</p>
+<pre class="r"><code>paired_fit &lt;- lm(difference ~ 1, data = cat_diff)
+summary(paired_fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = difference ~ 1, data = cat_diff)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+##  -3.50  -1.75   0.00   1.75   3.50 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)  -1.5000     0.6455  -2.324   0.0403 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.236 on 11 degrees of freedom</code></pre>
+<p>Our estimated intercept coefficient is -1.5, and the standard error of this estimate is 0.6455. The <code>summary()</code> output also includes a t<sub>statistic</sub> (<code>t value</code>) of -2.324. The output does not give us our t<sub>critical</sub> value, but it does gives us the p-value. Here, the p-value is 0.0403, which is less than our <span class="math inline">\(\alpha\)</span> value of 0.05. Hence, we reject the null hypothesis and conclude that there is a difference in treatment values.</p>
+<div id="you-should-now-be-able-to-complete-problem-3-in-the-homework-assignment" class="section level3">
+<h3><strong>You should now be able to complete problem 3 in the homework assignment</strong></h3>
+</div>
 </div>
 </div>
 

@@ -232,22 +232,30 @@ bt_samp &lt;- read.csv(&quot;data/body_temp_hr.csv&quot;)</code></pre>
 <h2>Problem 1: One-sample t-test</h2>
 <p>We will be formally testing whether the true population mean of human body temperatures is eaqual to 98.6 degrees Fahrenheit.</p>
 <p>1.1 Add a comment to your homework script stating the null and alternative hypotheses. Make sure to put each hypothesis on its own line. Make sure that your alternative hypothesis is 2-tailed.<br />
-1.2 Extract the <code>body_temp</code> data from <code>bt_samp</code> and store it as a vector called <code>b</code>.<br />
-1.3 Create new variables for the mean, SD and SEM of the vector <code>b</code>. Be sure that the values print out when you source your script so that I can check your work.<br />
-1.4 Calculate a t-statistic and print it out to your console.<br />
-<strong>HINT</strong> Name it something different from the lab so that you don’t get confused which variable is which.<br />
-1.5 calculate the critical value of t for this analysis and store it as a variable.<br />
-+ <strong>HINT</strong> use the <code>qt()</code> function, and make sure you calculate the correct degrees of freedom for this data set.<br />
-+ Give it a different name than what was used in the lab.</p>
-<p>1.6 Add a comment interpreting how the t-stat compares to our t-critical value. Do we reject or fail to reject our null hypothesis?<br />
-1.7 Calculate the p-value for your t-statistic in this analysis.<br />
-1.8 Analyze your <code>b</code> vector using the <code>lm()</code> function. Make sure to correctly account for your null value of 98.6 degrees.<br />
-+ Store your fitted model as an object, and then use the <code>summary()</code> function to print out the results</p>
+1.2 Extract the <code>body_temp</code> column/variable from <code>bt_samp</code> and store it as a vector called <code>b</code>.</p>
+<p>1.3 Create new variables for the mean, SD and SEM of the vector <code>b</code>. Be sure that the values print out when you source your script so that I can check your work.</p>
+<p>1.4 Calculate a t-statistic and print it out to your console.</p>
+<ul>
+<li><strong>HINT</strong> Name it something different from the lab so that you don’t get confused which variable is which.</li>
+</ul>
+<p>1.5 calculate the critical value of t for this analysis and store it as a variable.</p>
+<ul>
+<li><p><strong>HINT</strong> use the <code>qt()</code> function, and make sure you calculate the correct degrees of freedom for this data set.</p></li>
+<li><p>Give it a different name than what was used in the lab.</p></li>
+</ul>
+<p>1.6 Add a comment interpreting how the t-stat compares to our t-critical value. Do we reject or fail to reject our null hypothesis?</p>
+<p>1.7 Calculate the p-value for your t-statistic in this analysis.</p>
+<p>1.8 Analyze your <code>b</code> vector using the <code>lm()</code> function. Make sure to correctly account for your null value of 98.6 degrees.</p>
+<ul>
+<li>Store your fitted model as an object, and then use the <code>summary()</code> function to print out the results</li>
+</ul>
+<p>1.9 Add a comment to your script interpreting the results of your analysis. Be sure to refer back to the null and alternative hypotheses (reject or fail to reject?) include the t-statistic, the degrees of freedom, and the p-value in your answer.</p>
 </div>
 <div id="problem-2-two-sample-t-test" class="section level2">
 <h2>Problem 2: two-sample t-test</h2>
 <div id="data-scandens" class="section level3">
 <h3>Data: <code>scandens</code></h3>
+<p>We want to know if the average beak length (<code>blength</code>) has changed in the population of <em>Geospiza scandens</em> living on Daphne Major in the Galapagos islands between 1975 and 2012.</p>
 <p>We will once again be using the <em>Geospiza scandens</em> data from the <code>darwin-finches.csv</code>.</p>
 <pre class="r"><code># read in full data set
 finch &lt;- read.csv(&quot;data/galapago-finches.csv&quot;)
@@ -261,20 +269,43 @@ scandens &lt;- finch %&gt;%
 # If we leave year as an integer, the lm() function 
 # will treat it as continuous and will calculate statistics for a linear regression. 
 scandens$year &lt;- as.character(scandens$year)</code></pre>
-<p>1.1 Add a comment to your homework script stating the null and alternative hypotheses. Make sure to put each hypothesis on its own line. Make sure that your alternative hypothesis is 2-tailed.</p>
-<p>1.2 Use <code>dplyr</code>, <code>group_by()</code>, <code>summarize()</code> and <code>mutate()</code> to calculate the following statistics for each <code>year</code>: + Average, Standard Deviation, <span class="math inline">\(\sqrt(n)\)</span>, and the Standard Error of the Mean.</p>
-<p>1.2 Use the <code>lm()</code> function to perform a 2-sample t-test on whether or not the average <code>blength</code> (in mm) is equal between the two years of data.<br />
-+ Make sure to save your model-fit as an object, and then use the <code>summary()</code> function to print out the results.</p>
-<p>1.3 Add a comment to your script interpreting the results of your analysis.</p>
+<p>All of the following questions refer to the <code>scandens</code> object.</p>
+<p>2.1 Add a comment to your homework script stating the null and alternative hypotheses. Make sure to put each hypothesis on its own line. Make sure that your alternative hypothesis is 2-tailed.</p>
+<p>2.2 Use <code>dplyr</code>, <code>group_by()</code>, <code>summarize()</code> and <code>mutate()</code> to calculate the following statistics for the <code>blength</code> variable in each <code>year</code>:</p>
+<ul>
+<li>Average, Standard Deviation, <span class="math inline">\(\sqrt(n)\)</span>, and the Standard Error of the Mean.</li>
+</ul>
+<p>2.3 Use the <code>lm()</code> function to perform a 2-sample t-test on whether or not the average <code>blength</code> (in mm) is equal between the two years of data.</p>
+<ul>
+<li>Make sure to save your model-fit as an object, and then use the <code>summary()</code> function to print out the results.</li>
+</ul>
+<p>2.4 What is the estimate and standard error for <code>blength</code> in the “1975” sample? What is the estimate and standard error for the <em>difference</em> in <code>blength</code> between “1975” and the “2012” samples?</p>
+<p>2.5 Add a comment to your script interpreting the results of your analysis. Be sure to refer back to the null and alternative hypotheses (reject or fail to reject?) include the t-statistic, the degrees of freedom, and the p-value in your answer.</p>
 </div>
 </div>
 <div id="problem-3-paired-t-test" class="section level2">
 <h2>Problem 3: paired t-test</h2>
-<pre class="r"><code>darwin_diff &lt;- darwin %&gt;%
-    group_by(pair) %&gt;%
-    mutate(difference = -diff(height)) %&gt;%
-    select(pair, difference) %&gt;%
-    distinct()</code></pre>
+<div id="data-darwin_maize" class="section level3">
+<h3>Data <code>darwin_maize</code></h3>
+<p>For this problem, we will be returning to the <code>darwin_maize</code> data. Recall that the original experimental design included growing plants from different fertilization categories (self vs. cross). The individual plants were taken from the same parent, so are “paired” in this sense. Here, we will be testing the hypothesis that there is a difference in <code>height</code> between the Self and Cross <code>type</code>.</p>
+<pre class="r"><code># read in the data
+darwin_maize &lt;- read.csv(here::here(&quot;data/darwin_maize.csv&quot;))</code></pre>
+<p>3.1 Add a comment to your script describing the null and alternative hypotheses. Put each hypothesis on its own line.</p>
+<p>3.2 You will need to modify the structure of the <code>darwin_maize</code> object in order to formally test these hypotheses. Follow the example in lab, and save your modified data as a new object.</p>
+<ul>
+<li>Hint: The grouping variable will be <code>pair</code> and you will want to calculate the difference in the <code>height</code> variable.</li>
+</ul>
+<p>3.3 Use the <code>lm()</code> function to calculate a formal test on the modified data object.</p>
+<ul>
+<li><p>Hint: If you modified the data correctly in 3.2, you should be setting up an “intercept-only” model inside of <code>lm()</code>.</p></li>
+<li><p>Be sure to store your model fit in a new object and run the <code>summary()</code> function on it.</p></li>
+</ul>
+<p>3.4 Add a comment to your script describing the estimated average and standard error for the difference between the two groups.</p>
+<p>3.5 Add a comment to your script interpreting the results of your analysis. Be sure to refer back to the null and alternative hypotheses (reject or fail to reject?) include the t-statistic, the degrees of freedom, and the p-value in your answer.</p>
+<div id="this-concludes-the-homework" class="section level4">
+<h4><strong>This concludes the homework</strong></h4>
+</div>
+</div>
 </div>
 </div>
 
