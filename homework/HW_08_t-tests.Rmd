@@ -1,6 +1,6 @@
 ---
 title: "ENVS475 Homework 08: t-tests"
-subtitle: "Ungraded"
+subtitle: "Graded"
 date: "Spring, 2023"
 output: 
   html_document:
@@ -37,7 +37,7 @@ scandens$year <- as.character(scandens$year)
 darwin_maize <- read.csv(here::here("data/darwin_maize.csv"))
 ```
 
-# This assignment will not be graded.
+# This assignment will be graded.
 
 # Assignment Format
 
