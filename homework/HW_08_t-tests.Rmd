@@ -1,6 +1,6 @@
 ---
 title: "ENVS475 Homework 08: t-tests"
-subtitle: "Ungraded"
+subtitle: "Graded"
 date: "Spring, 2023"
 output: 
   html_document:
@@ -37,7 +37,7 @@ scandens$year <- as.character(scandens$year)
 darwin_maize <- read.csv(here::here("data/darwin_maize.csv"))
 ```
 
-# This assignment will not be graded.
+# This assignment will be graded.
 
 # Assignment Format
 
@@ -76,23 +76,36 @@ bt_samp <- read.csv("data/body_temp_hr.csv")
 We will be formally testing whether the true population mean of human body temperatures is eaqual to 98.6 degrees Fahrenheit.  
 
 1.1 Add a comment to your homework script stating the null and alternative hypotheses. Make sure to put each hypothesis on its own line. Make sure that your alternative hypothesis is 2-tailed.  
-1.2 Extract the `body_temp` data from `bt_samp` and store it as a vector called `b`.  
+1.2 Extract the `body_temp` column/variable from `bt_samp` and store it as a vector called `b`.  
+
 1.3 Create new variables for the mean, SD and SEM of the vector `b`. Be sure that the values print out when you source your script so that I can check your work.  
+
 1.4 Calculate a t-statistic and print it out to your console.  
-  **HINT** Name it something different from the lab so that you don't get confused which variable is which.  
+
+  + **HINT** Name it something different from the lab so that you don't get confused which variable is which.  
+  
 1.5 calculate the critical value of t for this analysis and store it as a variable.  
+
   + **HINT** use the `qt()` function, and make sure you calculate the correct degrees of freedom for this data set.  
+  
   + Give it a different name than what was used in the lab.  
   
 1.6 Add a comment interpreting how the t-stat compares to our t-critical value. Do we reject or fail to reject our null hypothesis?  
+
 1.7 Calculate the p-value for your t-statistic in this analysis.  
+
 1.8 Analyze your `b` vector using the `lm()` function. Make sure to correctly account for your null value of 98.6 degrees.  
-  + Store your fitted model as an object, and then use the `summary()` function to print out the results  
+
+  + Store your fitted model as an object, and then use the `summary()` function to print out the results   
   
+1.9 Add a comment to your script interpreting the results of your analysis. Be sure to refer back to the null and alternative hypotheses (reject or fail to reject?) include the t-statistic, the degrees of freedom, and the p-value in your answer. 
 
 ## Problem 2: two-sample t-test  
 
 ### Data: `scandens` 
+
+We want to know if the average beak length (`blength`) has changed in the population of *Geospiza scandens*  living on Daphne Major in the Galapagos islands between 1975 and 2012. 
+
 
 We will once again be using the *Geospiza scandens* data from the `darwin-finches.csv`. 
 
@@ -111,9 +124,12 @@ scandens <- finch %>%
 scandens$year <- as.character(scandens$year)
 ```
 
-1.1 Add a comment to your homework script stating the null and alternative hypotheses. Make sure to put each hypothesis on its own line. Make sure that your alternative hypothesis is 2-tailed.  
+All of the following questions refer to the `scandens` object. 
 
-1.2 Use `dplyr`, `group_by()`, `summarize()` and `mutate()` to calculate the following statistics for each `year`: 
+2.1 Add a comment to your homework script stating the null and alternative hypotheses. Make sure to put each hypothesis on its own line. Make sure that your alternative hypothesis is 2-tailed.  
+
+2.2 Use `dplyr`, `group_by()`, `summarize()` and `mutate()` to calculate the following statistics for the `blength` variable in each `year`: 
+
   + Average, Standard Deviation, $\sqrt(n)$, and the Standard Error of the Mean.  
 
 1.3 Use the `lm()` function to perform a 2-sample t-test on whether or not the average `blength` (in mm) is equal between the two years of data.  
@@ -122,8 +138,20 @@ scandens$year <- as.character(scandens$year)
   
 1.4 Add a comment to your script interpreting the results of your analysis.  
 
-## Problem 3: paired t-test
+2.3 Use the `lm()` function to perform a 2-sample t-test on whether or not the average `blength` (in mm) is equal between the two years of data.  
 
+  + Make sure to save your model-fit as an object, and then use the `summary()` function to print out the results.  
+
+
+2.4 What is the estimate and standard error for `blength` in the "1975" sample? What is the estimate and standard error for the *difference* in `blength` between "1975" and the "2012" samples?   
+
+2.5 Add a comment to your script interpreting the results of your analysis. Be sure to refer back to the null and alternative hypotheses (reject or fail to reject?) include the t-statistic, the degrees of freedom, and the p-value in your answer.   
+
+## Problem 3: paired t-test  
+
+### Data `darwin_maize`  
+
+For this problem, we will be returning to the `darwin_maize` data. Recall that the original experimental design included growing plants from different fertilization categories (self vs. cross). The individual plants were taken from the same parent, so are "paired" in this sense. Here, we will be testing the hypothesis that there is a difference in `height` between the Self and Cross `type`.  
 
 ### Data: `darwin_maize`  
 
@@ -145,3 +173,25 @@ darwin_maize <- read.csv("data/darwin_maize.csv")
   + Store the output of `lm()` in a new data object, and then use the `summary()` function to print out the results.  
   
 3.4 Add a comment to your script interpreting the results of your analysis.
+```{r}
+# read in the data
+darwin_maize <- read.csv(here::here("data/darwin_maize.csv"))
+```
+
+3.1 Add a comment to your script describing the null and alternative hypotheses. Put each hypothesis on its own line.  
+
+3.2 You will need to modify the structure of the `darwin_maize` object in order to formally test these hypotheses. Follow the example in lab, and save your modified data as a new object.  
+
+  + Hint: The grouping variable will be `pair` and you will want to calculate the difference in the `height` variable.  
+  
+3.3 Use the `lm()` function to calculate a formal test on the modified data object.  
+
+  + Hint: If you modified the data correctly in 3.2, you should be setting up an "intercept-only" model inside of `lm()`.  
+  
+  + Be sure to store your model fit in a new object and run the `summary()` function on it.  
+  
+3.4 Add a comment to your script describing the estimated average and standard error for the difference between the two groups.  
+
+3.5 Add a comment to your script interpreting the results of your analysis. Be sure to refer back to the null and alternative hypotheses (reject or fail to reject?) include the t-statistic, the degrees of freedom, and the p-value in your answer. 
+
+#### **This concludes the homework** 
