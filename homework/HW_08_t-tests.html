@@ -11,7 +11,7 @@
 
 
 
-<title>HW07: R Markdown</title>
+<title>ENVS475 Homework 08: t-tests</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -354,139 +354,150 @@ pre code {
 
 
 
-<h1 class="title toc-ignore">HW07: R Markdown</h1>
-<h3 class="subtitle">ENVS475: Experimental Analysis and Design</h3>
-<h4 class="date">March, 2023</h4>
+<h1 class="title toc-ignore">ENVS475 Homework 08: t-tests</h1>
+<h3 class="subtitle">Ungraded</h3>
+<h4 class="date">Spring, 2023</h4>
 
 </div>
 
 <div id="TOC">
 <ul>
-<li><a href="#this-assignment-will-not-be-graded">This Assignment will
-not be graded</a>
+<li><a href="#this-assignment-will-not-be-graded.">This assignment will
+not be graded.</a></li>
+<li><a href="#assignment-format">Assignment Format</a></li>
+<li><a href="#setup">Setup</a>
 <ul>
-<li><a href="#open-a-new-r-markdown-file">Open a new R Markdown
-file</a></li>
-<li><a href="#problem-1-preliminaries">Problem 1: preliminaries</a></li>
-<li><a href="#problem-2-lists">Problem 2: Lists</a></li>
-<li><a href="#problem-3-code-chunks">Problem 3: Code Chunks</a></li>
-<li><a href="#problem-4-equations">Problem 4: Equations</a></li>
-<li><a href="#problem-5-miscellany">Problem 5: Miscellany</a></li>
-<li><a href="#submission">Submission</a></li>
+<li><a href="#load-packages">Load packages</a></li>
+</ul></li>
+<li><a href="#data">Data</a>
+<ul>
+<li><a href="#download-the-data-and-read-into-r">Download the data and
+read into R</a></li>
+</ul></li>
+<li><a href="#exercises-homework-08-t-tests">Exercises Homework 08:
+t-tests</a>
+<ul>
+<li><a href="#problem-1-one-sample-t-test">Problem 1: One-sample
+t-test</a></li>
+<li><a href="#problem-2-two-sample-t-test">Problem 2: two-sample
+t-test</a></li>
+<li><a href="#problem-3-paired-t-test">Problem 3: paired t-test</a></li>
 </ul></li>
 </ul>
 </div>
 
-<div id="this-assignment-will-not-be-graded" class="section level1">
-<h1>This Assignment will not be graded</h1>
-<div id="open-a-new-r-markdown-file" class="section level2">
-<h2>Open a new R Markdown file</h2>
+<div id="this-assignment-will-not-be-graded." class="section level1">
+<h1>This assignment will not be graded.</h1>
+</div>
+<div id="assignment-format" class="section level1">
+<h1>Assignment Format</h1>
 <ul>
-<li><p>Click on
-<code>File -&gt; New File -&gt; R Markdown...</code></p></li>
-<li><p>Enter <code>HW07: intro to R Markdown</code> in the
-<code>title</code> field.</p></li>
-<li><p>Enter your <strong>first</strong> name in the <code>Author</code>
-field.</p></li>
-<li><p>Choose the HTML format</p></li>
-<li><p>Click <code>Ok</code></p></li>
-<li><p>Save the newly created document</p>
+<li>Open a new R script</li>
+<li>Save your R script in the <code>homework/</code> folder</li>
+<li>Name your script according to: <code>full_name_hw##.R</code>
 <ul>
-<li>Make sure to follow the file naming convention for homework
-assignments</li>
+<li>For example: <code>justin_pomeranz_hw08.R</code></li>
+</ul></li>
+<li>Comment before each problem, and each sub-problem</li>
+<li>Make sure your results print out on <code>Source with echo</code>
+<ul>
+<li>If you’re answer is saved in an object, make sure you print out that
+object afterwards</li>
 </ul></li>
 </ul>
 </div>
-<div id="problem-1-preliminaries" class="section level2">
-<h2>Problem 1: preliminaries</h2>
-<p>Edit the YAML header in your R Markdown file to include the
-following:</p>
-<ol style="list-style-type: upper-alpha">
-<li>Enter your full name in the author field<br />
-</li>
-<li>Add the code to include a table of contents with
-<code>toc_depth : 2</code><br />
-</li>
-<li>Add a level 1 Header called “My level 1 header”<br />
-</li>
-<li>Add a level 2 Header called “My level 2 header”<br />
-</li>
-<li>Add a level 3 Header called “My level 3 header”<br />
-</li>
-<li>click <code>Knit</code> to ensure that an html document is
-created.<br />
-</li>
-</ol>
-<ul>
-<li>Double check that the author field is correct</li>
-<li>Make sure that you have three headers, one of each level (1-3)</li>
-<li>Make sure that the table of contents at the top of your document
-<em>only</em> includes the first two levels.</li>
-</ul>
-<p><strong>NOTE</strong> You may want to <code>knit</code> your document
-after you complete each problem to ensure that the out put format is
-correct.</p>
+<div id="setup" class="section level1">
+<h1>Setup</h1>
+<div id="load-packages" class="section level2">
+<h2>Load packages</h2>
+<pre class="r"><code># load libraries
+library(dplyr)
+library(ggplot2)</code></pre>
 </div>
-<div id="problem-2-lists" class="section level2">
-<h2>Problem 2: Lists</h2>
-<ol style="list-style-type: upper-alpha">
-<li>Create a level 1 header titled “Problem 2: Lists”.</li>
-<li>Create a level 2 header titled “My favorite animals”. Then create a
-numbered list, ranking your top three favorite animals.</li>
-<li>Create a level 2 header called “Why use R Markdown?”. Then make a
-bulleted list (min 3 bullets) with a few of the benefits for using R
-Markdown.</li>
-<li>Create a level 2 header called “Sub bulleted list”. Then create a
-bulleted list (min 2 main bullets) with some of your favorite hobbies.
-For each main bullet, add at least one sub bullet briefly explaining why
-you like that hobby.</li>
-</ol>
 </div>
-<div id="problem-3-code-chunks" class="section level2">
-<h2>Problem 3: Code Chunks</h2>
-<ol style="list-style-type: upper-alpha">
-<li>Create a level 1 header titled “Problem 3: Code Chunks”.</li>
-<li>Create a code chunk and set the chunk options to ensure that the
-code runs but is not shown in the html document. Inside of the chunk,
-copy the following line of code: <code>date &lt;- Sys.Date()</code></li>
-<li>Below the code chunk created above, type “I completed this
-assignment on:” and then include inline code that prints the
-<code>date</code> object you created in the chunk above</li>
-</ol>
+<div id="data" class="section level1">
+<h1>Data</h1>
+<div id="download-the-data-and-read-into-r" class="section level2">
+<h2>Download the data and read into R</h2>
+<pre class="r"><code># read in data
+bt_samp &lt;- read.csv(&quot;data/body_temp_hr.csv&quot;)</code></pre>
 </div>
-<div id="problem-4-equations" class="section level2">
-<h2>Problem 4: Equations</h2>
-<ol style="list-style-type: upper-alpha">
-<li>Create a level 1 header titled “Problem 4: Equations”.</li>
-<li>Create an inline equation which produces the following: <span class="math inline">\(x \sim Normal(\mu = 0, \sigma = 1)\)</span></li>
-</ol>
-<ul>
-<li><strong>hint</strong> the <span class="math inline">\(\sim\)</span>
-symbol can be added by typing <code>\sim</code></li>
-</ul>
-<ol start="3" style="list-style-type: upper-alpha">
-<li>Create a block equation for a simple linear model. Your equation
-should look like this:</li>
-</ol>
-<p><span class="math display">\[ Y = \beta_0 + \beta_1 * X \]</span></p>
 </div>
-<div id="problem-5-miscellany" class="section level2">
-<h2>Problem 5: Miscellany</h2>
-<ol style="list-style-type: upper-alpha">
-<li>Create a level 1 header titled “Problem 5: Miscellany”.</li>
-<li>Make a line with the following: “My CMU email address is:”. Then,
-include your email address as a hyperlink.</li>
-<li>Include a line of text which includes at least one
-<strong>bold</strong> and one <em>italicized</em> word. Also be sure to
-include one subscript and one superscript.</li>
-</ol>
+<div id="exercises-homework-08-t-tests" class="section level1">
+<h1>Exercises Homework 08: t-tests</h1>
+<div id="problem-1-one-sample-t-test" class="section level2">
+<h2>Problem 1: One-sample t-test</h2>
+<p>We will be formally testing whether the true population mean of human
+body temperatures is eaqual to 98.6 degrees Fahrenheit.</p>
+<p>1.1 Add a comment to your homework script stating the null and
+alternative hypotheses. Make sure to put each hypothesis on its own
+line. Make sure that your alternative hypothesis is 2-tailed.<br />
+1.2 Extract the <code>body_temp</code> data from <code>bt_samp</code>
+and store it as a vector called <code>b</code>.<br />
+1.3 Create new variables for the mean, SD and SEM of the vector
+<code>b</code>. Be sure that the values print out when you source your
+script so that I can check your work.<br />
+1.4 Calculate a t-statistic and print it out to your console.<br />
+<strong>HINT</strong> Name it something different from the lab so that
+you don’t get confused which variable is which.<br />
+1.5 calculate the critical value of t for this analysis and store it as
+a variable.<br />
++ <strong>HINT</strong> use the <code>qt()</code> function, and make
+sure you calculate the correct degrees of freedom for this data
+set.<br />
++ Give it a different name than what was used in the lab.</p>
+<p>1.6 Add a comment interpreting how the t-stat compares to our
+t-critical value. Do we reject or fail to reject our null
+hypothesis?<br />
+1.7 Calculate the p-value for your t-statistic in this analysis.<br />
+1.8 Analyze your <code>b</code> vector using the <code>lm()</code>
+function. Make sure to correctly account for your null value of 98.6
+degrees.<br />
++ Store your fitted model as an object, and then use the
+<code>summary()</code> function to print out the results</p>
 </div>
-<div id="submission" class="section level2">
-<h2>Submission</h2>
-<p>Once your homework file is completed, you will need to knit the
-document into an html. <strong>Be sure to go over the rendered document
-to see if all the answer formats are correct.</strong></p>
-<p>For credit, you will submit both the .Rmd and .html files on D2L.</p>
+<div id="problem-2-two-sample-t-test" class="section level2">
+<h2>Problem 2: two-sample t-test</h2>
+<div id="data-scandens" class="section level3">
+<h3>Data: <code>scandens</code></h3>
+<p>We will once again be using the <em>Geospiza scandens</em> data from
+the <code>darwin-finches.csv</code>.</p>
+<pre class="r"><code># read in full data set
+finch &lt;- read.csv(&quot;data/galapago-finches.csv&quot;)
+# filter out scandens data and make a tibble
+scandens &lt;- finch %&gt;%
+  filter(species == &quot;scandens&quot;) %&gt;%
+  as_tibble()
+
+# change the year column to a character data type
+# this is necessary to run a 2-sample t-test
+# If we leave year as an integer, the lm() function 
+# will treat it as continuous and will calculate statistics for a linear regression. 
+scandens$year &lt;- as.character(scandens$year)</code></pre>
+<p>1.1 Add a comment to your homework script stating the null and
+alternative hypotheses. Make sure to put each hypothesis on its own
+line. Make sure that your alternative hypothesis is 2-tailed.</p>
+<p>1.2 Use <code>dplyr</code>, <code>group_by()</code>,
+<code>summarize()</code> and <code>mutate()</code> to calculate the
+following statistics for each <code>year</code>: + Average, Standard
+Deviation, <span class="math inline">\(\sqrt(n)\)</span>, and the
+Standard Error of the Mean.</p>
+<p>1.2 Use the <code>lm()</code> function to perform a 2-sample t-test
+on whether or not the average <code>blength</code> (in mm) is equal
+between the two years of data.<br />
++ Make sure to save your model-fit as an object, and then use the
+<code>summary()</code> function to print out the results.</p>
+<p>1.3 Add a comment to your script interpreting the results of your
+analysis.</p>
+</div>
+</div>
+<div id="problem-3-paired-t-test" class="section level2">
+<h2>Problem 3: paired t-test</h2>
+<pre class="r"><code>darwin_diff &lt;- darwin %&gt;%
+    group_by(pair) %&gt;%
+    mutate(difference = -diff(height)) %&gt;%
+    select(pair, difference) %&gt;%
+    distinct()</code></pre>
 </div>
 </div>
 

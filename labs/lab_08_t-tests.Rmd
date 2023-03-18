@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(ggplot2)
 bt_samp <- read.csv(here::here("data/body_temp_hr.csv"))
+caterpillar <- read.csv(here::here("data/caterpillar.csv"))
 ```
 
 ## About
@@ -20,6 +21,10 @@ bt_samp <- read.csv(here::here("data/body_temp_hr.csv"))
 This lab will explore formal hypothesis testing by considering classic t-tests from a linear modelling perspective.  
 
 ## Preliminaries 
+
+Recall that the general structure of a t-test is as follows:
+
+$$\large t = \frac{difference}{SE}$$
 
 ### Packages  
 
@@ -33,7 +38,7 @@ library(ggplot2)
 
 ### Data  
 
-For this lab, we will be creating data sets in R. No data needs to be downloaded or read in to R. 
+For the first two parts of this lab, we will be creating data sets in R. For the third part, you will need to download the `caterpillar.csv` from D2L and place it in your `data/` folder.  
 
 # One sample t-test: Stream pH  
 
@@ -58,12 +63,27 @@ $$\epsilon \sim N(0, \sigma)$$
 
 ## Analysis: Manual   
 
-Let's look at some simulated data, and load it into R as a vector. 
+Let's look at some **simulated data**, and load it into R as a vector. 
 
 ```{r}
 # simulated data values
 y <- c(6.2, 6.8, 7.3, 6.4, 6.3)
 ```
+
+First, let's plot the data. For this example, we will use `geom_boxplot()`. Becasue `ggplot()` requires the data object to be a data.frame, we will quickly convert our vector `y` inside of the function. We will also add a dashed line to indicate where our value of interest (7) is.  
+
+```{r}
+ggplot(data = data.frame(y = y), 
+       aes(y = y)) +
+  geom_boxplot() +
+  geom_hline(yintercept = 7,
+             size = 1.5,
+             linetype = "dashed",
+             color = "pink") +
+  theme_bw()
+```
+
+
 
 For the one-sample t-test, we will calculate all necessary variables manually, and then compare it to using the `lm()` function.  
 
@@ -113,7 +133,7 @@ one_samp_p_val
 
 ## Interpretation  
 
-Based on our data, we fail to reject the null hypothesis that stream pH is equal to 7 ($t_{statistic} = -1.96, df = 4, p = 0.12$)
+Based on our data, we estimate that the mean ($\pm$ SE) pH in streams near Grand Junction is 6.6 ($\pm$ `r round(y_sem, 2)`), and we fail to reject the null hypothesis that stream pH is equal to 7 ($t_{statistic} = -1.96, df = 4, p = 0.12$). 
 
 ## Analysis: using `lm()`
 
@@ -154,18 +174,34 @@ tree <- data.frame(
   dens = c(16, 14, 18, 17, 29, 31, 14, 16, 22, 15, 2, 11, 6, 8, 0, 3, 19, 1, 6, 5))
 ```
 
+Here, `dens` is the density of trees, and was simulated for this exercise. Let's once again plot our data to visualize how they are distributed. 
+
+```{r}
+ggplot(tree,
+       aes(x = elevation, 
+           y = dens,
+           fill = elevation))+
+  geom_boxplot() +
+  theme_bw()
+```
+
+
+## Analysis: Manual  
+
 Calculate statistics with dplyr. Recall that for a two-sample t-test we need the:
 
 $$\large t = \frac{\bar{y}_1 -\bar{y}_2}{SEDM}$$
-Where SEDM:
+Where $\bar{y}_1$ and $\bar{y}_2$ are the different experimental groups, and SEDM is the standard error of the difference and is calculated as:
 
 $$\large SEDM = \sqrt{SEM_1^2 + SEM^2_2}$$
 
-And that the $SEM_i$ is caluclated as:
+Where subscript 1 and 2 refer to the different experimental groups, and that the $SEM$ for the $i$^th^ group is calculated as:
 
-$$\large SEM_i = \frac{s}{\sqrt(n)}$$
+$$\large SEM_i = \frac{s_i}{\sqrt(n_i)}$$
 
-To summarize, we need the `mean()`, `sd()` and `sqrt(n())` for each `elevation` group in the data. 
+Where $s$ and $n$ are the standard deviation and sample size for the $i$^th^ group, respectively. 
+
+To summarize, we need the `mean()`, `sd()` and `sqrt(n())` for each `elevation` group in the data. We can complete this using functions from `dplyr` as follows. 
 
 ```{r}
 tree_summary <- tree %>%
@@ -181,7 +217,7 @@ tree_summary
 ```
 
 
-Unfortunately there is not an easy way to calculate the t-statistic using `dplyr`, so we will need to extract the variables individually (when we use the `lm()` all of these steps are automated, but we will continue to calculate it manually so you can see the process). We will use the `data_object[row_number,column_number]` function to subset the values into new variables. This is also why we converted `tree_summary` into a data.frame. 
+Unfortunately there is not an easy way to calculate the t-statistic using `dplyr`, so we will need to extract the variables individually (when we use the `lm()` all of these steps are automated, but we will continue to calculate it manually so you can see the process). Likewise, there is not a simple solution to extract individual variables from a `data.frame` using `dplyr`, so we will use the `data_object[row_number,column_number]` syntax to subset the values into new variables. This is also why we converted `tree_summary` into a `data.frame` in the previous step. 
 
 ```{r}
 y_high <- tree_summary[1,2]
@@ -219,9 +255,9 @@ two_samp_p_val
  
 When you have a really low p-value like this, it's best to round instead of reporting the full value. Reporting the exact value adds a false sense of specificity. The three levels of significance are generally p < 0.05, p < 0.01, and p < 0.001. Here we would just say that the p-value is < 0.001. 
  
- ### Interpretation  
+## Interpretation  
  
-Based on the data, we can reject the null hypothesis and accept the alternative that tree densities are not equal at different elevations ($t_{statistic} = 4.97, df = 18, p < 0.001$). 
+Based on the data, we estimate that the mean ($\pm$ SE) tree density at high and low elevations is `r y_high` ($\pm$ `r round(sem_high,2)`) and  `r y_low` ($\pm$ `r round(sem_low,2)`), respectively. Likewise, we can reject the null hypothesis and accept the alternative that tree densities differ based on elevation ($t_{statistic} = 4.97, df = 18, p < 0.001$). 
 
 ## 2-sample t-test using `lm()`  
 
@@ -231,6 +267,8 @@ The hand calculations for a 2-sample t-test are tedious. Luckily we can run the 
 two_sample_fit <- lm(dens ~ elevation, data = tree)
 summary(two_sample_fit)
 ```
+## Interpreting `lm()` output  
+The summary of the `lm()` has a lot of information. What we are primarily focused on here is the `elevationLow` row. The Estimate represents the *difference* between the two elevation groups. (Since "Low" is in the name, we can deduce that the `(Intercept)` is the estimated value for the other elevation group, "High".) The t-value (4.96) and the p-value (< 0.001) match what we calculated by hand above. There is also an R^2 value, which tells us how much of the variation in response variable (density) is explained by the predictor variable (elevation). In this case, approximately 55% of the variation is explained by elevation (This is rather high for one categorical value, maybe because I simulated these values).
 
 ### **You should now be able to complete problem 2 in the homework assignment**
  
@@ -242,21 +280,135 @@ For this section of the lab, you will need to download the `caterpillar.csv` fil
 
 ```{r, eval=FALSE}
 caterpillar <- read.csv("data/caterpillar.csv")
+
 ```
 
-For a paired t-test, the null hypothesis is that the avergae difference between the two groups is 0. 
+This data is from an experimental treatment assessing the impact of an herbicide on non target caterpillars. 
+
+```{r}
+head(caterpillar)
+```
+
+Plots were arranged in pairs at 12 different locations (`plot_number`). One plot in each pair was randomly selected for treatment with the microbial pesticide *Bacillus thuringiensis* (Bt) (`treatment`). The other plot was untreated and acts as a control. Surveys of non target caterpillars were performed by counting caterpillars on samples of 10,000 leaves on each plot (`caterpillar_count`). 
+
+Because the plots were paired, what we're interested in is the difference in `caterpillar_count` between `bt_herbicide` and `control` plots. If the herbicide had no effect, then we would expect both plot types to have the same number of caterpillars. In other, words, the difference in counts between each plot would be 0. 
+
+Therefore, the null hypothesis is that the average difference ($\mu_d$) between the two groups is 0. 
 
 $$H_0:\large \mu_D = 0$$
+And our alternative hypothesis is that there is a difference between the two groups, or:
+
 $$H_A:\large \mu_D \ne 0$$
 
-For this, we need to calculate the difference between the two treatments. If we look at the way the data is organized, there is not a simple solution using `dplyr` functions. 
+For this, we need to calculate the difference between the two treatments. The way that this data is organized, that means that we need to subtract row 2 from row 1, row 4 from row 3, etc. Based on the `dplyr` functions we've learned so far, there is no simple solution apparent.
 
 ```{r}
 caterpillar
 ```
-Luckily, there is a special helper function called `diff()` that we can use inside of `mutate()`. First, we need to group the data so that it uses the correct numbers. Here, we want to know what the difference is between `treatment` groups *within* each `plot_number`. So we will use `group_by(plot_number)`. 
+
+
+### Data Wrangling  
+
+Luckily, there is a special helper function called `diff()` that we can use inside of `mutate()`. First, we need to group the data so that it uses the correct numbers. Here, we want to know what the effect is within plots, so we will use `group_by(plot_number)`. 
 
 ```{r}
-
+caterpillar %>%
+  group_by(plot_number) %>%
+  mutate(difference = -diff(caterpillar_count))
 ```
 
+We can see that this correctly calculated the difference between `treatment` types *within* `plot_number`, but it has doubled the number of observations (essentially giving a value for each plot:treatment combination, when we only want one observation per plot). We can modify our data pipeline above to `select()` the two columns we are interested in (`plot`, and `difference`) and then use `distinct()` to only keep unique, individual observations. In this step we will also save the output of this data pipeline as a new object which we can use for our formal analysis. 
+
+```{r}
+cat_diff <- caterpillar %>%
+  group_by(plot_number) %>%
+  mutate(difference = -diff(caterpillar_count)) %>%
+  select(plot_number, difference) %>%
+  distinct()
+cat_diff
+```
+
+**REMEMBER** that when you are developing and working out a pipeline like this you should add only one command at a time. For example:
+
+```{r, eval=FALSE}
+# first step
+caterpillar %>%
+  group_by(plot_number)
+# second step
+caterpillar %>%
+  group_by(plot_number) %>%
+  mutate(difference = -diff(caterpillar_count))
+# third step
+caterpillar %>%
+  group_by(plot_number) %>%
+  mutate(difference = -diff(caterpillar_count)) %>%
+  select(plot_number, difference)
+# fourth step
+caterpillar %>%
+  group_by(plot_number) %>%
+  mutate(difference = -diff(caterpillar_count)) %>%
+  select(plot_number, difference) %>%
+  distinct()
+
+# Once you have the desired output, THEN save it as a new object
+cat_diff <- caterpillar %>%
+  group_by(plot_number) %>%
+  mutate(difference = -diff(caterpillar_count)) %>%
+  select(plot_number, difference) %>%
+  distinct()
+```
+
+## Analysis  
+
+Now that we have our a data object which includes the difference between treatments within each plot, we can formally test our hypotheses above using a linear model analysis. 
+
+The structure of the t-test for paired data is:
+
+$$\large t = \frac{\bar{y}_{diff} - 0}{SD_{diff} / \sqrt(n)}$$
+
+For this section, we will skip the manual calculations and just use the `lm()` function. Also recall that the `lm()` function uses a more accurate "pooled" estimate of the standard deviation of the difference which is more tedious to calculate. Another good reason to use the `lm()` function - less chance to make mistakes!
+
+But once again let's start by plotting our data. 
+
+```{r}
+ggplot(cat_diff, 
+       aes(y = difference)) +
+  geom_boxplot() +
+  geom_hline(yintercept = 0,
+             color = "dodgerblue",
+             size = 1.5,
+             linetype = "dashed") +
+  theme_bw()
+  
+```
+
+Because we already calculated the difference between the two treatments, we are fitting an "intercept-only" model as in the one sample t-test at the beginning of lab. However, in this case, our value of interest ($\mu_0$) is 0, which is the default in the `lm()` function, so we do not need to subtract anything from the response side of the formula. 
+
+```{r}
+paired_fit <- lm(difference ~ 1, data = cat_diff)
+summary(paired_fit)
+```
+
+Our estimated intercept ($\pm$ SE) is 1.5 $\pm$ 0.65, and we can reject the null hypothesis and conclude that there was a difference in the number of caterpillars between the two treatments ($t_{statistic} = 2.32, df = 11, p = 0.04$). 
+
+### **You should now be able to complete porblem 3 in the homework assignment.**  
+
+## `lm()` analysis without data wrangling  
+
+This section is supplementary and is not strictly required to complete HW 08.  
+
+For completeness, and to match the example presented in Ch. 6 of *The New Statistics with R*, we could run a paired t-test on the original `caterpillar` data object. In this case, we would designate our response variable `caterpillar_count` and two predictor variables: `treatment` and `plot_number`. In this case, we are assessing the effect of treatment while controlling for the plot_number. This is also known as a "blocking" variable. We will return to analyses with multiple predictor or blocking variables when we discuss ANOVA and linear regression analyses.
+
+Note that we modify the data to treat `plot_number` as a categorical variable using the `as.factor()` function. Becasue the variable is currently an integer, the `lm()` treats it as continuous which is not in fact correct. It's always important to think about the class or type of your individual variables to ensure you are running the analysis that you think you are running. 
+
+```{r}
+summary(lm(caterpillar_count ~ 
+             treatment + as.factor(plot_number),
+           data = caterpillar))
+```
+
+This output is much more crowded and difficult to interpret as it automatically runs a test comparing every `plot_number` to `plot_number == 1`. However, if we ignore those tests and focus on the second line (`treatmentcontrol`), we can see that it is the same results as our `paired_fit` object above. 
+
+## Coda
+
+This concludes lab 08  

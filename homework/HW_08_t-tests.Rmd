@@ -16,12 +16,12 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-
+library(dplyr)
 # data1
-bt_samp <- read.csv("data/body_temp_hr.csv")
+bt_samp <- read.csv(here::here("data/body_temp_hr.csv"))
 
 # data 2
-finch <- read.csv("data/galapago-finches.csv")
+finch <- read.csv(here::here("data/galapago-finches.csv"))
 # filter out scandens data and make a tibble
 scandens <- finch %>%
   filter(species == "scandens") %>%
@@ -34,7 +34,7 @@ scandens <- finch %>%
 scandens$year <- as.character(scandens$year)
 
 # data3
-darwin_maize <- read.csv("data/darwin_maize.csv")
+darwin_maize <- read.csv(here::here("data/darwin_maize.csv"))
 ```
 
 # This assignment will not be graded.
@@ -116,21 +116,32 @@ scandens$year <- as.character(scandens$year)
 1.2 Use `dplyr`, `group_by()`, `summarize()` and `mutate()` to calculate the following statistics for each `year`: 
   + Average, Standard Deviation, $\sqrt(n)$, and the Standard Error of the Mean.  
 
-1.2 Use the `lm()` function to perform a 2-sample t-test on whether or not the average `blength` (in mm) is equal between the two years of data.  
+1.3 Use the `lm()` function to perform a 2-sample t-test on whether or not the average `blength` (in mm) is equal between the two years of data.  
+  + Note that you will be using the `scandens` data for this step, not the summarized data you calculated in 1.2 above.  
   + Make sure to save your model-fit as an object, and then use the `summary()` function to print out the results.  
   
-1.3 Add a comment to your script interpreting the results of your analysis.  
+1.4 Add a comment to your script interpreting the results of your analysis.  
 
 ## Problem 3: paired t-test
 
-```{r}
-darwin_diff <- darwin %>%
-    group_by(pair) %>%
-    mutate(difference = -diff(height)) %>%
-    select(pair, difference) %>%
-    distinct()
+
+### Data: `darwin_maize`  
+
+For this problem, we will be using the `darwin_maize.csv` available on D2L. Download this csv file into your `data/` folder and read it into R. 
+
+```{r, eval = FALSE}
+darwin_maize <- read.csv("data/darwin_maize.csv")
 ```
 
+3.1 Add a comment to your homework script stating the null and alternative hypotheses. Make sure to put each hypothesis on its own line. Make sure that your alternative hypothesis is 2-tailed.   
 
-
-
+3.2. Make a new data object called `darwin_diff` which includes the `difference` in `heights` for each `pair` in the data set. 
+  + As in the lab, the way the data is structured does not make this task simple, but we can use `group_by()` function before using the `-diff()` function inside of `mutate()` to accomplish this.  
+  + See the `caterpillar` example from the lab.  
+  + **Hint** your new object should contain the following columns: `pair` and `difference`.  
+  + Make sure to print out your new `darwin_diff` object at the end of this problem.  
+  
+3.3 Use `lm()` function to formally test your hypothesis.  
+  + Store the output of `lm()` in a new data object, and then use the `summary()` function to print out the results.  
+  
+3.4 Add a comment to your script interpreting the results of your analysis.

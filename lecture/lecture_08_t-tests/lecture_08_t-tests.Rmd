@@ -16,6 +16,16 @@ options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(echo = FALSE, fig.align = 'center', warning=FALSE, message=FALSE, fig.retina = 2)
 
 library(ggplot2)
+
+ldl <- data.frame(subject = factor(c(1:10, 1:10)),
+                  time = factor(rep(c("before", "after"),
+                             each = 10), 
+                             levels = c("before", "after")),
+                  ldl = c(236, 213, 214, 190, 240, 227,
+                          220, 198, 266, 240, 230, 205,
+                          215, 185, 231, 220, 210, 190,
+                          257, 233))
+
 ```
 
 class: inverse
@@ -496,9 +506,8 @@ class: inverse, middle, center
 --
 
 - Examples:  
-  + Are right feet usually longer than left feet?  
-  + Is small mammal density higher before or after the use of prescribed fire?  
-  + Do two methods of measuring tree height yield similar results?  
+  + Does a new pharmaceutical decrease blood cholesterol?  
+  + Is small mammal density higher before or after the use of prescribed fire?  
 
 ---
 # motivation
@@ -506,62 +515,90 @@ class: inverse, middle, center
 <br/>
 <br/>
 
-> Matching is done in a variety of ways, but the object is always to remove extraneous variability from the experiment
----
-# worked example
-
-> Plots were arranged in pairs at 12 different locations. One plot in each pair was randomly selected for treatment with the microbial pesticide *Bacillus thuringiensis* (Bt). The other plot was untreated. Surveys of nontarget caterpillars were performed by counting caterpillars on samples of 10,000 leaves on each plot. Data below are caterpillar counts on each plot, paired by location.  
-```{r tab}
-library(kableExtra)
-tab <- data.frame(Location = 1:12,
-                  Untreated = c(23, 18, 29, 22, 33, 20, 17, 25, 27, 30, 25, 27),
-                  Treated = c(19, 18, 24, 23, 31, 22, 16, 23, 24, 26, 24, 28),
-                  Difference = c(4, 0, 5, -1, 2, -2, 1, 2, 3, 4, 1, -1))
-tab %>%
-  kable("html", align = 'c') %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
-                full_width = F, font_size = 10) %>%
-  scroll_box(height = "300px")
-```
-
----
-# worked example
-
-```{r box2, fig.height=7, fig.width=7}
-untreated <- c(23, 18, 29, 22, 33, 20, 17, 25, 27, 30, 25, 27)
-treated <- c(19, 18, 24, 23, 31, 22, 16, 23, 24, 26, 24, 28)
-#diffs <- c(4,0,5,-1,2,-2,1,2,3,-6,1,-1)
-diffs <- untreated - treated
-#boxplot(untreated, treated)
-#hist(diffs)
-#plot(untreated, treated, asp=1)
-#abline(1, 1)
-boxplot(diffs, #names="Difference between untreated and treated",
-        main="Boxplot of differences", col="tan", cex.lab=1.5,
-        ylab="Caterpillers (Untreated - Treated)")
-#abline(h=0, lty=2, col=4)
-```
-
 ---
 # worked example
 
 #### Hypotheses ( $\large \mu_d$ is the mean difference )
 
-- $\large H_0 :\mu_d = 0$
+- $\large H_0 :\mu_d = 0$
 
-- $\large H_a :\mu_d > 0$
+- $\large H_a :\mu_d \ne 0$  
 
---
+#### *t*-statistic  
+
+$$\large t = \frac{\bar{y}_{Diff} - 0}{SED}$$
+
+---
+# worked example
+
+```{r}
+
+(mean_diff = mean(ldl_diff$difference))
+sd(ldl_diff$difference)
+(se_diff = sd(ldl_diff$difference) / sqrt(10))
+# t-stat
+(t_diff = mean_diff / se_diff)
+# critical
+qt(0.025, df = 9)
+# p-val
+pt(abs(t_diff), df = 9, lower.tail = FALSE) * 2
+
+summary(lm(ldl_diff$difference~1))
+```
+
 
 #### Calculations
 
-- Mean differences: $\large\bar{y}_d = 1.5$  
+- Mean differences: $\large\bar{y}_d = -6.8$  
 
-- Standard deviation of differences: $\large s_d = 2.24$  
+- Standard deviation of differences: $\large s_d = 3.12$  
 
-- Standard error of mean differences: $\large SEM_d = 0.65$  
+- Standard error of mean differences: $\large SEM_d = 0.987$  
 
-- Test statistic: $\large t = 1.5/0.65 = 2.32$, Critical value: $\large t_{0.95,11} = 1.80$
+- Test statistic: $\large t = -6.8/9.82 = -6.893$, Critical value: $\large t_{0.95,10} = -2.26$
+
+- $\large p < 0.001$
+
+---
+# Paired t-test
+
+Blood cholesterol  
+
+Does Pharmaceutical lower LDL levels?
+
+```{r}
+ldl
+ggplot(ldl, 
+       aes(x = time, 
+           y = ldl, 
+           group = subject,
+           color = subject)) +
+  geom_hline(yintercept = c(200, 240), 
+             # 200 = heart healthy
+             # 240 = dangerous
+             linetype = "dashed",
+             size = 1.5, 
+             color = c("black", "red")) +
+  geom_point(color = "black",
+             size = 2,
+             shape = 0) +
+  geom_smooth(method = "lm") +
+  scale_colour_viridis_d()+
+  theme_bw() 
+```
+
+---
+```{r}
+ldl %>%
+  group_by(subject) %>%
+  summarize(difference = diff(ldl)) %>%
+  ggplot(aes(y = difference)) +
+  geom_boxplot(fill = "pink") +
+  geom_hline(yintercept = 0,
+             linetype = "dashed",
+             size = 1.5) +
+  theme_bw()
+```
 
 --
 

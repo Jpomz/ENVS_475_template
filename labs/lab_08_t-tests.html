@@ -11,7 +11,7 @@
 
 
 
-<title>HW07: R Markdown</title>
+<title>Lab 08: t-tests</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -354,139 +354,619 @@ pre code {
 
 
 
-<h1 class="title toc-ignore">HW07: R Markdown</h1>
+<h1 class="title toc-ignore">Lab 08: t-tests</h1>
 <h3 class="subtitle">ENVS475: Experimental Analysis and Design</h3>
-<h4 class="date">March, 2023</h4>
+<h4 class="date">Spring, 2023</h4>
 
 </div>
 
 <div id="TOC">
 <ul>
-<li><a href="#this-assignment-will-not-be-graded">This Assignment will
-not be graded</a>
+<li><a href="#about">About</a></li>
+<li><a href="#preliminaries">Preliminaries</a></li>
+<li><a href="#one-sample-t-test-stream-ph">One sample t-test: Stream
+pH</a>
 <ul>
-<li><a href="#open-a-new-r-markdown-file">Open a new R Markdown
-file</a></li>
-<li><a href="#problem-1-preliminaries">Problem 1: preliminaries</a></li>
-<li><a href="#problem-2-lists">Problem 2: Lists</a></li>
-<li><a href="#problem-3-code-chunks">Problem 3: Code Chunks</a></li>
-<li><a href="#problem-4-equations">Problem 4: Equations</a></li>
-<li><a href="#problem-5-miscellany">Problem 5: Miscellany</a></li>
-<li><a href="#submission">Submission</a></li>
+<li><a href="#formal-hypotheses">Formal Hypotheses</a></li>
+<li><a href="#analysis-manual">Analysis: Manual</a></li>
+<li><a href="#interpretation">Interpretation</a></li>
+<li><a href="#analysis-using-lm">Analysis: using
+<code>lm()</code></a></li>
+</ul></li>
+<li><a href="#two-sample-t-tests-tree-densities">Two-sample t-tests:
+Tree Densities</a>
+<ul>
+<li><a href="#analysis-manual-1">Analysis: Manual</a></li>
+<li><a href="#interpretation-1">Interpretation</a></li>
+<li><a href="#sample-t-test-using-lm">2-sample t-test using
+<code>lm()</code></a></li>
+<li><a href="#interpreting-lm-output">Interpreting <code>lm()</code>
+output</a></li>
+</ul></li>
+<li><a href="#paired-t-tests-herbicide-treatments">Paired t-tests:
+Herbicide Treatments</a>
+<ul>
+<li><a href="#data-1">Data</a></li>
+<li><a href="#analysis">Analysis</a></li>
+<li><a href="#lm-analysis-without-data-wrangling"><code>lm()</code>
+analysis without data wrangling</a></li>
+<li><a href="#coda">Coda</a></li>
 </ul></li>
 </ul>
 </div>
 
-<div id="this-assignment-will-not-be-graded" class="section level1">
-<h1>This Assignment will not be graded</h1>
-<div id="open-a-new-r-markdown-file" class="section level2">
-<h2>Open a new R Markdown file</h2>
-<ul>
-<li><p>Click on
-<code>File -&gt; New File -&gt; R Markdown...</code></p></li>
-<li><p>Enter <code>HW07: intro to R Markdown</code> in the
-<code>title</code> field.</p></li>
-<li><p>Enter your <strong>first</strong> name in the <code>Author</code>
-field.</p></li>
-<li><p>Choose the HTML format</p></li>
-<li><p>Click <code>Ok</code></p></li>
-<li><p>Save the newly created document</p>
-<ul>
-<li>Make sure to follow the file naming convention for homework
-assignments</li>
-</ul></li>
-</ul>
+<div id="about" class="section level2">
+<h2>About</h2>
+<p>This lab will explore formal hypothesis testing by considering
+classic t-tests from a linear modelling perspective.</p>
 </div>
-<div id="problem-1-preliminaries" class="section level2">
-<h2>Problem 1: preliminaries</h2>
-<p>Edit the YAML header in your R Markdown file to include the
+<div id="preliminaries" class="section level2">
+<h2>Preliminaries</h2>
+<p>Recall that the general structure of a t-test is as follows:</p>
+<p><span class="math display">\[\large t =
+\frac{difference}{SE}\]</span></p>
+<div id="packages" class="section level3">
+<h3>Packages</h3>
+<p>For this lab, we will be using the <code>dplyr</code> and
+<code>ggplot2</code> packages. Make sure both packages are installed on
+your computer, and then run the following code:</p>
+<pre class="r"><code>library(dplyr)
+library(ggplot2)</code></pre>
+</div>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<p>For the first two parts of this lab, we will be creating data sets in
+R. For the third part, you will need to download the
+<code>caterpillar.csv</code> from D2L and place it in your
+<code>data/</code> folder.</p>
+</div>
+</div>
+<div id="one-sample-t-test-stream-ph" class="section level1">
+<h1>One sample t-test: Stream pH</h1>
+<p>You may expect that streams around Grand Junction should have an
+approximately neutral pH of 7. Let’s look at some simulated data and
+formally tests whether or not the average stream pH is significantly
+different from 7. Here, the value of interest is <span class="math inline">\(\mu_0 = 7\)</span></p>
+<div id="formal-hypotheses" class="section level2">
+<h2>Formal Hypotheses</h2>
+<p>We can state our hypotheses formally using Null and Alternatives as
+follows:</p>
+<p><span class="math display">\[H_0: \mu = 7\]</span> <span class="math display">\[H_A: \mu \ne 7\]</span></p>
+<p>Since our Alternative hypothesis is <span class="math inline">\(\ne\)</span> this is a 2-tailed test. In other
+words we have to account for the fact that pH could be higher or lower
+than our null value of 7.</p>
+<p>We can express this as a simple linear model:</p>
+<p><span class="math display">\[y_i = \mu + \epsilon_i\]</span> where
+<span class="math inline">\(y_i\)</span> is a single observation of
+stream pH, <span class="math inline">\(\mu\)</span> is the population
+mean, and <span class="math inline">\(\epsilon_i\)</span> is the
+deviation from the expected value. Further, we expect the deviations to
+be distributed normally:</p>
+<p><span class="math display">\[\epsilon \sim N(0, \sigma)\]</span></p>
+</div>
+<div id="analysis-manual" class="section level2">
+<h2>Analysis: Manual</h2>
+<p>Let’s look at some <strong>simulated data</strong>, and load it into
+R as a vector.</p>
+<pre class="r"><code># simulated data values
+y &lt;- c(6.2, 6.8, 7.3, 6.4, 6.3)</code></pre>
+<p>For the one-sample t-test, we will calculate all necessary variables
+manually, and then compare it to using the <code>lm()</code>
+function.</p>
+<p>Recall that we calculate a one-sample t-statistic with the
 following:</p>
-<ol style="list-style-type: upper-alpha">
-<li>Enter your full name in the author field<br />
-</li>
-<li>Add the code to include a table of contents with
-<code>toc_depth : 2</code><br />
-</li>
-<li>Add a level 1 Header called “My level 1 header”<br />
-</li>
-<li>Add a level 2 Header called “My level 2 header”<br />
-</li>
-<li>Add a level 3 Header called “My level 3 header”<br />
-</li>
-<li>click <code>Knit</code> to ensure that an html document is
-created.<br />
-</li>
-</ol>
-<ul>
-<li>Double check that the author field is correct</li>
-<li>Make sure that you have three headers, one of each level (1-3)</li>
-<li>Make sure that the table of contents at the top of your document
-<em>only</em> includes the first two levels.</li>
-</ul>
-<p><strong>NOTE</strong> You may want to <code>knit</code> your document
-after you complete each problem to ensure that the out put format is
-correct.</p>
+<p><span class="math display">\[t_{statistic} =\frac{\bar{y} - \mu_{0}
+}{SEM_y}\]</span></p>
+<p>Where <span class="math inline">\(\bar{y}\)</span> is the mean, <span class="math inline">\(\mu_0\)</span> is the value of interest (pH = 7)
+and <span class="math inline">\(SEM\)</span> is calculated as <span class="math inline">\(s / \sqrt(n)\)</span>. Let’s calculate these
+values in R and store them as objects.</p>
+<pre class="r"><code>y_bar &lt;- mean(y)
+y_bar</code></pre>
+<pre><code>## [1] 6.6</code></pre>
+<pre class="r"><code>mu_0 &lt;- 7
+mu_0</code></pre>
+<pre><code>## [1] 7</code></pre>
+<pre class="r"><code>y_sd &lt;- sd(y)
+y_sd</code></pre>
+<pre><code>## [1] 0.4527693</code></pre>
+<pre class="r"><code>y_sem &lt;- y_sd / sqrt(length(y))
+y_sem</code></pre>
+<pre><code>## [1] 0.2024846</code></pre>
+<p>Now let’s calculate the t-statistic</p>
+<pre class="r"><code>t_stat &lt;- (y_bar - mu_0) / y_sem
+t_stat</code></pre>
+<pre><code>## [1] -1.975459</code></pre>
+<p>Now we need to calculate the t-critical value for this
+t-distribution. We can use the <code>qt()</code> function. This is
+similar to the <code>qnorm()</code> function we used previously for the
+normal distribution, but now we are looking at the t-distribution. for
+<code>qt()</code>, we need to supply the quantile (0.025) and the
+degrees of freedom (df = n - 1 = 4). The standard <span class="math inline">\(\alpha\)</span> value is 0.05, but since this is a
+2-tailed test we have to divide it by 2 (hence 0.025) in order to
+account for both tails.</p>
+<pre class="r"><code>t_crit &lt;- qt(0.025, df = 4)
+round(t_crit, 2)</code></pre>
+<pre><code>## [1] -2.78</code></pre>
+<p>Is our <code>t_stat</code> value <span class="math inline">\(\ge\)</span> our critical value? Note that we are
+going to use the absolute values so that we do not need to worry about
+using the proper &gt; or &lt; with negative numbers.</p>
+<pre class="r"><code>abs(t_stat) &gt; abs(t_crit)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<p>It is not, so we would fail to reject our null hypothesis. We can
+also calculate a p-value for our <code>t_critical</code> value by using
+the <code>pt()</code> function. We first calculate the probability of
+observing out <code>t_stat</code>, and then multiply it by 2 since this
+is a 2-tailed test. Also, we are going to use the absolute value of our
+<code>t_stat</code> and set the <code>lower.tail = FALSE</code> argument
+within <code>pt()</code>. This ensures that we don’t need to worry about
+mixing up our + and - signs when calculating a p-value.</p>
+<pre class="r"><code>one_samp_p_val &lt;- pt(abs(t_stat), df = 4, lower.tail = FALSE) * 2
+one_samp_p_val</code></pre>
+<pre><code>## [1] 0.1194206</code></pre>
 </div>
-<div id="problem-2-lists" class="section level2">
-<h2>Problem 2: Lists</h2>
-<ol style="list-style-type: upper-alpha">
-<li>Create a level 1 header titled “Problem 2: Lists”.</li>
-<li>Create a level 2 header titled “My favorite animals”. Then create a
-numbered list, ranking your top three favorite animals.</li>
-<li>Create a level 2 header called “Why use R Markdown?”. Then make a
-bulleted list (min 3 bullets) with a few of the benefits for using R
-Markdown.</li>
-<li>Create a level 2 header called “Sub bulleted list”. Then create a
-bulleted list (min 2 main bullets) with some of your favorite hobbies.
-For each main bullet, add at least one sub bullet briefly explaining why
-you like that hobby.</li>
-</ol>
+<div id="interpretation" class="section level2">
+<h2>Interpretation</h2>
+<p>Based on our data, we estimate that the mean (<span class="math inline">\(\pm\)</span> SE) pH in streams near Grand Junction
+is 6.6 (<span class="math inline">\(\pm\)</span> 0.2), and we fail to
+reject the null hypothesis that stream pH is equal to 7 (<span class="math inline">\(t_{statistic} = -1.96, df = 4, p =
+0.12\)</span>).</p>
 </div>
-<div id="problem-3-code-chunks" class="section level2">
-<h2>Problem 3: Code Chunks</h2>
-<ol style="list-style-type: upper-alpha">
-<li>Create a level 1 header titled “Problem 3: Code Chunks”.</li>
-<li>Create a code chunk and set the chunk options to ensure that the
-code runs but is not shown in the html document. Inside of the chunk,
-copy the following line of code: <code>date &lt;- Sys.Date()</code></li>
-<li>Below the code chunk created above, type “I completed this
-assignment on:” and then include inline code that prints the
-<code>date</code> object you created in the chunk above</li>
-</ol>
+<div id="analysis-using-lm" class="section level2">
+<h2>Analysis: using <code>lm()</code></h2>
+<p>We can use the <code>lm()</code> function to automatically calculate
+our values and test the hypothesis formally.</p>
+<p>Recall that <code>y</code> is our observations of data, and our null
+value is 7. When we run a one-sample t-test in <code>lm()</code>, we
+have to subtract the value of interest from our data. Review the
+numerator in the formula for the one-sample t-statistic above.</p>
+<pre class="r"><code>one_sample_fit &lt;- lm(y - mu_0 ~ 1)
+summary(one_sample_fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = y - mu_0 ~ 1)
+## 
+## Residuals:
+##    1    2    3    4    5 
+## -0.4  0.2  0.7 -0.2 -0.3 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)  -0.4000     0.2025  -1.975    0.119
+## 
+## Residual standard error: 0.4528 on 4 degrees of freedom</code></pre>
+<p>We can also reprint the values we calculated by hand and locate them
+in the output table (note that we are subtracting mu_0 from y_bar to put
+it on the same scale as our <code>(Intercept)</code> estimate in the
+table):</p>
+<pre class="r"><code>y_bar - mu_0</code></pre>
+<pre><code>## [1] -0.4</code></pre>
+<pre class="r"><code>y_sd</code></pre>
+<pre><code>## [1] 0.4527693</code></pre>
+<pre class="r"><code>y_sem</code></pre>
+<pre><code>## [1] 0.2024846</code></pre>
+<pre class="r"><code>t_crit</code></pre>
+<pre><code>## [1] -2.776445</code></pre>
+<pre class="r"><code>one_samp_p_val</code></pre>
+<pre><code>## [1] 0.1194206</code></pre>
+<div id="you-should-now-be-able-to-complete-problem-1-in-the-homework-assignment" class="section level3">
+<h3><strong>You should now be able to complete problem 1 in the homework
+assignment</strong></h3>
 </div>
-<div id="problem-4-equations" class="section level2">
-<h2>Problem 4: Equations</h2>
-<ol style="list-style-type: upper-alpha">
-<li>Create a level 1 header titled “Problem 4: Equations”.</li>
-<li>Create an inline equation which produces the following: <span class="math inline">\(x \sim Normal(\mu = 0, \sigma = 1)\)</span></li>
-</ol>
-<ul>
-<li><strong>hint</strong> the <span class="math inline">\(\sim\)</span>
-symbol can be added by typing <code>\sim</code></li>
-</ul>
-<ol start="3" style="list-style-type: upper-alpha">
-<li>Create a block equation for a simple linear model. Your equation
-should look like this:</li>
-</ol>
-<p><span class="math display">\[ Y = \beta_0 + \beta_1 * X \]</span></p>
 </div>
-<div id="problem-5-miscellany" class="section level2">
-<h2>Problem 5: Miscellany</h2>
-<ol style="list-style-type: upper-alpha">
-<li>Create a level 1 header titled “Problem 5: Miscellany”.</li>
-<li>Make a line with the following: “My CMU email address is:”. Then,
-include your email address as a hyperlink.</li>
-<li>Include a line of text which includes at least one
-<strong>bold</strong> and one <em>italicized</em> word. Also be sure to
-include one subscript and one superscript.</li>
-</ol>
 </div>
-<div id="submission" class="section level2">
-<h2>Submission</h2>
-<p>Once your homework file is completed, you will need to knit the
-document into an html. <strong>Be sure to go over the rendered document
-to see if all the answer formats are correct.</strong></p>
-<p>For credit, you will submit both the .Rmd and .html files on D2L.</p>
+<div id="two-sample-t-tests-tree-densities" class="section level1">
+<h1>Two-sample t-tests: Tree Densities</h1>
+<p>Is the density of trees at high elevations different from low
+elevations?</p>
+<p><span class="math display">\[H_0: \mu_{high} = \mu_{low}\]</span>
+<span class="math display">\[H_A: \mu_{high} \ne \mu_{low}\]</span> ##
+Data</p>
+<p>We will make a data.frame of the data and call it
+<code>tree</code>.</p>
+<pre class="r"><code>tree &lt;- data.frame(
+  elevation = rep(c(&quot;Low&quot;, &quot;High&quot;), each = 10),
+  dens = c(16, 14, 18, 17, 29, 31, 14, 16, 22, 15, 2, 11, 6, 8, 0, 3, 19, 1, 6, 5))</code></pre>
+<p>Here, <code>dens</code> is the density of trees, and was simulated
+for this exercise.</p>
+<div id="analysis-manual-1" class="section level2">
+<h2>Analysis: Manual</h2>
+<p>Calculate statistics with dplyr. Recall that for a two-sample t-test
+we need the:</p>
+<p><span class="math display">\[\large t = \frac{\bar{y}_1
+-\bar{y}_2}{SEDM}\]</span> Where <span class="math inline">\(\bar{y}_1\)</span> and <span class="math inline">\(\bar{y}_2\)</span> are the different experimental
+groups, and SEDM is the standard error of the difference and is
+calculated as:</p>
+<p><span class="math display">\[\large SEDM = \sqrt{SEM_1^2 +
+SEM^2_2}\]</span></p>
+<p>Where subscript 1 and 2 refer to the different experimental groups,
+and that the <span class="math inline">\(SEM\)</span> for the <span class="math inline">\(i\)</span><sup>th</sup> group is calculated
+as:</p>
+<p><span class="math display">\[\large SEM_i =
+\frac{s_i}{\sqrt(n_i)}\]</span></p>
+<p>Where <span class="math inline">\(s\)</span> and <span class="math inline">\(n\)</span> are the standard deviation and sample
+size for the <span class="math inline">\(i\)</span><sup>th</sup> group,
+respectively.</p>
+<p>To summarize, we need the <code>mean()</code>, <code>sd()</code> and
+<code>sqrt(n())</code> for each <code>elevation</code> group in the
+data. We can complete this using functions from <code>dplyr</code> as
+follows.</p>
+<pre class="r"><code>tree_summary &lt;- tree %&gt;%
+  group_by(elevation) %&gt;%
+  summarise(mean_density = mean(dens),
+            sd_density = sd(dens),
+            sqrt_n = sqrt(n())) %&gt;%
+  mutate(sem = sd_density / sqrt_n) %&gt;%
+  # change it from a tibble to a data.frame to make
+  # next steps easier
+  as.data.frame()
+tree_summary</code></pre>
+<pre><code>##   elevation mean_density sd_density   sqrt_n      sem
+## 1      High          6.1   5.626327 3.162278 1.779201
+## 2       Low         19.2   6.160808 3.162278 1.948219</code></pre>
+<p>Unfortunately there is not an easy way to calculate the t-statistic
+using <code>dplyr</code>, so we will need to extract the variables
+individually (when we use the <code>lm()</code> all of these steps are
+automated, but we will continue to calculate it manually so you can see
+the process). Likewise, there is not a simple solution to extract
+individual variables from a <code>data.frame</code> using
+<code>dplyr</code>, so we will use the
+<code>data_object[row_number,column_number]</code> syntax to subset the
+values into new variables. This is also why we converted
+<code>tree_summary</code> into a <code>data.frame</code> in the previous
+step.</p>
+<pre class="r"><code>y_high &lt;- tree_summary[1,2]
+y_high</code></pre>
+<pre><code>## [1] 6.1</code></pre>
+<pre class="r"><code>y_low &lt;- tree_summary[2,2]
+y_low</code></pre>
+<pre><code>## [1] 19.2</code></pre>
+<pre class="r"><code>sem_high &lt;- tree_summary[1,5]
+sem_high</code></pre>
+<pre><code>## [1] 1.779201</code></pre>
+<pre class="r"><code>sem_low &lt;- tree_summary[2,5]
+sem_low</code></pre>
+<pre><code>## [1] 1.948219</code></pre>
+<pre class="r"><code>t_stat_trees &lt;- (y_low - y_high) / sqrt(sem_high^2 + sem_low^2)
+t_stat_trees</code></pre>
+<pre><code>## [1] 4.965146</code></pre>
+<p>Now that we have a t-statistic, we need to calculate our t-critical
+value to compare it with and decide if we can formally rejct or fail to
+reject our null hypothesis. To calculate the t-critical value, we will
+once again use <code>qt()</code> funciton. Our degrees of freedom here
+is 18 (total n = 20, but we need to subtract 1 for each group: 20 - (1 +
+1) = 18).</p>
+<pre class="r"><code>t_crit_trees &lt;- qt(0.025, df = 18)
+t_crit_trees</code></pre>
+<pre><code>## [1] -2.100922</code></pre>
+<p>To compare our t-critical and t-statistic, we will once again use the
+absolute values to avoid mixing up our signs.</p>
+<pre class="r"><code>abs(t_stat_trees) &gt; abs(t_crit_trees)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>two_samp_p_val &lt;- pt(abs(t_stat_trees), df = 18, lower.tail = FALSE) * 2
+two_samp_p_val</code></pre>
+<pre><code>## [1] 0.0001001215</code></pre>
+<p>When you have a really low p-value like this, it’s best to round
+instead of reporting the full value. Reporting the exact value adds a
+false sense of specificity. The three levels of significance are
+generally p &lt; 0.05, p &lt; 0.01, and p &lt; 0.001. Here we would just
+say that the p-value is &lt; 0.001.</p>
+</div>
+<div id="interpretation-1" class="section level2">
+<h2>Interpretation</h2>
+<p>Based on the data, we estimate that the mean (<span class="math inline">\(\pm\)</span> SE) tree density at high and low
+elevations is 6.1 (<span class="math inline">\(\pm\)</span> 1.78) and
+19.2 (<span class="math inline">\(\pm\)</span> 1.95), respectively.
+Likewise, we can reject the null hypothesis and accept the alternative
+that tree densities differ based on elevation (<span class="math inline">\(t_{statistic} = 4.97, df = 18, p &lt;
+0.001\)</span>).</p>
+</div>
+<div id="sample-t-test-using-lm" class="section level2">
+<h2>2-sample t-test using <code>lm()</code></h2>
+<p>The hand calculations for a 2-sample t-test are tedious. Luckily we
+can run the same analysis in just a few lines of code using the
+<code>lm()</code> function.</p>
+<pre class="r"><code>two_sample_fit &lt;- lm(dens ~ elevation, data = tree)
+summary(two_sample_fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = dens ~ elevation, data = tree)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -6.100 -4.125 -1.700  2.125 12.900 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)     6.100      1.866   3.270  0.00426 ** 
+## elevationLow   13.100      2.638   4.965  0.00010 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 5.9 on 18 degrees of freedom
+## Multiple R-squared:  0.578,  Adjusted R-squared:  0.5545 
+## F-statistic: 24.65 on 1 and 18 DF,  p-value: 0.0001001</code></pre>
+</div>
+<div id="interpreting-lm-output" class="section level2">
+<h2>Interpreting <code>lm()</code> output</h2>
+<p>The summary of the <code>lm()</code> has a lot of information. What
+we are primarily focused on here is the <code>elevationLow</code> row.
+The Estimate represents the <em>difference</em> between the two
+elevation groups. (Since “Low” is in the name, we can deduce that the
+<code>(Intercept)</code> is the estimated value for the other elevation
+group, “High”.) The t-value (4.96) and the p-value (&lt; 0.001) match
+what we calculated by hand above. There is also an R^2 value, which
+tells us how much of the variation in response variable (density) is
+explained by the predictor variable (elevation). In this case,
+approximately 55% of the variation is explained by elevation (This is
+rather high for one categorical value, maybe because I simulated these
+values).</p>
+<div id="you-should-now-be-able-to-complete-problem-2-in-the-homework-assignment" class="section level3">
+<h3><strong>You should now be able to complete problem 2 in the homework
+assignment</strong></h3>
+</div>
+</div>
+</div>
+<div id="paired-t-tests-herbicide-treatments" class="section level1">
+<h1>Paired t-tests: Herbicide Treatments</h1>
+<div id="data-1" class="section level2">
+<h2>Data</h2>
+<p>For this section of the lab, you will need to download the
+<code>caterpillar.csv</code> file from D2L.</p>
+<pre class="r"><code>caterpillar &lt;- read.csv(&quot;data/caterpillar.csv&quot;)</code></pre>
+<p>This data is from an experimental treatment assessing the impact of
+an herbicide on non target caterpillars.</p>
+<pre class="r"><code>head(caterpillar)</code></pre>
+<pre><code>##   plot_number    treatment caterpillar_count
+## 1           1      control                23
+## 2           1 bt_herbicide                19
+## 3           2      control                18
+## 4           2 bt_herbicide                18
+## 5           3      control                29
+## 6           3 bt_herbicide                24</code></pre>
+<p>Plots were arranged in pairs at 12 different locations
+(<code>plot_number</code>). One plot in each pair was randomly selected
+for treatment with the microbial pesticide <em>Bacillus
+thuringiensis</em> (Bt) (<code>treatment</code>). The other plot was
+untreated and acts as a control. Surveys of non target caterpillars were
+performed by counting caterpillars on samples of 10,000 leaves on each
+plot (<code>caterpillar_count</code>).</p>
+<p>Because the plots were paired, what we’re interested in is the
+difference in <code>caterpillar_count</code> between
+<code>bt_herbicide</code> and <code>control</code> plots. If the
+herbicide had no effect, then we would expect both plot types to have
+the same number of caterpillars. In other, words, the difference in
+counts between each plot would be 0.</p>
+<p>Therefore, the null hypothesis is that the average difference (<span class="math inline">\(\mu_d\)</span>) between the two groups is 0.</p>
+<p><span class="math display">\[H_0:\large \mu_D = 0\]</span> And our
+alternative hypothesis is that there is a difference between the two
+groups, or:</p>
+<p><span class="math display">\[H_A:\large \mu_D \ne 0\]</span></p>
+<p>For this, we need to calculate the difference between the two
+treatments. The way that this data is organized, that means that we need
+to subtract row 2 from row 1, row 4 from row 3, etc. Based on the
+<code>dplyr</code> functions we’ve learned so far, there is no simple
+solution apparent.</p>
+<pre class="r"><code>caterpillar</code></pre>
+<pre><code>##    plot_number    treatment caterpillar_count
+## 1            1      control                23
+## 2            1 bt_herbicide                19
+## 3            2      control                18
+## 4            2 bt_herbicide                18
+## 5            3      control                29
+## 6            3 bt_herbicide                24
+## 7            4      control                22
+## 8            4 bt_herbicide                23
+## 9            5      control                33
+## 10           5 bt_herbicide                31
+## 11           6      control                20
+## 12           6 bt_herbicide                22
+## 13           7      control                17
+## 14           7 bt_herbicide                16
+## 15           8      control                25
+## 16           8 bt_herbicide                23
+## 17           9      control                27
+## 18           9 bt_herbicide                24
+## 19          10      control                30
+## 20          10 bt_herbicide                26
+## 21          11      control                25
+## 22          11 bt_herbicide                24
+## 23          12      control                27
+## 24          12 bt_herbicide                28</code></pre>
+<p>Luckily, there is a special helper function called
+<code>diff()</code> that we can use inside of <code>mutate()</code>.
+First, we need to group the data so that it uses the correct numbers.
+Here, we want to know what the effect is within plots, so we will use
+<code>group_by(plot_number)</code>.</p>
+<pre class="r"><code>caterpillar %&gt;%
+  group_by(plot_number) %&gt;%
+  mutate(difference = -diff(caterpillar_count))</code></pre>
+<pre><code>## # A tibble: 24 × 4
+## # Groups:   plot_number [12]
+##    plot_number treatment    caterpillar_count difference
+##          &lt;int&gt; &lt;chr&gt;                    &lt;int&gt;      &lt;int&gt;
+##  1           1 control                     23          4
+##  2           1 bt_herbicide                19          4
+##  3           2 control                     18          0
+##  4           2 bt_herbicide                18          0
+##  5           3 control                     29          5
+##  6           3 bt_herbicide                24          5
+##  7           4 control                     22         -1
+##  8           4 bt_herbicide                23         -1
+##  9           5 control                     33          2
+## 10           5 bt_herbicide                31          2
+## # … with 14 more rows</code></pre>
+<p>We can see that this correctly calculated the difference between
+<code>treatment</code> types <em>within</em> <code>plot_number</code>,
+but it has doubled the number of observations (essentially giving a
+value for each plot:treatment combination, when we only want one
+observation per plot). We can modify our data pipeline above to
+<code>select()</code> the two columns we are interested in
+(<code>plot</code>, and <code>difference</code>) and then use
+<code>distinct()</code> to only keep unique, individual observations. In
+this step we will also save the output of this data pipeline as a new
+object which we can use for our formal analysis.</p>
+<pre class="r"><code>cat_diff &lt;- caterpillar %&gt;%
+  group_by(plot_number) %&gt;%
+  mutate(difference = -diff(caterpillar_count)) %&gt;%
+  select(plot_number, difference) %&gt;%
+  distinct()
+cat_diff</code></pre>
+<pre><code>## # A tibble: 12 × 2
+## # Groups:   plot_number [12]
+##    plot_number difference
+##          &lt;int&gt;      &lt;int&gt;
+##  1           1          4
+##  2           2          0
+##  3           3          5
+##  4           4         -1
+##  5           5          2
+##  6           6         -2
+##  7           7          1
+##  8           8          2
+##  9           9          3
+## 10          10          4
+## 11          11          1
+## 12          12         -1</code></pre>
+<p><strong>REMEMBER</strong> that when you are developing and working
+out a pipeline like this you should add only one command at a time. For
+example:</p>
+<pre class="r"><code># first step
+caterpillar %&gt;%
+  group_by(plot_number)
+# second step
+caterpillar %&gt;%
+  group_by(plot_number) %&gt;%
+  mutate(difference = -diff(caterpillar_count))
+# third step
+caterpillar %&gt;%
+  group_by(plot_number) %&gt;%
+  mutate(difference = -diff(caterpillar_count)) %&gt;%
+  select(plot_number, difference)
+# fourth step
+caterpillar %&gt;%
+  group_by(plot_number) %&gt;%
+  mutate(difference = -diff(caterpillar_count)) %&gt;%
+  select(plot_number, difference) %&gt;%
+  distinct()
+
+# Once you have the desired output, THEN save it as a new object
+cat_diff &lt;- caterpillar %&gt;%
+  group_by(plot_number) %&gt;%
+  mutate(difference = -diff(caterpillar_count)) %&gt;%
+  select(plot_number, difference) %&gt;%
+  distinct()</code></pre>
+</div>
+<div id="analysis" class="section level2">
+<h2>Analysis</h2>
+<p>Now that we have our a data object which includes the difference
+between treatments within each plot, we can formally test our hypotheses
+above using a linear model analysis.</p>
+<p>The structure of the t-test for paired data is:</p>
+<p><span class="math display">\[\large t = \frac{\bar{y}_{diff} -
+0}{SD_{diff} / \sqrt(n)}\]</span></p>
+<p>For this section, we will skip the manual calculations and just use
+the <code>lm()</code> function. Also recall that the <code>lm()</code>
+function uses a more accurate “pooled” estimate of the standard
+deviation of the difference which is more tedious to calculate. Another
+good reason to use the <code>lm()</code> function - less chance to make
+mistakes!</p>
+<p>Because we already calculated the difference between the two
+treatments, we are fitting an “intercept-only” model as in the one
+sample t-test at the beginning of lab. However, in this case, our value
+of interest (<span class="math inline">\(\mu_0\)</span>) is 0, which is
+the default in the <code>lm()</code> function, so we do not need to
+subtract anything from the response side of the formula.</p>
+<pre class="r"><code>paired_fit &lt;- lm(difference ~ 1, data = cat_diff)
+summary(paired_fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = difference ~ 1, data = cat_diff)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+##  -3.50  -1.75   0.00   1.75   3.50 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)   1.5000     0.6455   2.324   0.0403 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.236 on 11 degrees of freedom</code></pre>
+<p>Our estimated intercept (<span class="math inline">\(\pm\)</span> SE)
+is 1.5 <span class="math inline">\(\pm\)</span> 0.65, and we can reject
+the null hypothesis and conclude that there was a difference in the
+number of caterpillars between the two treatments (<span class="math inline">\(t_{statistic} = 2.32, df = 11, p =
+0.04\)</span>).</p>
+<div id="you-should-now-be-able-to-complete-porblem-3-in-the-homework-assignment." class="section level3">
+<h3><strong>You should now be able to complete porblem 3 in the homework
+assignment.</strong></h3>
+</div>
+</div>
+<div id="lm-analysis-without-data-wrangling" class="section level2">
+<h2><code>lm()</code> analysis without data wrangling</h2>
+<p>This section is supplementary and is not strictly required to
+complete HW 08.</p>
+<p>For completeness, and to match the example presented in Ch. 6 of
+<em>The New Statistics with R</em>, we could run a paired t-test on the
+original <code>caterpillar</code> data object. In this case, we would
+designate our response variable <code>caterpillar_count</code> and two
+predictor variables: <code>treatment</code> and
+<code>plot_number</code>. In this case, we are assessing the effect of
+treatment while controlling for the plot_number. This is also known as a
+“blocking” variable. We will return to analyses with multiple predictor
+or blocking variables when we discuss ANOVA and linear regression
+analyses.</p>
+<p>Note that we modify the data to treat <code>plot_number</code> as a
+categorical variable using the <code>as.factor()</code> function.
+Becasue the variable is currently an integer, the <code>lm()</code>
+treats it as continuous which is not in fact correct. It’s always
+important to think about the class or type of your individual variables
+to ensure you are running the analysis that you think you are
+running.</p>
+<pre class="r"><code>summary(lm(caterpillar_count ~ 
+             treatment + as.factor(plot_number),
+           data = caterpillar))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = caterpillar_count ~ treatment + as.factor(plot_number), 
+##     data = caterpillar)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -1.750 -0.875  0.000  0.875  1.750 
+## 
+## Coefficients:
+##                            Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)               2.025e+01  1.164e+00  17.402 2.37e-09 ***
+## treatmentcontrol          1.500e+00  6.455e-01   2.324  0.04031 *  
+## as.factor(plot_number)2  -3.000e+00  1.581e+00  -1.897  0.08433 .  
+## as.factor(plot_number)3   5.500e+00  1.581e+00   3.479  0.00516 ** 
+## as.factor(plot_number)4   1.500e+00  1.581e+00   0.949  0.36316    
+## as.factor(plot_number)5   1.100e+01  1.581e+00   6.957 2.40e-05 ***
+## as.factor(plot_number)6  -2.182e-14  1.581e+00   0.000  1.00000    
+## as.factor(plot_number)7  -4.500e+00  1.581e+00  -2.846  0.01591 *  
+## as.factor(plot_number)8   3.000e+00  1.581e+00   1.897  0.08433 .  
+## as.factor(plot_number)9   4.500e+00  1.581e+00   2.846  0.01591 *  
+## as.factor(plot_number)10  7.000e+00  1.581e+00   4.427  0.00102 ** 
+## as.factor(plot_number)11  3.500e+00  1.581e+00   2.214  0.04891 *  
+## as.factor(plot_number)12  6.500e+00  1.581e+00   4.111  0.00173 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.581 on 11 degrees of freedom
+## Multiple R-squared:  0.9412, Adjusted R-squared:  0.8771 
+## F-statistic: 14.68 on 12 and 11 DF,  p-value: 4.544e-05</code></pre>
+<p>This output is much more crowded and difficult to interpret as it
+automatically runs a test comparing every <code>plot_number</code> to
+<code>plot_number == 1</code>. However, if we ignore those tests and
+focus on the second line (<code>treatmentcontrol</code>), we can see
+that it is the same results as our <code>paired_fit</code> object
+above.</p>
+</div>
+<div id="coda" class="section level2">
+<h2>Coda</h2>
+<p>This concludes lab 08</p>
 </div>
 </div>
 
