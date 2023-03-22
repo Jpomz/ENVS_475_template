@@ -1,0 +1,223 @@
+---
+title: "ENVS475 Homework 10: ANOVA"
+subtitle: "Graded"
+date: "Spring, 2023"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+   warning = FALSE, message = FALSE,
+   eval = FALSE,
+   fig.align = 'center', fig.retina = 2,
+  collapse = TRUE,
+  comment = "#>"
+)
+library(dplyr)
+library(ggplot2)
+crop <- read.csv(here::here("data/crop_anova.csv"))
+
+```
+
+# This assignment will be graded.
+
+# Assignment Format
+
+* Open a new R script
+* Save your R script in the `homework/` folder
+* Name your script according to: `full_name_hw##.R`
+  + For example: `justin_pomeranz_hw10.R`
+* Comment before each problem, and each sub-problem
+* Make sure your results print out on `Source with echo`
+  + If you're answer is saved in an object, make sure you print out that object afterwards
+  
+# Setup
+
+## Load packages
+
+```{r, eval=FALSE}
+# load libraries
+library(dplyr)
+library(ggplot2)
+```
+
+# Data
+
+## Download the data and read into R
+
+1) Problem 1 will use the "crop_anova.csv" data set on D2L  
+2) Problem 2 will use the `OrchardSprays` data set pre built into R.  
+
+```{r, eval = FALSE}
+# read in data
+crop <- read.csv("data/crop_anova.csv")
+```
+
+
+# Exercises Homework 10: One-way ANOVA
+
+## Problem 1: `crop_anova.csv`
+
+An experiment on the effects of fertilizer addition on the yield (in kg) of crops. Agricultural fields received one of three treatments: control (no fertilizer), Nitrogen addition, or Phosphorous addition. This experimental design has a single factor (`fertilizer`) with three levels (`control`, `N`, `P`). 
+
+For this problem, I will not be asking you to print out the names, dimensions, etc. of this data set as a question, but you should always be in the habit of doing that whenever you load a new data object.  
+
+We will be formally testing whether there is at least one inequality between the three groups.  
+
+## data wrangling 
+
+For this analysis, we will only be looking at the "low" `density` plantings and will also be ignoring the `block` variable (we will use these variables in a future assignment). 
+
+Enter the following code into your script and run it:
+
+```{r, eval = FALSE}
+crop1 <- crop %>%
+  filter(density == "low") %>%
+  select(fertilizer, yield)
+```
+
+1.1 Add a comment to your homework script stating the null and alternative hypotheses for a one-way ANOVA.  
+
+1.2 Make a plot of all the observations of yield, ignoring any other grouping variables. Be sure to include a box plot and the raw data points.    
+
+1.3 Make a plot of the yield separated by fertilizer treatment. Be sure to include a box plot and the raw observations. 
+
+1.4 Based on the box plots made in question 1.3, add a comment to your script interpreting the assumption of equal variance. Do these data appear to have equal variation between the groups? Why or why not?
+
+1.5 Check the assumption of the normality of residuals by making a QQ-plot of this data.  
+
+1.6 Add a comment to your script interpreting the QQ-plot you made in 1.5 above. Does it appear that the residuals are normally distributed? Why or why not?  
+
+1.7 Use `lm()` to fit a model to formally test the effect of fertilizer treatment on plant yield. Save your model fit as a new object (i.e., `crop_lm`)  
+
+1.8 Before we look at the model output, let's make a fitted vs. residual plot to check our last assumption: Equal variance of residuals.  
+
+  * Use the model-fit object you made in 1.7 above to make a fitted vs residual plot.  
+  
+1.9 Add a comment to Interpret the plot made in 1.8. Does this model appear to have equal variance in the residuals? Why or why not?  
+
+1.10 Now, use the `anova()` function on your model fit object created in 1.7 above to print out an ANOVA table in your output.  
+1.11 Add a comment to your script and manually type out the following values from the table.  
+  
+  * The two degrees of freedom  
+  
+  * The mean square of the among-group variation (treatment effect)  
+  
+  * The Mean square of the unexplained variation (the residual, or the "noise")  
+  
+  * The F-value  
+  
+  * The p-value (rounded if necessary)  
+  
+1.12 Add a comment to your script interpreting the results of our one-way ANOVA analysis. Do we reject or fail to reject our null hypothesis? Make sure to include all the appropriate statistics in your interpretation.  
+
+1.13 Regardless of what your answer to 1.12 was, let's now look at pairwise comparisons between the groups. We will start by looking at the output from the `lm()` analysis.  
+  
+  * Use the `summary()` function to print out your lm model fit object here.  
+  
+1.14 Interpret what the Intercept coefficient means.  
+  
+  * What is the coefficient estimate of?  
+  
+  * What does the p-value mean? (What is the null and alternative hypothesis?)    
+  
+1.15 Interpret the other two coefficient estimates here.  
+  
+  * What is the coefficient estimating?  
+  
+  * What do the p-values mean?  
+  
+1.16 Use the coefficient estimates from the `lm()` model to estimate the mean yield for the N and P groups. 
+  
+1.17 Perform a Tukey HSD multiple comparison on the linear model fit object that you created in problem 1.7.  
+  
+  * You will first need to create a new object with the `aov()` function  
+  
+  * You can then use `TukeyHSD()` on your aov object.  
+  
+  * print out the results of the Tukey HSD here.  
+  
+1.18 Also make a plot of the Tukey HSD results. 
+
+1.19 Finally, interpret the results of the Tukey HSD here. 
+
+## Problem 2: `OrchardSprays`  
+
+For this problem, we will be using a data set that comes pre-built into R. To load the data set into your working session, run the following code:
+
+```{r, eval = FALSE}
+data(OrchardSprays)
+```
+
+You can learn more about the data by running `?OrchardSprays` in your console. You should look at the names, dimensions, and head of the data object to familiarize yourself with it. For this analysis, we will only be using the `treatment` and `decrease` columns. 
+
+2.1 Add a comment to your homework script stating the null and alternative hypotheses for a one-way ANOVA.  
+
+2.2 Make a plot of all the observations of decrease, ignoring any other grouping variables. Be sure to include a box plot and the raw data points.    
+
+2.3 Make a plot of the decrease separated by treatment. Be sure to include a box plot and the raw observations. 
+
+2.4 Based on the box plots made in question 2.3, add a comment to your script interpreting the assumption of equal variance. Do these data appear to have equal variation between the groups? Why or why not?
+
+2.5 Check the assumption of the normality of residuals by making a QQ-plot of this data.  
+
+2.6 Add a comment to your script interpreting the QQ-plot you made in 2.5 above. Does it appear that the residuals are normally distributed? Why or why not?  
+
+
+2.7 Use `lm()` to fit a model to formally test the effect of  treatment on the decrease of bees. Save your model fit as a new object (i.e., `spray_lm`)  
+
+2.8 Before we look at the model output, let's make a fitted vs. residual plot to check our last assumption: Equal variance of residuals.  
+  
+  * Use the model-fit object you made in 2.7 above to make a fitted vs residual plot.  
+  
+2.9 Add a comment to Interpret the plot made in 1.8. Does this model appear to have equal variance in the residuals? Why or why not?  
+
+### Regardless of your answers to the assumption questions above, continue the analysis as if all assumptions were met.  
+If the above point wasn't enough of a clue, this data set actually fails the assumptions for a one-way analysis of variance. We will return to this data in a future assignment and perform a data transformation on it. But for now, continue on with the analysis. When you interpret the results below, you should mention that the assumptions were not met, so the results obtained are questionable.  
+
+2.10 Now, use the `anova()` function on your model fit object created in 2.7 above to print out an ANOVA table in your output.  
+
+2.11 Add a comment to your script and manually type out the following values from the table.  
+  
+  * The two degrees of freedom  
+  
+  * The mean square of the among-group variation (treatment effect)  
+ 
+  * The Mean square of the unexplained variation (the residual, or the "noise")  
+  
+  * The F-value  
+  
+  * The p-value (rounded if necessary)  
+  
+2.12 Add a comment to your script interpreting the results of our one-way ANOVA analysis. Do we reject or fail to reject our null hypothesis? Make sure to include all the appropriate statistics in your interpretation.  
+
+2.13 Regardless of what your answer to 1.12 was, let's now look at pairwise comparisons between the groups. We will start by looking at the output from the `lm()` analysis.  
+  
+  * Use the `summary()` function to print out your lm model fit object here.  
+  
+2.14 Interpret what the Intercept coefficient means.  
+  
+  * What is the coefficient estimate of?  
+  
+  * What does the p-value mean? (What is the null and alternative hypothesis?)    
+  
+2.15 What are all the other coefficients estimating?  
+  
+  * What is the Null and alternative hypothesis? (You can be general in your answer, you don't need to write out all 8 hypotheses)  
+  
+  * What do the p-values mean? (Again, you can be general here)    
+  
+2.16 Perform a Tukey HSD multiple comparison on the linear model fit object that you created in problem 2.7.  
+  
+  * You will first need to create a new object with the `aov()` function  
+  
+  * You can then use `TukeyHSD()` on your aov object.  
+  
+  * print out the results of the Tukey HSD here.  
+  
+2.17 Also make a plot of the Tukey HSD results. 
+
+2.18 Finally, interpret the results of the Tukey HSD here. Once again, you can be general. For example, list all the pairwise comparisons which were significant, and then say "all Tukey adjusted p-values < 0.05".   
