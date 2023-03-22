@@ -258,7 +258,10 @@ It's always important to remember that all models have assumptions, and you shou
 
 1. Linearity  
 2. Normality of residuals  
-3. Equal variance (homoscedasticity) of the residuals  
+3. Equal variance (homoscedasticity) of residuals  
+  * For categorical data, need to ensure equal variance across groups  
+  
+  
 4. Independence 
 
 Assumption 1 is usually assessed graphically and will be more important when we get to regression analysis (continuous x-variables). For categorical data it is less often tested directly. 
@@ -293,6 +296,32 @@ ggplot(dlm1,
 What we are looking for here is that the minimum and maximum y-values are the same across the x-values, and that they are approximately equally distributed above and below the reference line (y = 0). 
 
 Here, we have a few points that are well below the rest (difference in range), and it appears to be unequal (most points above the 0 reference line). Similar to the results above, this is not perfect, but also not terrible. 
+
+When we have categorical predictors, we also want to ensure that the variance between groups is approximately the same. We can do this with a boxplot of the groups. 
+
+```{r}
+ggplot(darwin_maize,
+       aes(x = height,
+           y = type)) +
+  geom_boxplot()+
+  labs(title = "Example of approx. equal variances across groups")
+```
+Here, the widths of the boxplots are approximately equal which means that each group has approximately the same observed variation. The dots on the left side for each group are not ideal, but this doesn't look too concerning. 
+
+What would be concerning is if the widths of the boxes were different sizes. For example:
+
+```{r, echo = FALSE}
+set.seed(2112)
+df <- data.frame(x = c(rnorm(10, 10, 1), 
+                       rnorm(10, 20, 10)), 
+                 group = rep(c("A", "B"), each = 10))
+ggplot(df, 
+       aes(y = group, 
+           x = x)) +
+  geom_boxplot() +
+  labs(title = "Example of unequal variances across groups")
+```
+
 
 ### **You should now be able to complete problem 4 in the homework assignment. **  
 
