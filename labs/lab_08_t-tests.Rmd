@@ -199,16 +199,11 @@ Where subscript 1 and 2 refer to the different experimental groups, and that the
 
 $$\large SEM_i = \frac{s_i}{\sqrt(n_i)}$$
 
-<<<<<<< HEAD
 Where $s$ and $n$ are the standard deviation and sample size for the $i$^th^ group, respectively. 
 
-To summarize, we need the `mean()`, `sd()` and `sqrt(n())` for each `elevation` group in the data. We can complete this using functions from `dplyr` as follows. 
-=======
 Where $i$ represents each group or sample.  
 
-
 To summarize, we need to group the data by `elevation` groups (using `group_by()`) and then use a `summary()` call with `mean()`, `sd()` and `sqrt(n())` functions inside of it. Remember to name your "new" summary variables and use an `=` inside the summary call. After summarizing, we will use a `mutate()` function to add a new column/variable for the SEM. Finally, I will also modify the data.frame into a tibble to make the display in future calls easier to read.   
->>>>>>> 19d04cbdedadb070771e09ac434725094ea3f9fb
 
 ```{r}
 tree_summary <- tree %>%
@@ -276,12 +271,8 @@ two_samp_p_val
  
 When you have a really low p-value like this, it's best to round instead of reporting the full value. Reporting the exact value adds a false sense of specificity. The three levels of significance are generally p < 0.05, p < 0.01, and p < 0.001. Here we would just say that the p-value is < 0.001. 
  
-<<<<<<< HEAD
-## Interpretation  
-=======
 ### Interpretation  
->>>>>>> 19d04cbdedadb070771e09ac434725094ea3f9fb
- 
+
 Based on the data, we estimate that the mean ($\pm$ SE) tree density at high and low elevations is `r y_high` ($\pm$ `r round(sem_high,2)`) and  `r y_low` ($\pm$ `r round(sem_low,2)`), respectively. Likewise, we can reject the null hypothesis and accept the alternative that tree densities differ based on elevation ($t_{statistic} = 4.97, df = 18, p < 0.001$). 
 
 ## 2-sample t-test using `lm()`  
@@ -292,6 +283,7 @@ The hand calculations for a 2-sample t-test are tedious. Luckily we can run the 
 two_sample_fit <- lm(dens ~ elevation, data = tree)
 summary(two_sample_fit)
 ```
+
 ## Interpreting `lm()` output  
 The summary of the `lm()` has a lot of information. What we are primarily focused on here is the `elevationLow` row. The Estimate represents the *difference* between the two elevation groups. (Since "Low" is in the name, we can deduce that the `(Intercept)` is the estimated value for the other elevation group, "High".) The t-value (4.96) and the p-value (< 0.001) match what we calculated by hand above. There is also an R^2 value, which tells us how much of the variation in response variable (density) is explained by the predictor variable (elevation). In this case, approximately 55% of the variation is explained by elevation (This is rather high for one categorical value, maybe because I simulated these values).
 
@@ -308,8 +300,7 @@ caterpillar <- read.csv("data/caterpillar.csv")
 
 ```
 
-<<<<<<< HEAD
-This data is from an experimental treatment assessing the impact of an herbicide on non target caterpillars. 
+Briefly, this is data from a controlled experiment looking herbicide effects on non-target caterpillars. Twelve plots were split, and each side was randomly assigned as a control or herbicide treatment. Each plot is an experimental unit and the treatments are "paired" within it.  
 
 ```{r}
 head(caterpillar)
@@ -320,30 +311,24 @@ Plots were arranged in pairs at 12 different locations (`plot_number`). One plot
 Because the plots were paired, what we're interested in is the difference in `caterpillar_count` between `bt_herbicide` and `control` plots. If the herbicide had no effect, then we would expect both plot types to have the same number of caterpillars. In other, words, the difference in counts between each plot would be 0. 
 
 Therefore, the null hypothesis is that the average difference ($\mu_d$) between the two groups is 0. 
-=======
-Briefly, this is data from a controlled experiment looking herbicide effects on non-target caterpillars. Twelve plots were split, and each side was randomly assigned as a control or herbicide treatment. Each plot is an experimental unit and the treatments are "paired" within it.  
+
 
 For a paired t-test, the null hypothesis is that the average difference between the two groups is 0. 
->>>>>>> 19d04cbdedadb070771e09ac434725094ea3f9fb
 
 $$H_0:\large \mu_D = 0$$
 And our alternative hypothesis is that there is a difference between the two groups, or:
 
 $$H_A:\large \mu_D \ne 0$$
 
-<<<<<<< HEAD
 For this, we need to calculate the difference between the two treatments. The way that this data is organized, that means that we need to subtract row 2 from row 1, row 4 from row 3, etc. Based on the `dplyr` functions we've learned so far, there is no simple solution apparent.
-=======
+
 Essentially, we calculate a one-sample t-test on the *differences* between groups. If the groups are the same, there should be no difference (i.e., difference = 0). If the groups are not the same, there should be a *difference*. 
 
 We need to calculate the difference between the two treatments within each plot or experimental unit. If we look at the way the data is organized, there is not a simple solution using `dplyr` functions. 
->>>>>>> 19d04cbdedadb070771e09ac434725094ea3f9fb
 
 ```{r}
 caterpillar
 ```
-<<<<<<< HEAD
-
 
 ### Data Wrangling  
 
@@ -421,18 +406,6 @@ ggplot(cat_diff,
 ```
 
 Because we already calculated the difference between the two treatments, we are fitting an "intercept-only" model as in the one sample t-test at the beginning of lab. However, in this case, our value of interest ($\mu_0$) is 0, which is the default in the `lm()` function, so we do not need to subtract anything from the response side of the formula. 
-=======
-Essentially, we need to subtract row 2 from row 1, row 4 from row 3, etc. 
-
-Luckily, there is a special helper function called `diff()` that we can use inside of `summarise()`. For those interested, this is a "lag" function. First, we need to group the data so that it uses the correct observations. Here, we want to know what the difference is between `treatment` groups *within* each `plot_number`. So we will use `group_by(plot_number)`. 
-
-```{r}
-cat_diff <- caterpillar %>%
-  group_by(plot_number) %>%
-  summarize(
-    difference = diff(caterpillar_count))
-cat_diff
-```
 
 We can quickly plot these differences to get an idea of the overall effect. 
 
@@ -453,14 +426,13 @@ Recall that we calculate a paired t-test statistic with the following formula:
 $$\large t = \frac{\bar{y}_{Diff} - 0}{SED}$$
 
 Here, SED is the standard error of the *difference*. For this example, we will skip the hand calculation and jump straight to using `lm()`. We already have the differences stored in the `cat_diff` object. We will use that object to calculate a one-sample t-test. Using the `lm()` function, a one sample t-test is the same as an intercept-only model.   
->>>>>>> 19d04cbdedadb070771e09ac434725094ea3f9fb
 
 ```{r}
 paired_fit <- lm(difference ~ 1, data = cat_diff)
 summary(paired_fit)
 ```
 
-<<<<<<< HEAD
+
 Our estimated intercept ($\pm$ SE) is 1.5 $\pm$ 0.65, and we can reject the null hypothesis and conclude that there was a difference in the number of caterpillars between the two treatments ($t_{statistic} = 2.32, df = 11, p = 0.04$). 
 
 ### **You should now be able to complete porblem 3 in the homework assignment.**  
@@ -481,12 +453,12 @@ summary(lm(caterpillar_count ~
 
 This output is much more crowded and difficult to interpret as it automatically runs a test comparing every `plot_number` to `plot_number == 1`. However, if we ignore those tests and focus on the second line (`treatmentcontrol`), we can see that it is the same results as our `paired_fit` object above. 
 
-## Coda
 
-This concludes lab 08  
-=======
 Our estimated intercept coefficient is -1.5, and the standard error of this estimate is 0.6455. The `summary()` output also includes a t~statistic~ (`t value`) of -2.324. The output does not give us our t~critical~ value, but it does gives us the p-value. Here, the p-value is 0.0403, which is less than our $\alpha$ value of 0.05. Hence, we reject the null hypothesis and conclude that there is a difference in treatment values. 
 
 ### **You should now be able to complete problem 3 in the homework assignment**  
 
->>>>>>> 19d04cbdedadb070771e09ac434725094ea3f9fb
+
+## Coda
+
+This concludes lab 08  
