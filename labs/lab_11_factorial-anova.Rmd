@@ -159,6 +159,31 @@ We interpret the F-value for each factor as before, but in this case, we can say
 
 The p-value is an indication of the likelihood of observing the data (i.e., F-value, signal / noise ratio) we have *if* the null hypothesis was true. In this case, both p-values are < 0.002 which is less than $\alpha = 0.05$, and we can conclude that there is a significant main effect for each factor. 
 
+## PLotting main effects separately
+
+It can be helpful to plot the data considering only one factor at a time to see the main effects. 
+
+```{r}
+ggplot(crop,
+       aes(x = fertilizer,
+           y = yield,
+           color = fertilizer)) +
+  geom_boxplot() +
+  theme_bw()
+```
+This plot shows the average yield based on fertilizer type, **ignoring the effect** of the density factor. 
+
+```{r}
+ggplot(crop,
+       aes(x = density,
+           y = yield,
+           color = density)) +
+  geom_boxplot() +
+  theme_bw()
+```
+This plot shows the average yield based on density type, **ignoring the effect** of the fertilizer factor. 
+
+
 ## ANOVA Interpretation  
 
 Remember that the hypotheses for ANOVA are either that all means are the same, or that at least one was different. ANOVA can only tell us that there is a difference. Therefore, out interpretation would look something like this:
