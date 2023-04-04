@@ -1,6 +1,6 @@
 ---
 title: "ENVS475 Homework 11: Factorial"
-subtitle: "Graded"
+subtitle: "Not Graded"
 date: "Spring, 2023"
 output: 
   html_document:
@@ -20,7 +20,7 @@ library(dplyr)
 
 ```
 
-# This assignment will be graded.
+# This assignment will Not be graded.
 
 # Assignment Format
 
@@ -44,78 +44,9 @@ library(ggplot2)
 
 # Data
 
-For this homework, you will need to download three .csv files from D2L: `clear_cut_factorial.csv`, `moth_data.csv`, and `latin_square_crops.csv`.  
+For this homework, you will need to download three .csv files from D2L: `moth_data.csv`, and `latin_square_crops.csv`.  
 
-# problem 1: `clear_cut` 
-
-### Load the data into R
-```{r}
-clear <- read.csv("data/clear_cut_factorial.csv")
-```
-
-This is a simulated data set looking at the effects that clear cuts at different elevations have on the number of bird species present in plots throughout the season. 
-
-You should always print out the `names()` and `head()` of data objects when you load them into your R environment.
-
-You may also want to look at the distinct/unique levels of each of the categorical/factor variables. 
-
-
-1.1 Make a box plot the response variable (`spp`) separated by both grouping variables. 
-
-1.2 Interpret the box plots here. Does it appear that there is equal variance across the groups? Why or why not?
-
-1.3 Make a QQ-plot to assess the assumptions of a normal distirbution of residuals. 
-
-1.4 Interpret the QQ-plot. Do the residuals look normally distributed? Why or why not?
-
-1.5 Write out the hypotheses for a two factor ANOVA without interactions.  
-
-  * **Hint** You should have two sets of null and alternative hypotheses.  
-  
-1.6 Fit a linear model using the `lm()` function, and save it as a new data object.  
-
-1.7 Assess the last assumption of equal variance of residuals by making a plot of the fitted vs. residual values.  
-
-1.8 Interpret the fitted vs. residual plot. Do the residuals appear to have equal variation? Why or why not?  
-
-1.9 Regardless of your answers above, make a new variable which log-transforms your response variable, and save it as a new data object.  
-
-  * **Hint** The formula for a log transformation will go inside of a `mutate()` function and should look something like this: `new_variable_name = log(response_variable + 1)`
-
-1.10 Fit a linear model using the transformed data.  
-
-  * **Hint** you will need to modify the model fit performed in problem 1.6 by changing the data object and the response variable.  
-  
-### Redo plots with transformed data  
-
-1.11 Make a box plot the response variable (`spp`) separated by both grouping variables. 
-
-1.12 Interpret the box plots here. Does it appear that there is equal variance across the groups? Why or why not?
-
-1.13 Make a QQ-plot to assess the assumptions of a normal distirbution of residuals. 
-
-1.14 Interpret the QQ-plot. Do the residuals look normally distributed? Why or why not?
-
-
-1.15 Assess the assumption of equal variance of residuals by making a plot of the fitted vs. residual values.  
-
-1.16 Interpret the fitted vs. residual plot. Do the residuals appear to have equal variation? Why or why not?  
-
-
-1.17 Print out an anova table of the model using the transformed data (i.e., the second model that you fit)  
-
-1.18 Write out the Statistical interpretation of the ANOVA table. Make sure you use the correct statistics (df's, F- and P-values) and relate it back to your null and alternative hypotheses.   
-
-1.19 Perform a multiple comparison using Tukey's HSD test, and print out the results.  
-
-1.20 Make a plot of the TukeyHSD multiple comparisons. 
-
-1.21 Add a comment which has your interpretation of the Tukey HSD plot.  
-
-  * **Note** Because we are using transformed data, you would need to back-transform the values for the estimated difference and 95%CI reported in the TukeyHSD output. We are going to skip that step for now, so here I'm just asking you to interpret the plots. The interpretation is the same whether data are transformed or not, i.e., does the CI contain zero or not?  
-  
-
-# Problem 2: `moth` 
+# Problem 1: `moth` 
 
 ### Load the data into R  
 ```{r}
@@ -139,39 +70,39 @@ moth <- moth %>%
   mutate(Region = factor(Region))
 ```
 
-2.1 Make a box plot of the response variable (`caterpillar`) grouped with the herbicide treatment.  
+1.1 Make a box plot of the response variable (`caterpillar`) grouped with the herbicide treatment.  
 
   * **Note** do **not** include `Region` as a grouping variable. There is only one observation for each treatment in each region, and this is not enough to make a box plot.  
 
-2.2 Interpret the box plots here. Does it appear that there is equal variance across the different treatments? Why or why not?  
+1.2 Interpret the box plots here. Does it appear that there is equal variance across the different treatments? Why or why not?  
 
-2.3 Now, make a box plot of the response variable grouped by region (ignore the treatment variable)  
+1.3 Now, make a box plot of the response variable grouped by region (ignore the treatment variable)  
 
-2.4 Interpret the box plots here. Does it appear that there is equal variance across the different regions? Why or why not?  
+1.4 Interpret the box plots here. Does it appear that there is equal variance across the different regions? Why or why not?  
 
-2.5 Fit a linear model using the `lm()` function, and save it as a new data object. Make sure to include both the `Treatment` and `Redion` variables as main effects in the model.  
+1.5 Fit a linear model using the `lm()` function, and save it as a new data object. Make sure to include both the `Treatment` and `Region` variables as main effects in the model.  
 
-2.6 Write out the null and alternative hypotheses for this model.  
-
-
-2.7 Print out the ANOVA table for the linear model you fit in problem 2.5.  
-
-2.8 Write out your statistical interpretation of the ANOVA table. Make sure to report all appropriate statistics. 
-
-2.9 Write out an interpretation of these results using plain words.  
-
-2.10 To see how accounting for blocking effects can affect our model, fit a linear model without the region factor, and save it as a new data object.  
+1.6 Write out the null and alternative hypotheses for this model.  
 
 
-2.11 Print out the ANOVA table for your second model (without region)  
+1.7 Print out the ANOVA table for the linear model you fit in problem 2.5.  
 
-2.12 Write out the statistical interpretation of this second model. 
+1.8 Write out your statistical interpretation of the ANOVA table. Make sure to report all appropriate statistics. 
+
+1.9 Write out an interpretation of these results using plain words.  
+
+1.10 To see how accounting for blocking effects can affect our model, fit a linear model without the region factor, and save it as a new data object.  
 
 
-2.13 What does this mean in your own words? What happened?  
+1.11 Print out the ANOVA table for your second model (without region)  
+
+1.12 Write out the statistical interpretation of this second model. 
 
 
-# Problem 3: `latin_square_crops`
+1.13 What does this mean in your own words? What happened?  
+
+
+# Problem 2: `latin_square_crops`
 
 ### Read in the data
 
@@ -206,23 +137,23 @@ Variables:
   
 You can see that each column and row has exactly one observation of each seed variety (A-E).   
 
-3.1 Write out the null and alternative hypotheses for this experiemntal design.  
+2.1 Write out the null and alternative hypotheses for this experiemntal design.  
 
   * **Hint** You should have one set of hypotheses for each factor: Fertilizer, Tillage, and Seed.  
   
-3.2 Fit a linear model for this analysis, and save it as a new data object.  
+2.2 Fit a linear model for this analysis, and save it as a new data object.  
 
-3.3 Print out the ANOVA table for your linear model.  
+2.3 Print out the ANOVA table for your linear model.  
 
-3.4 Write out the statistical interpretation for the main effects tested in this model. Be sure to include all appropriate statistics and relate it back to your null and alternative hypotheses.  
+2.4 Write out the statistical interpretation for the main effects tested in this model. Be sure to include all appropriate statistics and relate it back to your null and alternative hypotheses.  
 
-3.5 Perform a Tukey HSD multiple comparison for this model.   
+2.5 Perform a Tukey HSD multiple comparison for this model.   
 
-3.6 Interpret the output of the Tukey HSD here.  
+2.6 Interpret the output of the Tukey HSD here.  
 
   * **Note** There are lots of pairwise comparisons here. To simplify,  you can just list the pairs within each factor which were significantly different.  
 
-3.7 Make a plot of the Tukey HSD results.  
+2.7 Make a plot of the Tukey HSD results.  
 
 ### Coda  
 
