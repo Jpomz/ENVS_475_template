@@ -166,7 +166,8 @@ $$HA: \text{At least one mean is different}$$
 ### Interactive effect of `dose:supp`  
 
 $$H0: \text{The effect of one factor DOES NOT depend on the other factor}$$
-$$H0: \text{The effect of one factor DOES depend on the other factor}$$
+$$H0: \text{The effect of one factor DOES depend on the other factor}$$  
+
 ## Two-way ANOVA with `lm()`  
 
 Let's first fit a linear model to the data. 

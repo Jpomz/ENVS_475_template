@@ -1,0 +1,253 @@
+---
+title: "ENVS475 Homework 12: Two-Way ANOVA"
+subtitle: "Graded"
+date: "Spring, 2023"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+   warning = FALSE, message = FALSE,
+   eval = TRUE,
+   fig.align = 'center', fig.retina = 2,
+  collapse = TRUE,
+  comment = "#>"
+)
+library(dplyr)
+library(ggplot2)
+wheat <- read.csv(here::here("data/wheat_2-way.csv"))
+selenium <-read.csv(here::here("data/selenium_2-way-anova.csv")) 
+```
+
+# This assignment will be graded.
+
+# Assignment Format
+
+* Open a new R script
+* Save your R script in the `homework/` folder
+* Name your script according to: `full_name_hw##.R`
+  + For example: `justin_pomeranz_hw12.R`
+* Comment before each problem, and each sub-problem
+* Make sure your results print out on `Source with echo`
+  + If you're answer is saved in an object, make sure you print out that object afterwards
+  
+# Setup
+
+## Load packages
+
+```{r, eval=FALSE}
+# load libraries
+library(dplyr)
+library(ggplot2)
+```
+
+# Data
+
+## Download the data and read into R
+
+1) Problem 1 will use the "wheat_2-way.csv" data set on D2L  
+2) Problem 2 will use the "selenium_2-way-anova.csv" data set on D2L  .  
+
+```{r, eval = FALSE}
+# read in data
+wheat <- read.csv("data/wheat_2-way.csv")
+selenium <-read.csv("data/selenium_2-way-anova.csv")
+```
+
+
+# Exercises Homework 12: Two-way ANOVA
+
+## Problem 1: `wheat_2-way.csv`
+
+An experiment on the effects of fertilizer addition on the yield (in kg) of wheat. Agricultural fields received one of four treatments: control (no fertilizer), Nitrogen addition, Phosphorous addition, or addition of N+P in combination. This experimental design has a two factors (`Nitrogen`, `Phosphorous`) each with two levels (`no`, `yes`). 
+
+For this problem, I will not be asking you to print out the names, dimensions, etc. of this data set as a question, but you should always be in the habit of doing that whenever you load a new data object.  
+
+We will perform a two-way ANOVA looking for both main and interactive effects. 
+
+
+1.1 Add a comment to your homework script stating the null and alternative hypotheses for a two-way ANOVA.  
+
+  * **Hint**: you should have three pairs of hypotheses. 
+  
+1.2 Make a box plot of all the observations of yield for all groups in the experimental design.  
+
+  * **Hint**: put one factor in as `x` and the other factor in as the `color. 
+  
+1.3 Make an interaction plot of the yield.  
+
+  * **Hint**: The lab showed two two ways of doing this.  
+
+1.4 Based on the box plots made in question 1.2, add a comment to your script interpreting the assumption of equal variance. Do these data appear to have equal variation between the groups? Why or why not?
+
+1.5 Check the assumption of the normality of residuals by making a QQ-plot of this data. 
+
+1.6 Add a comment to your script interpreting the QQ-plot you made in 1.5 above. Does it appear that the residuals are normally distributed? Why or why not?  
+
+1.7 Use `lm()` to fit a model and formally test the two-way ANOVA. Make sure to include the interaction. Save your model fit as a new object (i.e., `wheat_lm`) 
+
+1.8 Before we look at the model output, let's make a fitted vs. residual plot to check our last assumption: Equal variance of residuals.  
+  * Use the model-fit object you made in 1.7 above to make a fitted vs residual plot.  
+
+1.9 Add a comment to Interpret the plot made in 1.8. Does this model appear to have equal variance in the residuals? Why or why not?  
+
+1.10 Now, use the `anova()` function on your model fit object created in 1.7 above to print out an ANOVA table for your 2-way analysis of varianvce. 
+
+1.11 Add a comment to your script interpreting the results of our two-way ANOVA analysis. Do we reject or fail to reject our null hypotheses? Be sure to specifically address all three pairs of hypotheses and include all the appropriate statistics in your interpretation.  
+
+1.12 Let's now look at pairwise comparisons between the groups. We will start by looking at the output from the `lm()` analysis.  
+  
+  * Use the `summary()` function to print out your lm model fit object here.  
+  
+1.13 Add a comment to your script describing what each coefficient means. Pay close attention to how you define the groups.  
+
+1.14 Add a comment to your script describing which coefficients are significantly different from 0, including the *t*- and *p*-value. For each coefficient that is significant, also include a brief description of what this means using plain language. 
+
+1.15 Use the coefficient estimates from the `lm()` model to estimate the mean yield for the N and P groups.  
+
+  * **Hint** the code for this using the `coef()` function is described in the "Mean estimatesfor treatment groups" seciton in **Lab 10**  
+
+1.16 Perform a Tukey HSD multiple comparison on the linear model fit object that you created in problem 1.7.  
+  
+  * You will first need to create a new object with the `aov()` function  
+  
+  * You can then use `TukeyHSD()` on your aov object.  
+  
+  * print out the results of the Tukey HSD here.  
+
+
+1.17 Make a plot of the Tukey HSD results.
+
+
+1.18 Finally, interpret the results of the Tukey HSD here. You can be broad and summarize these results generally.  
+
+
+1.19 Based on the interaction plot above, you may have guessed that there would be a significant interaction effect. However, the last few questions should have made it clear that there was not a statistically significant interaction effect (if you got a different result, double check your code and/or ask me). Here, add a comment discussing why you think the interaction plot disagrees with the statistical analyses.  
+
+
+
+## Problem 2: `selenium`   
+
+For this problem, we will be using a simulated data set comparing the effects of Selenium and Atrazine (an herbicide) on aquatic insect abundance. 
+
+### Load the data  
+
+Download the data from D2L and load it into your R session. 
+
+```{r, eval = FALSE}
+selenium <-read.csv("data/selenium_2-way-anova.csv")
+```
+
+### Data background  
+
+This simulated data is based on a study by [Henry and Wesner (2018)](https://pubs.acs.org/doi/10.1021/acs.est.8b01791).  
+
+* Aquatic insects are an important food source for migrating birds.  
+
+* Prairie potholes in North Dakota are an important resting and foraging location for migrating birds  
+
+* Aquatic insect abundance in prairie potholes has declined in recent years  
+
+* Some potholes have naturally elevated levels of Selenium  
+
+* High agricultural cultivation in the area, and use of Atrazine (herbicide) has also increased in recent years.  
+
+* Mesocosm experiment designed to test the main and interactive effects of these two chemicals on the abundance of aquatic insects  
+
+* Mesocosm experiment also included a block factor  
+
+### Problem 2 questions  
+
+2.1 You should always get to know your data by looking at `names()`, `head()`, etc. It is also a good idea to print out all the levels of categorical variables using `distinct()` or `unique()` functions. 
+
+
+2.2 Produce a table showing the number of replicates for each combination of Selenium and Atrazine treatment. Is this a balanced design?  
+
+  * **Hint** This was shown in Lab 11  
+
+
+2.3 Make a box plot of the abundance observations grouped by Selenium and Atrazine levels.  
+
+  * Set one factor as the `x` variable and one factor as the `color` variable.  
+
+
+2.4 Based on the box plots made in question 2.3, add a comment to your script interpreting the assumption of equal variance. Do these data appear to have equal variation between the groups? Why or why not?
+
+
+2.5 Check the assumption of the normality of residuals by making a QQ-plot of this data.  
+
+
+2.6 Add a comment to your script interpreting the QQ-plot you made in 2.5 above. Does it appear that the residuals are normally distributed? Why or why not?  
+
+
+2.7 Make a box plot of the abundance observations, but this time group the data based solely on the `block` factor. 
+
+2.8 Add a comment to your script assessing whether or not there is equal variance across the blocks. Why do you think there is (or is not) equal variance?  
+
+
+2.9 Add a comment to your script estimating whether or not you think there will be a significant main effect of the blocking factor.  
+
+  * **Hint**: compare the means within each box  
+
+
+2.10 Use `lm()` to fit a model to formally test the effects of this experiment. Note that you will be performing a 2-way ANOVA for the main and interactive effects of Selenium and Atrazine. In addition, you will need to test for the main effect of block. Save your model fit as a new object (i.e., `sel_lm`)  
+
+  * **Hint** your formula should include ` ~ block + Atrazine * Selenium`  
+  
+
+2.11 Now, use the `anova()` function on your model fit object to print out an ANOVA table in your output.  
+
+
+2.12 Add a comment to your script fully interpreting the results of the ANOVA table including the df's, F- and p-values.  
+
+2.13 You should have found a non-significant effect of block above (if you got a different result, you may want to double check your code above or ask me). To simplify the interpretation of the following questions, let's fit a new model without the block factor in it, and print the summary results here.  
+
+  * **Note**  there is debate in the statistical community on whether or not it's OK to drop non-significant factors.  
+  
+  * We're going to do it here to simplify the interpretation, and reduce the number of pairwise comparisons.  
+  
+  * If you do this for an analysis in a job/grad school etc., always be sure to just be very clear in your methods what decisions you made, and report your findings.  
+  
+  * new model should be: `sel_lm2 <- lm(abundance ~ Selenium * Atrazine, data = selenium)`  
+  
+
+2.14 Describe what the Intercept coefficient is estimating in your `sel_lm2` model. Also include the appropriate statistics, and how this relates to our null and alternative hypotheses for an intercept coefficient.     
+  
+  
+2.15 Interpret the rest of the coefficients. For each, explain:  
+
+  * What is the coefficient estimating?  
+  
+  * What is the statistical conclusion for each (include *t*- and *p*-values)?  
+  
+  * Explain what this means in plain language.  
+  
+
+2.16 Perform a Tukey HSD multiple comparison on the second linear model fit object that you created in problem 2.13.  
+  
+  * You will first need to create a new object with the `aov()` function  
+  
+  * You can then use `TukeyHSD()` on your aov object.  
+  
+  * print out the results of the Tukey HSD here.  
+  
+
+2.17 Plot the Tukey HSD results.  
+
+
+2.18 Finally, interpret the results of the Tukey HSD here. Once again, you can be general. For example, list all the pairwise comparisons which were significant, and then say "all Tukey adjusted p-values < 0.05".  
+
+  * For the interactions, you can simplify by calling:  
+  
+    * no:no = control  
+    
+    * yes:no = Selenium  
+    
+    * no:yes = Atrazine  
+    
+    * yes:yes = full treatment  
+
+### This concludes the Homework
