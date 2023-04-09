@@ -1,0 +1,295 @@
+---
+title: "Lab 12: 2-Way ANOVA"
+subtitle: "ENVS475: Experimental Analysis and Design"
+date: "Spring, 2023"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggplot2)
+data("ToothGrowth")
+```
+
+# About
+
+This lab will demonstrate how to perform a two-way ANOVA with interaction in R. This includes checking assumptions, fitting the linear model, interpreting and visualizing the results. 
+
+# Preliminaries 
+
+### Packages  
+
+For this lab, we will be using the `dplyr` and `ggplot2` packages. Make sure both packages are installed on your computer, and then run the following code:
+
+```{r, eval=FALSE}
+library(dplyr)
+library(ggplot2)
+```
+
+
+### Data  
+
+We will use the `ToothGrowth` data which comes with R. Load the data by running the following command:
+
+```{r, eval = FALSE}
+data("ToothGrowth")
+```
+
+`ToothGrowth` contains data examining the effect of varying the dose (`dose`) of two supplements (`supp`) on the length (`len`) of teeth in Guinea Pigs. Run `?ToothGrowth` to learn more about the data.  
+
+# Analysis
+
+Let's look at the full data, and see what the treatment levels are. 
+
+```{r}
+names(ToothGrowth)
+dim(ToothGrowth)
+head(ToothGrowth)
+distinct(ToothGrowth, supp)
+distinct(ToothGrowth, dose)
+distinct(ToothGrowth, supp, dose)
+```
+
+For this analysis, we have two *factors* (supp and dose). The **supp** factor has two levels: VC, and OJ and the **dose** factor has three levels: 0.5, 1.0, and 2.0. 
+
+### Wrangle variables to be a **Factor** 
+
+You may have noticed that the `dose` variable is a class `dbl`. If we plug this into the `lm()` function, R will treat this as continuous and will give us a different result. In ANOVA, we want to analyze the data based on categories. We can chnage the `dose` variable to an ordered factor with the following code. We will also be changing the name of the data object to `dat` to have less typing to do. 
+
+```{r}
+dat <- ToothGrowth %>%
+  mutate(dose = factor(dose,
+                       levels = c(0.5, 1, 2),
+                       labels = c("D0.5", "D1", "D2")))
+         
+```
+
+
+We can also use the `tab()` function to see how many observations are in each group:
+
+```{r}
+table(ToothGrowth$supp, ToothGrowth$dose)
+```
+
+We can see that there are 10 observations in each combination of all levels for both factors. We call this a completely balanced ANOVA design. 
+
+## Plot data
+
+Let's start by plotting all of the data. We will save time and consider all the grouping variables. 
+
+```{r}
+ggplot(dat,
+       aes(x = dose,
+           y = len,
+           color = supp)) +
+  geom_boxplot() +
+  theme_bw()
+```
+
+### Interaction plots  
+
+We can estimate the effects based on the boxplot above, but an interaction plot is usually more illustrative. 
+
+### Base R Plotting
+
+```{r}
+with(data = dat, 
+     interaction.plot(dose, supp, len))
+```
+
+### `ggplot` 
+
+```{r}
+ggplot(dat, 
+       aes(x = dose,
+           y = len,
+           color = supp,
+           group = supp)) +
+  geom_point() +
+  stat_summary(fun = mean,
+               geom = "line") +
+  theme_bw()
+
+```
+
+## Check pre-analysis assumptions  
+
+### Assumption: equal variance
+
+```{r, echo=FALSE}
+ggplot(dat,
+       aes(x = dose,
+           y = len,
+           color = supp)) +
+  geom_boxplot() +
+  theme_bw()
+```
+
+These data look to have approximately equal variation across the treatment groups. The `D1:VC` and `D2:OJ` look to have slightly less variation, but this is probably close enough.  
+
+
+### Assumptions: Normality of residuals  
+#### QQ-plot 
+
+```{r}
+ggplot(dat,
+       aes(sample = len)) +
+  stat_qq()+
+  stat_qq_line()
+```
+
+Most of the observations (points) fall close to the reference line. There's a few that are off near the low and high end of the data, but this should be ok. 
+
+# Two-way ANOVA   
+
+## Hypotheses 
+
+### Main effect of supplement (`supp`)
+
+$$ H0: \mu_{OJ} = \mu_{VC} $$
+
+
+$$HA: \text{At least one mean is different}$$
+
+### Main effect of `dose` 
+
+Null and alternative hypotheses:  
+
+$$H0: \mu_{D0.5} = \mu_{D1} = \mu_{D2}$$  
+
+$$HA: \text{At least one mean is different}$$  
+
+### Interactive effect of `dose:supp`  
+
+$$H0: \text{The effect of one factor DOES NOT depend on the other factor}$$
+$$H0: \text{The effect of one factor DOES depend on the other factor}$$
+## Two-way ANOVA with `lm()`  
+
+Let's first fit a linear model to the data. 
+
+```{r}
+tooth_lm <- lm(len ~ supp * dose, data = dat)
+tooth_lm
+```
+
+### Assumption: Equal variance of residuals  
+
+Before we look at the results, let's check our post-model fit assumption with a fitted vs. residuals plot. 
+ 
+
+```{r}
+ggplot(tooth_lm,
+       aes(x = .fitted, y = .resid)) +
+    geom_point(
+      position = position_jitter(
+        width = 0.1,
+        height = 0)) +
+    geom_hline(yintercept = 0) +
+  theme_bw()
+```
+
+In this plot, the absolute magnitude of the maximum and minimum y-values are approximately the same (~ -7.5, ~ 7.5), although there are a couple of points above the 1.25 region. There may be slightly more variation on the right side (points are further from the line). However, there is no clear pattern in the spread of the points, so this looks OK. 
+
+# ANOVA table  
+
+In order to get the statistical values for the ANOVA table, we need to use the `anova()` function on the model fit object. 
+
+```{r}
+anova(tooth_lm)
+```
+
+You can see that we know have a row for each of the main factors and a row for the interaction effect (`supp:dose`) as well as a fourth row for the residuals (unexplained variation). 
+
+We interpret the F-value and p-value for each factor as before. Our interpretation of the main effects is the same as before. For example, there is a significant main effect of supplement (`supp`) and dose (`dose`). 
+
+We can now also make a statement of the statistical significance for the interactive effect. In this case, the p-value for the `supp:dose` interaction is p = 0.02 and this is less than our $\alpha = 0.05$ cutoff, so there *is an interactive effect*. In other words, the effect of supplement depends on the dose applied (or the effect of the dose depends on the supplement type). **Reminder** do not try and interpret what the interaction effect is, just say that there is one.
+
+## ANOVA Interpretation  
+
+Remember that the hypotheses for ANOVA are either that all means are the same, or that at least one was different. ANOVA can only tell us that there is a difference. Therefore, our interpretation would look something like this:
+
+> Based on a 2-way ANOVA with interaction, there were significant main effects of supplement ($F_{1, 54}= 15.572, p < 0.001$) and dose ($F_{2, 54}= 92, p < 0.001$). Furthermore, there was a significnat interaction ($F_{2, 54}= 92, p = 0.02$) which means that the effect of one factor depended on the level of the other factor.  
+
+### Relate ANOVA table to intercation plot
+
+```{r, echo = FALSE}
+ggplot(dat, 
+       aes(x = dose,
+           y = len,
+           color = supp,
+           group = supp)) +
+  stat_summary(fun = mean,
+               geom = "line") +
+  theme_bw()
+```
+
+#### Main effect of `supp`  
+
+"Average" the y-values for each line individually across the x-values. Overall, the average of the red line is not equal to the average of the blue line: Significant main effect. 
+
+#### Main effect of `dose`  
+
+"Average" the y-values for each x-category across the lines. The average for `D0.5` is low, and `D1` is medium, while `D2` is high. This means we have a significant effect of dose. 
+
+#### Interaction  
+
+Look at the lines to see if they are parallel or if they have a different slope. Both lines are parallel at the lower doses, but the slope changes between `D1` and `D2`. This means there is a significant interaction. 
+
+
+# Multiple Comparisons  
+
+In order to see *which* means are different, we can view the summary output from the `lm()` model, as well as calculate Tukey's HSD.  
+
+## `lm()` summary  
+
+```{r}
+summary(tooth_lm)
+```
+
+The summary output with multiple-levels of a factor and an interaction becomes much more complicated. However, if we take them one at-a-time we can see there's not much different. 
+
+The intercept is the mean estimate for our reference group, which in this case is the OJ supplement at D0.5. We will need to keep this in mind when we look at all of the other coefficient estimates. 
+
+Other Coefficients:  
+* `suppVC` = `OJ:D0.5` - `VC:D0.5  
+* `doseD1` = `OJ:D0.5` - `OJ:D1`  
+* `doseD2` = `OJ:D0.5` - `OJ:D2`  
+* `suppVC:doseD1` = `OJ:D0.5` - `VC:D1` * `suppVC:doseD2` = `OJ:D0.5` - `VC:D2`  
+### Interpretation of p-values  
+
+* Intercept: Is mean length of `OJ:D0.5` = 0?  
+  * Low p-value, Reject null. Value is different from 0  
+* Is the difference of the treatment group different from our reference group? 
+  * reference group in this case is: `OJ:D0.5`  
+  * `suppVC:doseD1` has a high p-value, failt to reject (FTR) the null. In other words, it is not different from 'OJ:D0.5` (refer back to box plot)  
+  * All other coefficients have p < 0.05, so reject the null hypothesis that those differences = 0. (In other words, there **IS** a difference between means.)  
+
+## Tukey's HSD  
+
+Before we run the Tukey HSD test, we need to run an ANOVA on our linear model fit using the `aov()` function. 
+
+```{r}
+# ANOVA of our lm model
+tooth_aov <- aov(tooth_lm)
+
+# Tukey's test on the plant_aov object
+tooth_tukey <- TukeyHSD(tooth_aov)
+# print out results
+tooth_tukey
+```
+
+Here, we can see that we have a section for each factor as well as a section for the interaction. Witin each section there is a row for every pairwise combination. The table gives us an estimated and 95% CI for the differences, as well as an adjusted p value. 
+
+We can also plot these differences. Any coefficient estimates which cross zero are not considered to be significantly different. 
+
+```{r}
+plot(tooth_tukey)
+```
+
+### Coda
+
+This concludes Lab 12, and you should now be able to complete the homework assignment. 
