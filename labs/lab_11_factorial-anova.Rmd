@@ -300,7 +300,8 @@ head(os)
 
 This is a good opportunity to remind you all to think about how you're going to analyze your data *before* you enter it. If you know your going to be running an ANOVA or some other type of categorical analysis, enter row position as "r1" instead of 1. Likewise, column position 2 could be "c2". This way, when you load your data into R, it automatically treats it as a categorical variable, and then you don't have to mess around with changing the class of the variable. (It will also prevent you from running a full analysis, interpreting the results and writing it up, only to find out that your blocking variables are continuous instead of categorical. This is exactly what just happened to me as I was writing this lab exercise.)
 
-### Transform response variable
+### Transform response variable  
+#### Skip this in week 11  
 
 You may recall from the homework that the `OrchardSprays` data failed its assumption checks. There are a few options for you to do when this occurs. I'm hoping to go through them in more detail later, but for now, suffice it to say that we can transform the variable to see if that fixes our problems. A common transformation is a log-transformation. 
 
