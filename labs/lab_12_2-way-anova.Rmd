@@ -150,18 +150,18 @@ Most of the observations (points) fall close to the reference line. There's a fe
 
 ### Main effect of supplement (`supp`)
 
-$$ H0: \mu_{OJ} = \mu_{VC} $$
+$$ H0: \text{There is NO effect of supplement on tooth growth} $$
 
 
-$$HA: \text{At least one mean is different}$$
+$$HA: \text{There IS AN EFFECT of supplement on tooth growth}$$
 
-### Main effect of `dose` 
+### Main effect of (`dose`) 
 
 Null and alternative hypotheses:  
 
-$$H0: \mu_{D0.5} = \mu_{D1} = \mu_{D2}$$  
+$$H0: \text{There is NO effect of Dose on tooth growth}$$  
 
-$$HA: \text{At least one mean is different}$$  
+$$HA: \text{There IS AN EFFECT of Dose on tooth growth}$$  
 
 ### Interactive effect of `dose:supp`  
 
@@ -213,7 +213,7 @@ We can now also make a statement of the statistical significance for the interac
 
 Remember that the hypotheses for ANOVA are either that all means are the same, or that at least one was different. ANOVA can only tell us that there is a difference. Therefore, our interpretation would look something like this:
 
-> Based on a 2-way ANOVA with interaction, there were significant main effects of supplement ($F_{1, 54}= 15.572, p < 0.001$) and dose ($F_{2, 54}= 92, p < 0.001$). Furthermore, there was a significnat interaction ($F_{2, 54}= 92, p = 0.02$) which means that the effect of one factor depended on the level of the other factor.  
+> Based on a 2-way ANOVA with interaction, there were significant main effects of supplement ($F_{1, 54}= 15.572, p < 0.001$) and dose ($F_{2, 54}= 92, p < 0.001$). Furthermore, there was a significnat interaction ($F_{2, 54}= 4.1, p = 0.02$) which means that the effect of one factor depended on the level of the other factor.  
 
 ### Relate ANOVA table to intercation plot
 
