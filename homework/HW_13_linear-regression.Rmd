@@ -1,0 +1,196 @@
+---
+title: "ENVS475 Homework 13: Linear Regression"
+subtitle: "Graded"
+date: "Spring, 2023"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+   warning = FALSE, message = FALSE,
+   eval = TRUE,
+   fig.align = 'center', fig.retina = 2,
+  collapse = TRUE,
+  comment = "#>"
+)
+library(dplyr)
+library(ggplot2)
+trout <- read.csv(here::here("data/trout_cu.csv")) %>%
+  as_tibble()
+island <- read.csv(here::here("data/island_plants.csv")) %>%
+  as_tibble()
+```
+
+# This assignment will be graded.
+
+# Assignment Format
+
+* Open a new R script
+* Save your R script in the `homework/` folder
+* Name your script according to: `full_name_hw##.R`
+  + For example: `justin_pomeranz_hw13.R`
+* Comment before each problem, and each sub-problem
+* Make sure your results print out on `Source with echo`
+  + If you're answer is saved in an object, make sure you print out that object afterwards
+  
+# Setup
+
+## Load packages
+
+```{r, eval=FALSE}
+# load libraries
+library(dplyr)
+library(ggplot2)
+```
+
+# Data
+
+## Download the data and read into R
+
+Download the `trout_cu.csv` and `island_plants.csv` files from D2L and put it in your "data" folder. Read it in to R and convert it to a `tibble` with the following command. 
+
+```{r, eval = FALSE}
+# read in data for problem 1
+trout <- read.csv("data/trout_cu.csv") %>%
+  as_tibble()
+
+# data for problem 2
+island <- read.csv("data/island_plants.csv") %>%
+  as_tibble()
+```
+
+
+# Exercises Homework 13: Linear Regression
+
+## Problem 1: `trout_cu`  
+
+This is a simulated data set illustrating the impacts of increasing copper concentration `cu_ppb` measured in parts per billion on the number of trout surviving after chronic exposure. All treatments began with 100 trout, and the number surviving at the end of the experiment are recorded in the `trout` variable. 
+
+1.1 Print the `names()` and `head()` of your data object here. 
+  
+
+1.2 What class are the two variables in this data set? Is this appropriate for a linear regression? Why or why not?
+
+
+1.3 Produce a scatter plot of the data with `trout` as the response variable and `cu_ppb` as the predictor variable. 
+
+
+1.4 Does there appear to be a linear relationship between trout survival and increasing copper concentration? Why or why not?
+
+
+1.5 Does the distribution of the x-variable ( `cu_ppb` ) appear to be uniformly distributed? In other words, are there "clumps" of observations across the x-axis?
+
+
+1.6 Add a comment to your homework script stating the null and alternative hypotheses for a linear regression.  
+
+  * **Hint**: you should have two pairs of hypotheses, one for the intercept ($\beta_0$) and one for the regression coefficient ($\beta_1$). 
+
+
+1.7 Check the assumption of the normality of residuals by making a QQ-plot of this data. 
+
+
+1.8 Add a comment to your script interpreting the QQ-plot you made in 1.7 above. Does it appear that the residuals are normally distributed? Why or why not?  
+
+
+1.9 Regardless of your answer to 1.8 above, we will continue with a simple linear regression analysis of this data. Fit a model using `lm()` for the trout data, and save it as a new data object. 
+
+
+1.10 Before we look at the model output, let's make a fitted vs. residual plot to check our assumption of Equal variance of residuals.  
+
+  * Use the model-fit object you made in 1.9 above to make a fitted vs residual plot.  
+
+
+1.11 Add a comment to Interpret the fitted vs residual plot made above. Does this model appear to have equal variance in the residuals? Why or why not?  
+
+1.12 Now, use the `anova()` function on your model fit object  above to print out an ANOVA table for your linear regression. 
+
+
+1.13 Add a comment to your script interpreting the ANOVA table for our linear regression analysis. Which of the two hypotheses stated above does this table refer to? Do we reject or fail to reject that null hypotheses? 
+
+
+1.14 Print out the `summary()` of the linear model object you created. 
+
+
+1.15 Add a comment to your script describing what each coefficient means. 
+
+1.16 Add a comment which has the adjusted R-squared value from our model as well as an interpretation for what it means.
+
+
+1.17 Add a comment to your script writing out the full equation for our linear model. 
+
+
+1.18 Make a scatter plot of the data which includes a line of best fit on the plot.  
+
+* hint: you will need to add a `geom_smooth(method = "lm")` argument to your ggplot code above. 
+
+
+1.19 Use the coefficient estimates from the `lm()` model to estimate the number of surviving trout when copper concentration is 5 ppb. 
+
+1.20 Estimate the copper concentration for an experiment which has 35 trout surviving at the conclusion of the experiment.  
+
+* Hint: You will need to rearrange your linear model equation to have `cu_ppb` on its own on the left side of the equation. 
+
+## Problem 2: `island_plants`    
+
+### Load data
+
+If you haven't already done so, load the data for problem 2. 
+
+```{r, eval = FALSE}
+# data for problem 2
+island <- read.csv("data/island_plants.csv") %>%
+  as_tibble()
+```
+### Data background  
+
+The theory of island biogeography predicts that the number of species will increase with island area. This data set is from an observational study of the number of plants occuring on islands of different sizes.   
+
+### Problem 2 questions  
+
+2.1 You should always get to know your data by looking at `names()`, `head()`. 
+
+2.2 Produce a scatter plot of the data with `Nspecies` as the response variable and `Area` as the predictor variable. 
+
+2.3 Add a comment to your script interpreting this scatter plot. Does it appear that there is a linear relationship between the number of species and island area?  
+
+
+2.4 Make another scatter plot but this time use `log10_Nspp` as the response variable and `log10_area` as the predictor variable. 
+
+
+2.5 Add a comment to your script interpreting this scatter plot. Does it appear that there is a linear relationship between the log10-transformed number of species and island area?   
+
+
+## We will continue this analysis using the log10 transformed data. 
+
+### A Brief note  
+
+The transformation of data is a very common thing to do in an analysis. Technically speaking, our assumptions of normality, equal variance, etc. also apply to data which has been transformed. In other words, if our assumptions are met *after* transformation, this constitutes a legitimate statistical analysis. You will often see language in publications that say "we transformed the variable(s) to meet the assumptions of normality" or similar. 
+
+Unfortunately, I ran out of time in class to go over this in detail, but just know that this is OK, and that there are a number of other common transformations out there. 
+
+### Continuing on with the homework... 
+
+2.6 Perform a linear regression using the `lm()` function using the log10 variables and save this model in a new data object. 
+
+2.7 Make a fitted vs. residual plot to check our assumption of equal variance in the residuals. 
+
+2.8 Add a comment to your script interpreting the fitted vs. residual plot. 
+
+
+2.9 Print out an ANOVA table of the `lm` object and interpret it here. 
+
+2.10 Print out the `summary()` of your lm object here. 
+
+2.11 For each coefficient, write out the estimate and standard error and interpret the results. Be sure to list all appropriate statistics, and relate it back to the null and alternative hypotheses for each. 
+
+2.12 what is the adjusted R-squared for this model, and what does it mean?
+
+
+2.13 Write out the full equation for this linear model. Be sure to put "log10" in the appropriate places for these variables. 
+
+2.14 Make another scatter plot of the transformed data and include a line of best fit. 
+
+### This concludes the Homework
