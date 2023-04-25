@@ -16,6 +16,13 @@ library(Sleuth3)
 df <- case1402
 ```
 
+# NOTES  
+
+add hypotheses, and about section
+Make homework and solution 
+Do I need more intro??  
+
+
 ## About
 
 
