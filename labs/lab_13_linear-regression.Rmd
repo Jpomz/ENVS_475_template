@@ -189,7 +189,7 @@ We interpret the F-value and p-value for our predictor variable in a similar way
 
 Remember that the hypothesis for the regression coefficient is that it is equal to zero (no relationship between x and y) or that it is not equal to 0 (there is a relationship between x and y). Therefore, our interpretation would look something like this:
 
-> Based on our data, we can reject the null hypothesis and conclude that the value of y (Height) does depend on the value of x (Girth) in black cherry trees  ($F_{1, 29}= 10.7, p < 0.001$)
+> Based on our data, we can reject the null hypothesis and conclude that the value of y (Height) does depend on the value of x (Girth) in black cherry trees  ($F_{1, 29}= 10.7, p = 0.003$)
 
 
 ## `lm()` summary  
