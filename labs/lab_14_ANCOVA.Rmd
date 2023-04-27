@@ -16,28 +16,149 @@ library(Sleuth3)
 df <- case1402
 ```
 
-# NOTES  
 
-add hypotheses, and about section
-Make homework and solution 
-Do I need more intro??  
+# About
 
+Here we go for our final linear-model example. It is unique in that it combines a categorical explanatory variable with a continuous explanatory variable. What are we up to? We are combining regression and one-way ANOVA! Yes we are.
 
-## About
+# ANCOVA  
 
+This week, we will be using the `lm()` function to fit a linear regression to data which has a continuous *AND* a categorical variable. Essentially, we will be fitting two linear regression models (one for each level of the categorical variable), and testing whether these lines are different from each other or not. 
 
 ## Preliminaries 
 
 ### Packages  
 
-For this lab, we will be using the `dplyr`, `ggplot2`, `Sleuth3` and the `car` packages. Make sure all packages are installed on your computer (you may need to install `Sleuth3` and `car`), and then run the following code:
+For this lab, we will be using the `dplyr`, `ggplot2`, and `Sleuth3` packages. Make sure all packages are installed on your computer (you may need to install `Sleuth3`), and then run the following code:
 
 ```{r, eval=FALSE}
 library(Sleuth3)
-library(car)
 library(dplyr)
 library(ggplot2)
 ```
+
+## Hypotheses, plain words  
+
+* Is the intercept for the reference level = 0?  
+* Is there a *difference* in intercepts between the groups (Think ANOVA)  
+* Is there a relationship between the response and continuous predictor variable *regardless* of groups? (Think a "global" linear regression, ignoring/averaging across groups)  
+* Does the relationship between the response and continous predictor *differ* between groups? i.e., are the slopes different?  
+
+## Hypotheses, graphs  
+
+```{r, echo = FALSE}
+dat <- data.frame(x = -10:10, y = -10:10)
+ggplot(dat,
+       aes(x, y)) +
+  geom_blank() +
+  theme_bw() +
+  geom_abline(intercept = 0,
+              slope = 0,
+              color = "dodgerblue",
+              size = 2) +
+  geom_abline(intercept = 0.5,
+              slope = 0,
+              color = "black",
+              linetype = "dashed",
+              size = 2) +
+  labs(title = "No relationship, same intercept")
+```
+
+```{r, echo = FALSE}
+ggplot(dat,
+       aes(x, y)) +
+  geom_blank() +
+  theme_bw() +
+  geom_abline(intercept = -5,
+              slope = 0,
+              color = "dodgerblue",
+              size = 2) +
+  geom_abline(intercept = 5,
+              slope = 0,
+              color = "black",
+              linetype = "dashed",
+              size = 2) +
+  labs(title = "No relationship, Different intercepts")
+
+```
+
+```{r, echo = FALSE}
+ggplot(dat,
+       aes(x, y)) +
+  geom_blank() +
+  theme_bw() +
+  geom_abline(intercept = 0.5,
+              slope = 1,
+              color = "dodgerblue",
+              size = 2) +
+  geom_abline(intercept = 0,
+              slope = 1,
+              color = "black",
+              linetype = "dashed",
+              size = 2) +
+  labs(title = "Same Relationship, Same intercepts")
+
+```
+
+```{r, echo = FALSE}
+ggplot(dat,
+       aes(x, y)) +
+  geom_blank() +
+  theme_bw() +
+  geom_abline(intercept = 2.5,
+              slope = 1,
+              color = "dodgerblue",
+              size = 2) +
+  geom_abline(intercept = -2.5,
+              slope = 1,
+              color = "black",
+              linetype = "dashed",
+              size = 2) +
+  labs(title = "Same Relationship, Different intercepts")
+
+```
+
+```{r, echo = FALSE}
+ggplot(dat,
+       aes(x, y)) +
+  geom_blank() +
+  theme_bw() +
+  geom_abline(intercept = 3.5,
+              slope = 1,
+              color = "dodgerblue",
+              size = 2) +
+  geom_abline(intercept = -2.5,
+              slope = 2,
+              color = "black",
+              linetype = "dashed",
+              size = 2) +
+  labs(title = "Different Relationship (Interaction), Different intercepts")
+
+```
+
+## Parameters, two linear equations  
+
+Equation for the line of the reference (REF) level
+
+$$\hat{y}_{REF} = \beta_0 + \beta_1*x_1$$
+
+Equation for the line of the alternative (ALT) level
+
+$$\hat{y}_{ALT} = (\beta_0 +\beta_{0\Delta}) + (\beta_1 +\beta_{1\Delta})*x_1$$  
+
+* $\Delta$ is the Greek letter Delta, and is commonly used to represent *differences*  
+
+* $\beta_0$ = intercept for reference level  
+
+* $(\beta_{0\Delta})$ = Difference between intercepts  
+
+* $\beta_1$ = Slope for reference level  
+
+* $(\beta_{1\Delta})$ = Difference between slopes (Interactive effect)    
+
+
+**NOTE** We are keeping things simple with just two levels of the categorical variable. For each additional level, $i$, there will be two more parameters estimated in the linear model, one each for the difference in intercepts between the reference level and level $i$ ($\beta_{0\Delta_i}$, and one for the difference in slopes between the reference level and level $i$ ($\beta_{1\Delta_i}$.  
+
 
 
 ## Data  
@@ -161,15 +282,22 @@ summary(df_lm)
 
 ### Equation for line 1: `Stressed`  
 
+$$Yield_{Stressed} = \beta_0 + \beta_1 * \text{Ozone} $$  
+
 * (Intercept) $\beta_0$: Estimate = 8.49; This is the average yield for the `Stressed` treatment when Ozone = 0.  
+
 * `O3` $\beta_1$: Estimate = -6.47; For every 1-unit increase in Ozone, the average yield changes by -6.47.  
+#### Full equation  
 
 $$ \text{Yield}_{Stressed} = 8.49 - 6.47 * \text{Ozone}$$
 
 ### Equation for line 2: `Well-watered`  
 
-* `StressWell-watered`: This is the estimated difference in intercepts for the two treatment groups. Estimate = $\beta_0 + \beta_{well-watered} = 8.49 + 1.916 = 10.41$; This is the average yield for the `Well-watered` treatment when Ozone = 0.  
-* `O3:Stresswell-watered`: This is the estimated difference in slopes for the two treatment groups (but note that the p-value > 0.05, so we fail to reject the NULL that this coefficient is 0). Estimate = $-6.47 - 1.35 = -7.82$.  
+$$Yield_{well-watered} = (\beta_0+\beta_{0 \Delta}) + (\beta_1 +\beta_{1 \Delta}) * \text{Ozone} $$  
+
+* `StressWell-watered`: This is the estimated difference ($\beta_0+\beta_{0 \Delta}$) in intercepts for the two treatment groups. Estimate = $\beta_0 + \beta_{well-watered} = 8.49 + 1.916 = 10.41$; This is the average yield for the `Well-watered` treatment when Ozone = 0. 
+
+* `O3:Stresswell-watered`: This is the estimated difference ($\beta_1 +\beta_{1 \Delta}$) in slopes for the two treatment groups (but note that the p-value > 0.05, so we fail to reject the NULL that this coefficient is 0). Estimate = $-6.47 - 1.35 = -7.82$.  
 
 $$ \text{Yield}_{well-watered} = (8.49 + 1.916) - (6.47 - 1.35) * \text{Ozone} = 10.41 - 7.82 * \text{Ozone}$$
 

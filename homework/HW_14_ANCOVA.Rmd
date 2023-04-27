@@ -1,0 +1,138 @@
+---
+title: "ENVS475 Homework 14: Linear Regression"
+subtitle: "Ungraded"
+date: "Spring, 2023"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+   warning = FALSE, message = FALSE,
+   eval = TRUE,
+   fig.align = 'center', fig.retina = 2,
+  collapse = TRUE,
+  comment = "#>"
+)
+library(dplyr)
+library(ggplot2)
+limp <- read.csv(here::here("data/limpet.csv")) %>%
+  as_tibble()
+```
+
+# UNGRADED
+
+# Assignment Format
+
+* Open a new R script
+* Save your R script in the `homework/` folder
+* Name your script according to: `full_name_hw##.R`
+  + For example: `justin_pomeranz_hw14.R`
+* Comment before each problem, and each sub-problem
+* Make sure your results print out on `Source with echo`
+  + If you're answer is saved in an object, make sure you print out that object afterwards
+  
+
+# Overview: ANCOVA
+
+Here we go for our final linear-model example. It is unique in that it combines a categorical explanatory variable with a continuous explanatory variable. What are we up to? We are combining regression and one-way ANOVA! Yes we are.
+  
+# Setup
+
+## Load packages
+
+```{r, eval=FALSE}
+# load libraries
+library(dplyr)
+library(ggplot2)
+```
+
+# Data
+
+## Download the data and read into R
+
+Download the `limpet.csv` file from D2L and put it in your "data" folder. Read it in to R and convert it to a `tibble` with the following command. 
+
+```{r, eval = FALSE}
+# read in data for problem 1
+limp <- read.csv("data/limpet.csv") %>%
+  as_tibble()
+```
+
+The dataset we will use is `limpet.csv` and is originally from Quinn and Keough’s 2002 book Experimental Design and Data Analysis for Biologists.  The data relate egg production by limpets to four density conditions in two seasons. The response variable (y) is egg production (`EGGS`) and the independent variables (x’s) are `DENSITY` (continuous) and `SEASON` (categorical). Because we are examining egg production along a continuous density gradient, this is essentially a study of density-dependent reproduction. The experimental manipulation of density was implemented in spring and in summer. Thus, a motivation for collecting these data could be ‘does the density dependence of egg production differ between spring and summer’?
+
+Density dependence is the idea that as the number of individuals sharing a food resource increases (e.g. their density goes up), they get a smaller and smaller portion of that food, leading to reduced reproduction success.
+
+# Exercises Homework 14: ANCOVA
+
+## Problem 1: `limpet`  
+
+1.1 Print the `names()` and `head()` of your data object here. 
+  
+
+
+1.2 Add a comment to your script with each variable and its class. Recall that `SEASON` and `DENSITY` are our predictor variables.   
+
+
+
+1.3 Produce a scatter plot of the data with `EGGS` as the response variable and `DENSITY` as the predictor variable. 
+
+
+1.4 Does there appear to be a linear relationship between the number of eggs and increasing population density? Why or why not?
+
+
+1.5 Add a line of best fit to your scatter plot with `geom_smooth(method = "lm")`  
+
+
+1.6 Now, make another scatter plot (without the line) which includes `SEASON` mapped to the `color` aesthetic. R 
+
+
+1.7 Does it appear that there is a different relationship between spring and summer? In other words, do the colors seem to "group" on one side/part of the graph, or are the colors randomly or evenly distributed across the graph? 
+
+
+1.8 Repeat the plot in 1.6, but now add a line of best fit. Below the plot, add a comment as to whether or not your answer in 1.7 is supported or if you've changed your mind.  
+
+
+1.9 Let's check the normality of residuals with a qqplot. Make the plot, and add a comment below discussing if we meet or fail or asusmption. 
+
+
+1.10  Fit a model using `lm()` for the limpet data, and save it as a new data object. Make sure to include main effects of both explanatory AND the interaction between them. 
+
+
+1.11 Before we look at the model output, let's make a fitted vs. residual plot to check our assumption of Equal variance of residuals.  
+
+  * Use the model-fit object you made in 1.9 above to make a fitted vs residual plot.  
+
+
+1.12 Add a comment to Interpret the plot made above. Does this model appear to have equal variance in the residuals? Why or why not?  
+
+
+1.13 Now, use the `anova()` function on your model fit object  above to print out an ANOVA table for your linear regression. 
+
+
+1.14 Add a comment to your script interpreting the ANOVA table for our ANCOVA analysis. Discuss what the predictor variable means, and how that relates to a linear model. Recall which variables were continuous or categorical.  
+
+  * HINT: Continuous predictors indicate if there is a relationship (Linear Regression).  
+  
+  * Categorical predictors indicate if there is a difference in means between groups (different intercepts)  
+
+
+1.15 Print out the `summary()` of the linear model object you created. 
+
+
+1.16 Add a comment to your script describing what each coefficient means. Be sure to specify what group (if necessary) the coefficient refers to.  
+
+
+1.17 Add a comment which has the adjusted R-squared value from our model as well as an interpretation for what it means.
+
+
+1.18 Add a comment to your script writing out the full equations for our linear model.  
+
+* HINT: You should have an equation for spring and an equation for summer  
+
+$$EGGS_{spring} = \beta_0 + \beta_1 * DENSITY $$  
+
+$$EGGS_{summer} = (\beta_0+\beta_{0 \Delta}) + (\beta_1 +\beta_{1 \Delta}) * DENSITY $$  
+
