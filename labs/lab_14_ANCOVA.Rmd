@@ -319,7 +319,9 @@ new_x <- expand.grid(
   Stress = levels(df$Stress))
 head(new_x)
 ```
+
 * Predict values of y based on model fit (`df_lm`) and `new_x`  
+
 
 ```{r}
 new_y <- predict(df_lm, 
@@ -327,14 +329,18 @@ new_y <- predict(df_lm,
                  interval = "confidence")
 head(new_y)
 ```
+
 * combine `new_x` and `new_y` in a data frame to add to the plot  
+
 
 ```{r}
 fit_data <- data.frame(new_x,
                        new_y)
 head(fit_data)
 ```
+
 * Plot original data  
+
 ```{r}
 ggplot(df,
        aes(x = O3, 
@@ -344,8 +350,11 @@ ggplot(df,
   geom_point() +
   theme_bw() 
 ```
+
 * add a `geom_smooth()` layer  
+
 * instead of using automatic calculations (`method = "lm"`), specify `fit_data`  
+
 
 ```{r}
 ggplot(df,
