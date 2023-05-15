@@ -295,11 +295,11 @@ $$ \text{Yield}_{Stressed} = 8.49 - 6.47 * \text{Ozone}$$
 
 $$Yield_{well-watered} = (\beta_0+\beta_{0 \Delta}) + (\beta_1 +\beta_{1 \Delta}) * \text{Ozone} $$  
 
-* `StressWell-watered`: This is the estimated difference ($\beta_0+\beta_{0 \Delta}$) in intercepts for the two treatment groups. Estimate = $\beta_0 + \beta_{well-watered} = 8.49 + 1.916 = 10.41$; This is the average yield for the `Well-watered` treatment when Ozone = 0. 
+* `StressWell-watered`: This is the estimated difference ($\beta_0+\beta_{0 \Delta}$) in intercepts for the two treatment groups. Estimate = $\beta_0 + \beta_{well-watered} = 8.49 + 0.2642 = 8.75$; This is the average yield for the `Well-watered` treatment when Ozone = 0. 
 
 * `O3:Stresswell-watered`: This is the estimated difference ($\beta_1 +\beta_{1 \Delta}$) in slopes for the two treatment groups (but note that the p-value > 0.05, so we fail to reject the NULL that this coefficient is 0). Estimate = $-6.47 - 1.35 = -7.82$.  
 
-$$ \text{Yield}_{well-watered} = (8.49 + 1.916) - (6.47 - 1.35) * \text{Ozone} = 10.41 - 7.82 * \text{Ozone}$$
+$$ \text{Yield}_{well-watered} = (8.49 + 0.2642) - (6.47 - 1.35) * \text{Ozone} = 8.75 - 7.82 * \text{Ozone}$$
 
 Note that these equations will be slightly different from what `geom_smooth(method = "lm")` will estimate. To see how to plot the estimated model fits in `ggplot`, see the appendix of this lab. 
 
