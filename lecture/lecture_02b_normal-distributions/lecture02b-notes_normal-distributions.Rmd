@@ -370,6 +370,22 @@ Student A has a z-score of 1, which is higher than the z-score for student B of 
 
 ![Figure 11. SAT and ACT SCores. (image credit Open Intro Statistics)](sat-act.png){width=50%}
 
+## Log-Normal Distribution  
+
+### ADD SECTION
+
+
+```{r}
+ln <- rlnorm(1000)
+plot(density(ln))
+
+plot(density(log(ln)))
+```
+
+[judge data](https://www.datanovia.com/en/lessons/transform-data-to-normal-distribution-in-r/) positive and negativer skew
+
+
+
 # Appendix
 ## Exampe code for figures
 
