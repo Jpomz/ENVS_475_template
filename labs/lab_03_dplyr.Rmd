@@ -13,9 +13,6 @@ knitr::opts_chunk$set(collapse = T, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 
 library(dplyr)
-library(ggplot2)
-library(nycflights13)
-data("flights")
 ```
 
 # Overview 
@@ -29,61 +26,56 @@ vignette("dplyr")
 
 ## Preliminaries
 
-Before we begin, make sure you have the following packages installed: `dplyr`, `ggplot2` and `nycflights13`. 
+Before we begin, make sure you have the `tidyverse` installed. 
 
-If you need to install `dplyr` or `nycflights13`, run the following lines of code, as needed. Also note that the package name is inside of "" in the function call: 
+If you need to install it, run the following lines of code, as needed. Also note that the package name is inside of "" in the function call: 
 ```{r, eval=FALSE}
-install.packages("dplyr")
-install.packages("ggplot2")
-install.packages("nycflights13")
+install.packages("tidyverse")
 ```
 
 As a reminder, you only have to run the `install.packages(...)` line once per machine. Running this line downloads the package onto the machine that you are currently using. However, you do need to load the packages at the beginning of every session. The following commands "loads" the packages and makes the commands available to you. Note that once the package is installed, you *do not* need "" around the package name.
 
 ```{r eval = FALSE}
-library(dplyr)
-library(ggplot2)
-library(nycflights13)
+library(tidyverse)
 ```
 
-### Data: nycflights13
+## Data: `starwars`  
 
-In order to demonstrate the basic data manipulation verbs of dplyr, we will be using the `nycflights13` database. This data object contains five dataframes: `airlines`, `airports`, `flights`, `planes`, and `weather`. The `flights` dataset contains all `r nrow(nycflights13::flights)` flights that departed from New York City in 2013. The data comes from the US [Bureau of Transportation Statistics](http://www.transtats.bts.gov/DatabaseInfo.asp?DB_ID=120&Link=0), and is documented in `?nycflights13::flights`
+In order to demonstrate the basic data manipulation verbs of dplyr, we will be using the `starwars` database, which comes with `dplyr` (part of the tidyverse. 
 
-We will load the `flights` data by running the following command:
+We will load the `starwars` data by running the following command:
 ```{r}
-data("flights")
+data("starwars")
 ```
-
-It is worth noting that this data is already in the "tidydata" format. Unfortunately, going into this in detail is beyond the scope of this tutorial, but I recommend you look at the "tidydata" chapter in R for Data Science: <https://r4ds.had.co.nz/tidy-data.html>. Likewise, see my plug for tidydata at the end of this document. 
 
 Whenever you start working with a new dataset, you should also run some quick commands to get an idea of what the data looks like, and how it is set up. I generally run the following commands (note that I have suppressed the display in this document for room, but you should run each of these on your computer):
+
 ```{r, eval=FALSE}
-dim(flights)
-names(flights)
-head(flights)
-tail(flights)
-str(flights)
+dim(starwars)
+names(starwars)
+head(starwars)
+tail(starwars)
+str(starwars)
 ```
 
-The `dim()` list the number of rows and columns, in that order. The `flights` dataset has `r nrow(flights)` rows and `r nrow(flights)` columns! Just imagine trying to summarize that "by hand" in excel. These are the types of tasks which nightmares are made of. But as we will see in this tutorial, `dplyr` makes summarising data sets this large a breeze. But before we go there, let's keep getting to know the data set a bit. 
+The `dim()` list the number of rows and columns, in that order. The `starwars` dataset has `r nrow(starwars)` rows and `r nrow(starwars)` columns. 
 
-You may notice that the `head(flights)` output is different from many other data frames that you may have worked with before. It only shows the rows and columns that easily fit into your window. That's because the `flights` object is a tibble:
+You may notice that the `head(starwars)` output is different from many other data frames that you may have worked with before. It only shows the rows and columns that easily fit into your window. That's because the `starwars` object is a tibble:
 
 ```{r}
-class(flights)
+class(starwars)
 ```
 
 Tibbles `"tbl_df"` act just as a data frame would, but they print only the information that can fit into your window. To see the full data frame in the Rstudio viewer use:
 
 ```{r eval = FALSE}
-View(flights)
+View(starwars)
 ```
 
 Or as a normal data frame use:
 
 ```{r eval = FALSE}
-head(as.data.frame(flights))
+head(as.data.frame(starwars))
 ```
 
 To convert a data frame to a tibble, use `as_tibble()`. 
@@ -91,10 +83,10 @@ To convert a data frame to a tibble, use `as_tibble()`.
 As a general rule, I almost always use the `names()` function when I'm looking at a new data set. This helps me get an idea of the data structure, and if the variable names are meaningful, can help me understand what types of questions I can ask, and how I may be able to answer them.
 
 ```{r}
-names(flights)
+names(starwars)
 ```
 
-These variables should be relatively self-explanatory, but you can run `?flights` for more information. 
+These variables should be relatively self-explanatory, but you can run `?starwars` for more information, including units. 
 
 
 #  `dplyr`
@@ -103,7 +95,7 @@ Data manipulation is one of the primary tasks that scientists undertake. the `dp
 
 There is an extremely helpful Rstudio data wrangling cheat sheet which you can download directly through Rstudio by clicking *Help > Cheatsheets > Data transformation with dplyr*. 
 
-**Practice good project organization** When you download these cheatsheets, put them all in an appropriate folder so you can find them again easily. Recall that I recommend the following sub folders in your `ENVS_475` project directory:
+**Practice good project organization** When you download these cheat sheets, put them all in an appropriate folder so you can find them again easily. Recall that I recommend the following sub folders in your `ENVS_475` project directory:
 ```
 ENVS_475/
   |─── other_resources/
@@ -139,19 +131,29 @@ There are other verbs in the `dplyr` package, along with many useful "helper" fu
 
 `filter()` allows you to select a subset of rows in a data frame. The first argument is the name of the data frame. The second and subsequent arguments are the expressions that filter the data frame. 
 
-#### Filter rows based on numeric data 
-For example, we can select all flights on July 4th with:
+#### Filter rows based on numeric data  
+
+For example, we can select all star wars characters who are greater than or equal to 180 cm tall with:
 ```{r}
-filter(flights, month == 7, day == 4)
+filter(starwars, height >= 180)
 ```
-If you check the output of this function, you shuold notice at the top R tells us that the functioned returned "A tibble: 737 x 19". This means that the data returned had 737 rows and 19 columns. This makes sense, because we are only asking for flights which left on a certain day, but are not changing anyhting about the number of columns. It's always a good idea to double check that the size of the returned data makes sense. 
 
-*** 
-you try it - modify the code above to filter out flights that occured in the month of July. What is the size of the returned tibble?
-***
+* Note that R tells us that the functioned returned "A tibble: rows x columns".  
 
-#### The use of `==`
-You may have noticed in the `filter()` command we used `==` instead of `=`. The `==` is a Boolean operator. It is used to specify that we want to know if the object on the left is *exactly* the same as the object on the right. For example, run the following code:
+*  This makes sense, because we are only asking for star wars characters taller than a number.   
+
+* It's always a good idea to double check that the size of the returned data makes sense. 
+
+
+#### The use of `==`  
+
+if we wanted to know which characters were *exactly* 180 cm, we use the following: 
+
+```{r}
+filter(starwars, height == 180)
+```
+
+In the `filter()` command, we use `==` instead of `=`. The `==` is a Boolean operator. It is used to specify that we want to know if the object on the left is *exactly* the same as the object on the right. For example, run the following code:
 
 ```{r}
 5 == 5
@@ -162,17 +164,17 @@ You may have noticed in the `filter()` command we used `==` instead of `=`. The 
 
 The single `=` is another way of *assigning* a value to an object in R. For example `a = 5` stores the value of 5 inside of the object called `a`. 
 
-Other Boolean operators are discussed below, but for now, let's get back to our `filter(flights, month == 7, day == 4)` command...
-This is equivalent to the standard subsetting notation in base R:
+#### Filtering rows based on character data
 
-```{r, eval = FALSE}
-flights[flights$month == 7 & flights$day == 4, ]
+In the example above, we were filtering observations based on numeric data (i.e., `height >= 150`). Filter also works with character data types. For example, let's extract all of the star wars characters that are from Naboo, which is stored in the `homeworld` column
+
+```{r}
+filter(starwars, homeworld == "Naboo")
 ```
- But as you can see, there's a lot more detail that needs to be included in the base commands, and it's much easier to make mistakes. To be honest, I *always* forget exactly how to do it, and have to Google the syntax nearly ever time I do it this way. 
- 
-You may also see old scripts or tutorials using the `subset()` command. `filter()` works very similarly to `subset()` but is slightly more flexible. As far as I can tell `filter()` has superceded `subset()`, so we won't be going over it here but I wanted to mention it in case you see it other places. 
+Note the use of `""` around UA in the `filter()` function. Remove the quotes and run the code again. What happens?
 
-`filter()` also works with other Boolean operators, which allows for a very flexible system to filter out specific cases. 
+You should have received an error code in the R console. Error codes often look like hieroglyphics the first few times you see them, but the important information in this error is the "object 'UA' not found". When we enter unquoted arguments into the dplyr functions, R looks for objects (i.e., data objects, column names within a data object, etc.) with that name. 
+
 
 #### Other Boolean operators
 Other Boolean operators include:
@@ -180,7 +182,7 @@ Other Boolean operators include:
 
 * `&` which means "and"  
 
-* `!=` which means "not equal to"  
+* `!=` which means "not equal to"  **PAY ATTENTION HERE!**
 
 * `>=`which means "greater than or equal to"  
 
@@ -194,46 +196,29 @@ Other Boolean operators include:
 You can use boolean operators, singly and in combination:
 
 ```{r, eval = FALSE}
-# flights in January OR February
-filter(flights, month == 1 | month == 2)
-# flights in January OR February AND that flew > 1000 OR < 500 miles
-filter(flights, month == 1 | month == 2 & distance > 1000 | distance < 500)
+# starwars from Tatooine *OR* Alderaan
+filter(starwars, homeworld == "Tatooine" | homeworld == "Alderaan")
+
+# starwars from Tatooine OR Alderaan AND that are > 100 OR < 150 cm
+filter(starwars, homeworld == "Tatooine" | homeworld == "Alderaan" & height > 100 | height < 150)
 ```
 
-Sometimes you want to see all of the data that do *not* meet a criteria. For example, maybe you don't want to know what flights left in July. You could use a combination of arguments within `filter()` such as: `month < 7 | month > 7`, or you could use the logical negation command `!=`. This command can be read as "not equal to". 
+Sometimes you want to see all of the data that do *not* meet a criteria. For example, maybe you don't want to know what starwars characters are not from Tatooine. You can use the logical negation command `!=`. This command can be read as "not equal to". 
 
 ```{r}
-# month less than "OR" greater than 7
-not_july_1 <- filter(flights, month < 7 | month >7)
-# month "not equal to" 7
-not_july_2 <- filter(flights, month != 7)
-# are these to objects the same?
-identical(not_july_1, not_july_2)
-# yes
+# Not Tatooine
+filter(starwars, homeworld != "Tatooine")
 ```
-
-Both lines of code above give the same result, but the second line is simpler to write, and you don't have to remember if you're supposed to use an "AND" (`&`) or an "OR" (`|`) command. 
-
-#### Filtering rows based on character data
-
-In the example above, we were filtering observations based on numeric data (i.e., `month == 7` for July). Filter also works with character data types. For example, let's extract all of the flights that were operated by United Airlines, which is abbreviated as "UA" in the `carrier` column
-
-```{r}
-filter(flights, carrier == "UA")
-```
-Note the use of `""` around UA in the `filter()` function. Remove the quotes and run the code again. What happens?
-
-You should have received an error code in the R console. Error codes often look like hieroglyphics the first few times you see them, but the important information in this error is the "object 'UA' not found". When we enter unquoted arguments into the dplyr functions, R looks for objects (i.e., data objects, column names within a data object, etc.) with that name. 
 
 #### Removing `NA`'s with `filter()`
 
-A common task in data analysis requires the removal of `NA` values in our data. For example, in the `flights` data, flights which were cancelled have `NA` values in the `dep_` and `arr_` columns. 
+A common task in data analysis requires the removal of `NA` values in our data. For example, in the `starwars` data, droids don't have hair, so `hair_color` is `NA`. 
 
-Based on what we learned before it’s natural to think that we do this by using the condition `dep_time != NA`
+Based on what we learned before it’s natural to think that we do this by using the condition `hair_color != NA`
 * To remove only rows with `NA` in specific columns use `filter`
 
-```{r}
-filter(flights, dep_time != NA)
+```{r, eval=FALSE}
+filter(starwars, hair_color != NA)
 ```
 
 * Why didn't that work?
@@ -245,27 +230,17 @@ filter(flights, dep_time != NA)
 * Combine this with `!` for "not"
 
 ```{r}
-filter(flights, !is.na(dep_time))
+filter(starwars, !is.na(hair_color))
 ```
 
 #### Using `unique()` 
 
-It is also often useful to see all of the values that occur within a variable column. For example, what are all of the airport origins in this data set?
+It is also often useful to see all of the values that occur within a variable column. For example, what are all of the homeworld origins in this data set?
 
-Here, I will use the base R function `unique()` to see all of the values in the variable "origin". To select just that variable, I will use the `$` subsetting function. 
+Here, I will use the base R function `unique()` to see all of the values in the variable `homeworld`. To select just that variable, I will use the `$` subsetting function. 
 ```{r}
-unique(flights$origin)
+unique(starwars$homeworld)
 ```
-
-This data contains all of the flights leaving New York City, and the codes above refer to Newark, LaGuardia, and JFK, respectively. 
-
-
-#### Pracice problems 1
-
-1. Filter out all of the flights that departed in December. 
-2. What are all of the `carriers` in this data set? Choose one and filter out all of the flights for that carrier. 
-3. Filter out all of the flights that did *not* depart on the 13th day of any month.  
-4. *Challenge* Filter out all of the flights which departed on your birthday and were delayed by at least 10 minutes. 
 
 ### Arrange rows with `arrange()`
 
@@ -273,31 +248,18 @@ This data contains all of the flights leaving New York City, and the codes above
 
 
 ```{r}
-# arrange by sched_dep_time
-arrange(flights, sched_dep_time)
+# arrange by homeworld
+arrange(starwars, homeworld)
 
-# arrange by sched_dep_time, then dep_delay
-arrange(flights, sched_dep_time, dep_delay)
+# arrange by homeworld, then height
+arrange(starwars, homeworld, height)
 ```
 
 The default order is from smallest to largest, numeric to character, and a to z. To reverse this order, use `desc()` to order a column in descending order:
 
 ```{r}
-arrange(flights, desc(sched_dep_time))
-arrange(flights, desc(sched_dep_time), dep_delay)
+arrange(starwars, desc(homeworld))
 ```
-
-`arrange()` is a straightforward wrapper around `order()` that requires less typing. The `arrange()` calls above are equivalent to the following code written in base R:
-```{r, eval = FALSE}
-flights[order(flights$sched_dep_time), ]
-flights[order(flights$sched_dep_time, decreasing = TRUE, flights$dep_delay),]
-```
-
-Similar to the `filter()` commands above, I hope you'll agree that the `arrange()` commands are more intuitive and less error prone to write. 
-
-#### Practice problems 2
-1. Arrange the flights in order of flight distance. 
-2. Arrange the flights in descending order of month (12 --> 1), and increasing order of day (1 --> 31). 
 
 ### Select columns with `select()`
 
@@ -305,82 +267,37 @@ Data sets generally contain numerous columns, but oftentimes you are only intere
 
 ```{r, eval=FALSE}
 # Select columns by name
-select(flights, month, day, carrier)
+select(starwars, height, mass, homeworld, hair_color)
 
-# Select all columns between day and arr_time (inclusive)
-select(flights, day:arr_time)
+# Select all columns between name and eye_color (inclusive)
+select(starwars, name:eyecolor)
 
-# select all columns except for month
-select(flights, -month)
-
-# Select all columns except those from year to day (inclusive)
-select(flights, -(year:day))
+# select all columns except for height
+select(starwars, -height)
 ```
 
-This function works similarly to the `select` argument in `base::subset()`. The dplyr philosophy is to have small functions that do one thing well, so it's its own function. 
 
 There are a number of helper functions you can use within `select()`, like `starts_with()`, `ends_with()`, `matches()` and `contains()`. These let you quickly match larger blocks of variables that meet some criterion. See `?select` for more details.
 
-As a quick example, the following command selects all the column names which end with the word "time". Note that you need to put the search term in "" within the `ends_with()` command.
-
-```{r}
-select(flights, ends_with("time"))
-```
 
 The order you write the arguments in `select()` are retained in the output. This can be helpful if you want to quickly compare the values in two columns which do not normally appear next to each other. 
 
 ``` {r}
-select(flights, air_time, dep_time, arr_time)
+select(starwars, name, homeworld, eye_color)
 ```
-
-#### Practice problems 3
-
-1. Select the hour and minute columns. 
-2. Select the dest, carrier, and arr_time variables, in that order. 
-3. **Challenge** Select every column which *does not* end with the word "time". 
 
 ### Add new columns with `mutate()`
 
-Data analysis often requires the creation of new variable columns based on values within your data. The `mutate()` function allows you to do this. For example, let's calculate a new variable called `gain`, which looks at how much time flights were able to make up after being delayed. To do this, we take the `arr_delay` column and subtract the `dep_delay` column:
+Data analysis often requires the creation of new variable columns based on values within your data. The `mutate()` function allows you to do this. For example, let's calculate a new variable called `bmi`, which looks at how height and mass in one variable.
 
 ```{r}
-# make new column called "gain"
-d2 <- mutate(flights,
-  gain = arr_delay - dep_delay)
+# make new column called "bmi"
+d2 <- mutate(starwars,
+  bmi = mass / height^2)
 
 # select new columns in d2, and columns used to calculate them
-select(d2, gain, arr_delay, dep_delay)
+select(d2, mass, height, bmi)
 ```
-
-`dplyr::mutate()` works similarly to `base::transform()`. The key difference between `mutate()` and `transform()` is that mutate allows you to refer to columns that you've just created. For example, let's take our newly created `gain` column and calculate what the average gain per hour was:
-
-```{r}
-d3 <- mutate(flights,
-  # calculate "gain" column
-  gain = arr_delay - dep_delay,
-  # use "gain" column in next calculation
-  gain_per_hour = gain / (air_time / 60)
-)
-select(d3, gain, gain_per_hour)
-```
-
-Whereas `transform` will throw an error:
-```{r, eval = FALSE}
-transform(flights,
-  gain = arr_delay - dep_delay,
-  gain_per_hour = gain / (air_time / 60)
-)
-#> Error in eval(substitute(list(...)), `_data`, parent.frame()) : object 'delay' not found
-```
-
-Once again, `mutate()` has largely replaced `transform()`, but I wanted to mention it here in case you see it in other scripts or tutorials. 
-
-
-#### Practice Problems 4
-
-1. Calculate the average speed per flight, in units of miles per minute. Reminder, speed = distance / time, and in this data, air_time is in minutes.
-2. Do the same as above, but this time report the speed in miles per hour. 
-3. Calculate an new departure delay column (i.e. `my_dep_delay = dep_time - sched_dep_time`) and see if it is equal to the `dep_delay` column provided in the original data. Hint, to get a `TRUE/FASLE` value, use `calc_equal = my_dep_delay == dep_delay`. 
 
 
 ### Summarise values with `summarise()`
@@ -388,11 +305,11 @@ Once again, `mutate()` has largely replaced `transform()`, but I wanted to menti
 The last verb is `summarise()`. This collapses a dataframe to a single value, based on a function:
 
 ```{r}
-# mean departure delay
-summarise(flights,
-  delay = mean(dep_delay, na.rm = TRUE))
-# shortest flight distance
-summarise(flights, min.dist = min(distance, na.rm = TRUE))
+# mean height
+summarise(starwars,
+  height_average = mean(height, na.rm = TRUE))
+# smallest mass
+summarise(starwars, min_mass = min(mass, na.rm = TRUE))
 ```
 
 Notice the argument `na.rm = TRUE` within the summarize function. If you have missing or `NA` values within your data, it will cause the summary functions to return `NA`. Recall that we discussed this in the "`NULL`'s in Vectors " section in our introduction to R activity.  
@@ -402,159 +319,74 @@ Additionally, summarize is optimized to work with functions that return a single
 range(c(1, 2, 3, NA, 5, 6, 7), na.rm = TRUE)
 ```
 
-When used in combination with `summarise()`, two values are returned, but they are not labeled:
+When used in combination with `summarise()`, two values are returned, but they are not labeled, and it includes a warning message:
 ```{r}
-summarise(flights,
-          delay.range = range(dep_delay, na.rm = TRUE))
+summarise(starwars,
+          height_range = range(height, na.rm = TRUE))
 
 ```
 
 If this is the only thing you are calling, it may be easy to tell which is which, but if we have multiple summary arguments, it can be less obvious:
 
 ```{r}
-summarise(flights,
-          delay.range = range(dep_delay, na.rm = TRUE),
-          mean.delay = mean(dep_delay, na.rm = TRUE))
+summarise(starwars,
+          height_range = range(height, na.rm = TRUE),
+          height_mean = mean(height, na.rm = TRUE))
 
 ```
 
 However, we can get around this by calling the `min()` and `max()`  functions separately within summarise:
 ``` {r}
-summarise(flights, 
-          min.delay = min(dep_delay, na.rm = TRUE),
-          max.delay = max(dep_delay, na.rm = TRUE),
-          mean.delay = mean(dep_delay, na.rm = TRUE))
+summarise(starwars, 
+          min_height = min(height, na.rm = TRUE),
+          max_height = max(height, na.rm = TRUE),
+          mean_height = mean(height, na.rm = TRUE))
 ```
 
-In general, it is strongly recommended to call functions inside `summary()` which only return one value. Indeed, in the future `dplyr` is scheduled to be updated to remove the ability to return 2 values. You should get in the habit now so you don't have to re-learn habits in the future. 
-
-#### Practice Problems 5 
-1. What is the mean `air_time` in this data?
-2. What is the minimum and maximum flight `distance`?
-3. What is the mean and standard deviation of `arr_delay`?
 
 ## Grouped operations
 
 These verbs are useful on their own, but when used in conjuction with the `group_by()` function, the awesomeness of `dplyr` starts to shine through. It organizes a dataset into specified groups of rows. Verbs are then applied group-by-group within the dataset. Conveniently, this is accomplished using the exact same syntax as above. 
 
-Here, we will group the data by "carrier" and then summarize the mean departure delay:
+Here, we will group the data by `homeworld` and then summarize the mean height:
 ```{r}
 # make a new object which contains a "grouping variable"
-carrier_group <- group_by(flights, carrier)
-summarize(carrier_group,
-          mean_delay = mean(dep_delay, na.rm = TRUE))
+home_group <- group_by(starwars, homeworld)
+summarize(home_group,
+          mean_height = mean(height, na.rm = TRUE))
 ```
-The output now contains 1 row per carrier. 
+The output now contains 1 row per world 
 
-Notice that if we print out the `carrier_group` object that it has the same dimensions as the original, but there is now a new line at the top which specifies the grouping variable:
+Notice that if we print out the `home_group` object that it has the same dimensions as the original, but there is now a new line at the top which specifies the grouping variable:
 
 ```{r}
-carrier_group
-```
-
-Just to emphasize a previous point, including functions that return 2 values in this context can be difficult to interpret. 
-```{r, message = FALSE}
-summarize(carrier_group,
-          range_delay = range(dep_delay, na.rm = TRUE),
-          mean_delay = mean(dep_delay, na.rm = TRUE))
-```
-Here the `mean_delay` is repeated twice in order to account for the fact the we have a row for the minimum *and* the maximum delay. The following code requires one additional line, but gives us the same information and is much easier to interpret:
-
-```{r, message=FALSE}
-summarize(carrier_group,
-          min_delay = min(dep_delay, na.rm = TRUE),
-          max_delay = max(dep_delay, na.rm = TRUE),
-          mean_delay = mean(dep_delay, na.rm = TRUE))
+home_group
 ```
 
 #### Using `n()` to get counts
 
-Another common data summarization task is to get the number of observations within a data set. For example, let's say we wanted to know how many flights each carrier was scheduled to operate. For this, we can use `n()`, which is a special function inside of the `summary()` function. 
+Another common data summarization task is to get the number of observations within a data set. For example, let's say we wanted to know how many starwars each carrier was scheduled to operate. For this, we can use `n()`, which is a special function inside of the `summary()` function. 
 
 ```{r}
-summarize(carrier_group, count = n())
+summarize(home_group, count = n())
 ```
-#### Extended `dplyr` example 
 
-To illustrate the power of `dplyr`, here is a more complex data summarization. 
-
-1. First, we **filter** out the flights that were canceled. In this data, canceled flights have `dep_time = NA`. The command we will use is: `!is.na(dep_time)`. You can read this as "all of the flights that *do not* have an `NA` value in the `dep_time` variable. 
-2. The entire data set is **grouped** into carrier and individual planes. 
-3. A **new column** for air speed is added (using `mutate()`). 
-4. It is then **summarized** by counting the number of flights (`count = n()`) and computing the average speed (`mean.speed = mean(speed, na.rm = TRUE)`) and arrival delay (`delay = mean(arr_dellay, na.rm = TRUE)`). 
-5. We will filter out results to make the display (below) nicer. 
-6. The results are then displayed using ggplot (after filtering to only include )
-  * Don't worry about the `ggplot()` commands for now, we will work on that in the coming weeks
-
-```{r, warning = FALSE, message = FALSE, fig.width = 6}
-#filter out canceled flights
-not_cancelled <- filter(flights, !is.na(dep_time))
-# add grouping variable
-by_carrier <- group_by(not_cancelled, carrier, tailnum)
-# add air speed column
-air_speed <- mutate(by_carrier, speed = distance / air_time * 60)
-# summarize data
-speed_summary <- summarise(air_speed,
-  count = n(),
-  distance = mean(distance, na.rm = TRUE),
-  speed = mean(speed, na.rm = TRUE))
-# only include groups which have more than 100 observations
-speed_summary <- filter(speed_summary, count > 100)
-
-# plot the resulting data using ggplot
-ggplot(speed_summary, aes(distance, speed)) + # initiate the plot
-  geom_point( # add points as in a "scatterplot"
-    aes(
-      color = carrier,
-      size = count),
-    alpha = 0.5) +
-  theme_bw() # I like this style better than the default
-```
-Not surprisingly, flights that travel a shorter distance do not reach their maximal cruising speed. The difference in speed between different carriers (colored dots) may be reflecitive of different plane models or operation procedures. 
-
-#### Practice Problems 6
-Perform the following after grouping the data by `carrier`. You may want to use the `carrier_group` object created above. 
-1. Calculate the mean `air_time.`
-2. Calculate the minimum and maximum flight `distance.`
-3. Calculate the mean and standard deviation of `arr_delay.`
 
 # Chaining
 
-The `dplyr` function calls don't have any side-effects (unlike some base functions), making it easy to explore your data in an interactive way. However, one disadvantage of this is it doesn't lead to very succint code, particularly if you want to perform many operations at once. You can do it step-by-step, saving a new object each time:
+The `dplyr` function calls don't have any side-effects (unlike some base functions), making it easy to explore your data in an interactive way. However, one disadvantage of this is it doesn't lead to very sucinct code, particularly if you want to perform many operations at once. You can do it step-by-step, saving a new object each time:
 
 ```{r, warning = FALSE, message = FALSE, eval = FALSE}
-# calculate flights either whose arrival or departure were delayed > 30 minutes 
-a1 <- group_by(flights, year, month, day)
-a2 <- select(a1, arr_delay, dep_delay)
-a3 <- summarise(a2,
-  arr = mean(arr_delay, na.rm = TRUE),
-  dep = mean(dep_delay, na.rm = TRUE))
-a4 <- filter(a3, arr > 30 | dep > 30)
+# calculate starwars characters that have a BMI either >0.04 or < 0.01 
+a1 <- group_by(starwars, homeworld)
+a2 <- select(a1, homeworld, height, mass)
+a3 <- mutate(a2,
+  bmi = mass / height^2)
+a4 <- filter(a3, bmi > 0.04 | bmi < 0.005)
 a4
 ```
 
 However this can lead to many problems. Giving objects appropriate names can be difficult (e.g. object names in `ggplot` example). When naming them chronologically (as above), it can be difficult to remember which object is which (was the summarized object `a2` or `a3`?...). Especially if you want to do the same thing over and over on different data sets or subsets of observations. 
-
-Alternatively, if you don't want to save the intermediate results, you need to wrap the function calls inside each other:
-
-```{r warning = FALSE, message = FALSE, echo=TRUE, eval = FALSE}
-# calculate flights either whose arrival or departure were delayed > 30 minutes 
-filter(
-  summarise(
-    select(
-      group_by(flights, year, month, day),
-      arr_delay, dep_delay
-    ),
-    arr = mean(arr_delay, na.rm = TRUE),
-    dep = mean(dep_delay, na.rm = TRUE)
-  ),
-  arr > 30 | dep > 30
-)
-```
-
-This is difficult to write and to read, and not intuitive because the order of the operations is from inside to out. The arguments are a long way away from the function. For example the arguments for the first `filter()` function above are the last thing within the full call (`arr > 30 | dep >30)`), approximately 8 lines lower down. 
-
-In order to get around this and write intuitive, easy to read code, we need to chain the function calls together. But before we do this, we need to introduce the pipe operator, which looks like `%>%` or `|>`
 
 ## The pipe operator: `%>%`, `|>`
 
@@ -581,57 +413,50 @@ You can see that both syntaxes give the same result. Now, let's go back our exam
 
 ```{r, message = FALSE, eval = FALSE}
 # original method, saving new object at each step
-a1 <- group_by(flights, year, month, day)
-a2 <- select(a1, arr_delay, dep_delay)
-a3 <- summarise(a2,
-  arr = mean(arr_delay, na.rm = TRUE),
-  dep = mean(dep_delay, na.rm = TRUE))
-a4 <- filter(a3, arr > 30 | dep > 30)
+a1 <- group_by(starwars, homeworld)
+a2 <- select(a1, homeworld, height, mass)
+a3 <- mutate(a2,
+  bmi = mass / height^2)
+a4 <- filter(a3, bmi > 0.04 | bmi < 0.005)
+a4
 
 # now using the %>% operator
-a5 <- flights %>%
-  group_by(year, month, day) %>% 
-  select(arr_delay, dep_delay) %>%
-  summarise(
-    arr = mean(arr_delay, na.rm = TRUE),
-    dep = mean(dep_delay, na.rm = TRUE)) %>%
-  filter(arr > 30 | dep > 30)
+a5 <- starwars %>%
+  group_by(homeworld) |>
+  select(homeworld, height, mass) |>
+  mutate(bmi = mass / height^2) |>
+  filter(bmi > 0.04 | bmi < 0.005)
 
 identical(a4, a5)
 #> TRUE
 ```
 
 It is helpful to say "then" when you see a `%>%` operator. 
-e.g. take object `flights`, *then* group by year, month and day, *then* select variables arr_delay and dep_delay *then* summarize ... etc.
+e.g. take object `starwars`, *then* group by year, month and day, *then* select variables arr_delay and dep_delay *then* summarize ... etc.
 
 The pipe operator in combination with `dplyr` allows you to quickly examine your data and explore interesting results. One of my favorite aspects of this is you can answer interesting questions almost immediately. 
 
-"I wonder what the smallest arrival delay on Christmas day was, and how far the plane travelled?"
+"I wonder what the smallest mass character is?"
 
 ```{r}
-flights %>% 
-  filter(month == 12, day == 25) %>%
-  select(dep_delay, distance) %>%
-  arrange(dep_delay)
-# note that negative values indicate an early arrival
+starwars %>% 
+  arrange(mass)
 ```
 
-If you want to also know the destination:
+If you want to also know the homeworld:
 ```{r}
-flights %>% 
-  filter(month == 12, day == 25) %>%
-  select(dep_delay, distance, dest) %>%
-  arrange(dep_delay)
+starwars %>% 
+  arrange(mass) %>%
+  select(name, mass, homeworld)
 ```
 
-What carrier has the longest flights on average?
+What homeworld has the largest average mass?
 
 ```{r, message = FALSE}
-flights %>% 
-  group_by(carrier) %>%
-  summarise(mean.dist = mean(distance), 
-                count = n()) %>%
-  arrange(desc(mean.dist))
+starwars %>% 
+  group_by(homeworld) %>%
+  summarise(mean_mass = mean(mass)) %>%
+  arrange(desc(mean_mass))
 ```
 
 ## Formatting with pipes
@@ -650,18 +475,18 @@ A couple of pointers.
 ```{r, echo=TRUE, eval = FALSE, warning=FALSE, message=FALSE}
 # don't do these:
 # no new line after each pipe
-flights %>% group_by(year, month, day) %>% filter(carrier == "FL" | 
+starwars %>% group_by(year, month, day) %>% filter(carrier == "FL" | 
 carrier == "AA"| carrier == "UA") %>% select(arr_delay, dep_delay) %>%
 summarise(arr = mean(arr_delay, na.rm = TRUE), dep = mean(dep_delay, na.rm
 = TRUE)) %>% filter(arr > 30 | dep > 30)
 # no new line after each summarize argument, and meaningless variable names
-flights %>% summarize(x1 = mean(dep_delay, na.rm = TRUE), x2 = min(dep_delay, na.rm = TRUE), x3 = max(dep_delay, na.rm = TRUE), x4 = n())
+starwars %>% summarize(x1 = mean(dep_delay, na.rm = TRUE), x2 = min(dep_delay, na.rm = TRUE), x3 = max(dep_delay, na.rm = TRUE), x4 = n())
 ```
 
 #### Better formatting
 ```{r, echo=TRUE, eval = FALSE, warning=FALSE, message=FALSE}
 # new line after each pipe
-flights %>%
+starwars %>%
   group_by(year, month, day) %>%
   select(arr_delay, dep_delay) %>%
   summarise(arr = mean(arr_delay, na.rm = TRUE), # new line here
@@ -669,7 +494,7 @@ flights %>%
   filter(arr > 30 | dep > 30)
 
 # new line after each summarize argument, and variable names
-flights %>%
+starwars %>%
   summarize(mean_delay = mean(dep_delay, na.rm = TRUE),
             min_delay = min(dep_delay, na.rm = TRUE),
             max_delay = max(dep_delay, na.rm = TRUE),
@@ -677,56 +502,4 @@ flights %>%
 ```
 
 Note that when you press enter when "inside" of a function, RStudio automatically adds a tab space. This is very helpful for keeping the code format clean and makes it much easier to read. 
-
-### Pipe with other functions
-
-You can also pipe objects into other functions outside the dplyr package: 
-```{r, warning=FALSE, message=FALSE, eval=FALSE}
-
-flights %>% 
-  filter(carrier == "HA") %>%
-  dim()
-
-# pipe results into write.csv()
-flights %>%
-  group_by(carrier, dest) %>%
-  select(dest, carrier, dep_delay) %>%
-  summarize(mean.delay = mean(dep_delay,na.rm = T), 
-            count = n()) %>%
-  arrange(carrier, desc(mean.delay)) %>%
-  write.csv(
-    file = "mean_delay_by_carrier_and_dest.csv",
-    row.names = F)
-
-# revisit our ggplot example above
-# pipe results into ggplot()
-flights %>% 
-  filter(!is.na(dep_time)) %>%
-  group_by(carrier, tailnum) %>%
-  mutate(speed = distance / air_time * 60) %>%
-  summarize(
-    count = n(), 
-    distance = mean(distance, na.rm = T), 
-    speed = mean(speed, na.rm = T)) %>% 
-  filter(count > 30) %>% 
-  ggplot(aes(distance,speed)) + 
-  geom_point(aes(color = carrier, size = count), alpha = 0.5)
-```
-
-Quick note, if you don't know where to find the .csv file you created in the example above, you can check your working directory with `getwd()`. If you're working within a project (once again, I *highly recommend* doing this!!!) and using the file structure as recommended, you could write that file directly into the `data/` folder by replacing the code after `file` with the following: 
-
-`"data/mean_delay_by_carrier_and_dest.csv"` 
-
-
-#### Practice Problems 7
-
-For all of the following exercises, try and write code to answer the question using step-by-step object creation, as well as in a single command by chaining functions together with the pipe `%>%` operator. 
-
-1) What day of the year did the longest departure delay occur on? How long was the delay? 
-
-2) What flight arrived the earliest on your birthday? Where was the flight coming from and going to?
-
-3) What is the longest flight duration in this data set? What is the longest flight duration for each carrier?
-
-4) What questions do you want to answer? Think about what you can ask with this data set, and then go step-by-step to answer the question.
 
