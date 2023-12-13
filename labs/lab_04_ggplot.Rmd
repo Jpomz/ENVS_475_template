@@ -1,112 +1,88 @@
 ---
-title: "Graphing using ggplot"
+title: "LAB: Graphing using ggplot"
 subtitle: "ENVS475: Experimental Analysis and Design"
 date: "`r format(Sys.time(), '%B, %Y')`"
 output: 
   html_document:
     toc: true
-    toc_depth: 3
+    toc_depth: 2
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(ggplot2)
-acacia <- read.csv(here::here("data/uhuru_acacia.csv"))
+library(tidyverse)
+invert <- read_csv(here::here("data/ggplot_lab_invert_survey.csv"))
 ```
 
 ## About
 
-This lab will introduce you to the `ggplot2` package in R. This is a powerful and flexible package which is capable of producing publication quality grpahics. 
+This lab will introduce you to the `ggplot2` package in R. This is a powerful and flexible package which is capable of producing publication quality graphics. 
 
 ### Preliminaries
 
-Before we begin, make sure to download the data from D2L. The data we are using in this lab is called `uhuru_acacia.csv`. You will also need to download `uhuru_trees.csv` for the homework assignment. Make sure to place both of these files in the `data/` folder in your R Project, otherwise you will need to modify the code below in order to have the code run successfully. 
+Before we begin, make sure to download the data from D2L. The data we are using in this lab is a small simulated data set called `ggplot_lab_invert_survey.csv`. You will also need to download `galapago-finches.csv` for the homework assignment. Make sure to place both of these files in the `data/` folder in your R Project, otherwise you will need to modify the code below to have it run correctly. 
 
-### More information
+* `ggplot2` is a part of the `tidyverse` and was included when you previously ran `install.packages("tidyverse")`  
 
-> * You can view the [metadata](https://esapubs.org/archive/ecol/E095/064/metadata.php) from the *Acacia drepanolobium* Surveys. 
+* Remember you only need to install packages on each machine once.  
 
-## Introduction to the UHURU dataset
+```{r, eval=FALSE}
+library(tidyverse)
+```
 
-### Data
-
-* For the next set of lessons we'll be working with data on acacia size from an experiment in Kenya
-* The experiment is designed to understand the influence of herbivores on vegetation by excluding different sized herbivores
-* There are 3 different treatments:
-  * The top-left image shows Megaherbivore  exclosures (MEGA), which use wires 2m high to keep out elephants
-  * The top-right image shows Mesoherbivore exclosures (MESO), which use fenses starting 1/3m off the ground to exclude things like impalla
-  * The bottom-left image shows full exclosures (TOTAL), which use fences all the way to the ground to keep out all mammalian herbivores
-  * And the bottom-right image shows control plots (OPEN)
-
-![Pictures of 4 experimental treatments. (A) Megaherbivore fences consist of two parallel wires starting 2-m above ground level. (B) Mesoherbivore fences consist of 11 parallel wires starting ~0.3 m above ground level and continuing to 2.4-m above ground level. (C) Total-exclusion fences consist of 14 wires up to 2.4-m above ground level, with a 1-m high chain-link barrier at ground level. (D) Open control plots are unfenced, with boundaries demarcated by short wooden posts at 10-m intervals.](https://esapubs.org/archive/ecol/E095/064/images/Fig2.png)
+## Getting Started  
 
 * So far we've been mostly working with data sets that are built into R, or making our own small data sets within our scripts. 
 * Now we will need to read in the data sets into R. 
-* But first, take a look at the `uhuru_acacia.csv` data sets by opening them. 
-* * *Right-Click on uhuru_acacia.csv in your file explorer program to Open With Notepad or text editor*
-* This data is comma separated, which is the default type in the `read.csv()` function.  
-  * Recall that we used `read.csv()` in our `dplyr` homework. This is the main one we will throughout this course.  
-  * You can also modify the `read.csv()` function to load other data types, such as tab-separated `.txt` files, etc.
-  * This is beyond the scope of the course, but you can Google it to learn more  
-* We'll call our data frame `acacia` and assign it the output from `read.csv()`
+* But first, take a look at the `ggplot_lab_invert_survey.csv` data set by opening them. 
+* * *Right-Click on uhuru_acacia.csv in your file explorer program to Open With Notepad or text editor*  
+* This data is comma separated, which is the default type in the `read_csv()` function. `read_csv()` is a part of the `tidyverse` and is the the main function that we will throughout this course.  
+  * There is also a `read.csv()` function that comes with the base installation of R. It behaves very similarly but is slightly less "smart" than `read_csv()`. 
+* We'll call our data frame `invert` and assign it the output from `read-csv()`
 * We still to supply the file name in quotes as the first argument  
 * to tell R that it's located in the `data/` folder, we add this to the beginning of the filename
 
 ```{r, eval=FALSE}
-acacia <- read.csv("data/uhuru_acacia.csv")
+invert <- read_csv("data/ggplot_lab_invert_survey.csv")
 ```
 
 * **Did everyone successfully load the data into R?**  
   + Are you in your R-project?  
   + Do you have a `data/` folder?  
-  + Is your `uhuru_acacia.csv` in the `data/` folder?
+  + Is your `ggplot_lab_invert_survey.csv` in the `data/` folder?
   
   
 Whenever you load a dataset into R, it is always a good idea to take a look at it to familiarize yourself with the structure. Run the following lines of code in RStudio one by one (I have removed the output to save space here): 
 ```{r, eval=FALSE}
-names(acacia)
-head(acacia)
-tail(acacia)
-str(acacia)
-summary(acacia)
+names(invert)
+head(invert)
+tail(invert)
+str(invert)
+summary(invert)
 ```
 
-* You can see the entire `acacia` object by running the following command:  
-`View(acacia)`  
+* You can see the entire `invert` object by running the following command:  
+`View(invert)`  
 
 * we can see that it includes information on:
-  * the time and location of the sampling
-  * the experimental treatment
-  * the size of each Acacia including a height, the canopy diameter measured in the direction (or axis) of the largest diameter and the diameter of the axis perpendicular to that, and the circumference of the shrub  
-  * information on the number of flowers, buds, and fruits
-  * And finally information on the species of ant associated with the shrub. 
-    + This is because there is a very interesting ant-acacia mutualism where the Acacia makes special structures that serve as houses for the ants and the ants swarm herbivores that try to eat the acacia  
-  * **Note** that there are `NA` values in the HEIGHT column  
-    * These refer to trees which were "dead"  
-
-## `ggplot2`
-
-* Very popular plotting package
-* Good plots quickly
-* Declarative - describe what you want not how to build it
-* Contrasts w/Imperative - how to build it step by step
-* Install `ggplot2` using `install.packages("ggplot2")`  
-* Remember you only need to install packages on each machine once. 
+  * the month (as a number) of the sampling month  
+  * the taxa (either `beetle` or `spider`) as a character vector 
+  * the body length (in millimeters) of each individual   
+  * and the body mass (in grams) of each individual  
   
-### Basics
+# `ggplot2`
 
-* We load the `ggplot2` package just like we loaded `dplyr` 
+* Very popular plotting package  
 
-```{r, eval=FALSE}
-library(ggplot2)
-```
+* Makes publication quality plots quickly  
 
-* If you haven't already loaded the uhuru data, make sure to do it now: 
-```{r, eval=FALSE}
-acacia <- read.csv("data/uhuru_acacia.csv")
-```
+* Declarative - describe what you want not how to build it  
 
-#### `ggplot` basic syntax  
+* Contrasts w/Imperative - how to build it step by step  
+  
+## Basics
+
+### `ggplot` basic syntax  
 
 $$\underbrace{ggplot}_{initiate\; plot}(\underbrace{data = df}_{data\;frame},\; \underbrace{aes(x =\; , y = \;, color = \;)}_{plot\; attributes}) + \underbrace{geom\_line()}_{geometry}$$
 * To build a plot using `ggplot` we start with the `ggplot()` function
@@ -115,483 +91,525 @@ $$\underbrace{ggplot}_{initiate\; plot}(\underbrace{data = df}_{data\;frame},\; 
 ggplot()
 ```
 
-* `ggplot()` creates a base ggplot object that we can then add things to
+* `ggplot()` creates a base ggplot object that we can then add things to  
+
   * Think of it as a blank canvas
+  
+### Plot attributes, mapping and `aes()`
   
 * We can also add optional arguments for information to be shared across different components of the plot
 * The two main arguments we typically use here are 
-* `data` - which is the name of the data frame we are working with, so `acacia`
+* `data` - which is the name of the data frame we are working with, so `invert`
 * `mapping` - which describes which columns of the data are used for different aspects of the plot
 * We create a `mapping` by using the `aes` function, which stands for "aesthetic", and then linking columns to pieces of the plot
 * We'll start with telling ggplot what value should be on the x and y axes
-* Let's plot the relationship between the circumference of an acacia and its height
+* Let's plot the relationship between the `body_length_mm` of invertebrates to their `body_mass_g`  
+* note that I start a new line after each `,` and that Rstudio automatically indents for us. This improves readability and makes it easier to look for typos.  
 
 ```{r}
-ggplot(data = acacia, mapping = aes(x = CIRC, y = HEIGHT))
+ggplot(data = invert,
+       mapping = aes(x = body_length_mm,
+                     y = body_mass_g))
 ```
+
 * Notice we now have "CIRC" on the x-axis and "HEIGHT" on the y-axis
-* This still doesn't create a figure, it's just a blank canvas and some information on
-  default values for data and mapping columns to pieces of the plot
-* We can add data to the plot using layers
-* We do this by adding a `+` after the the `ggplot()` function and then adding something called a `geom`, which stands for `geometry`
+* This still doesn't create a figure, it's just a blank canvas and some information on the default values for the data and mapping columns to axes of the plots  
+
+### Plot Layers  
+
+* We can add data to the plot using layers  
+
+* We do this by adding a `+` after the the `ggplot()` function and then adding something called a `geom`, which stands for `geometry`  
+
 * To make a scatter plot we use `geom_point()`
 
 ```{r}
-ggplot(data = acacia, mapping = aes(x = CIRC, y = HEIGHT)) +
+ggplot(data = invert,
+       mapping = aes(x = body_length_mm,
+                     y = body_mass_g)) +
   geom_point()
 ```
 
 * It is standard to hit `Enter` after the plus so that each layer shows up on its own line
   
-* To change things about the layer we can pass additional arguments to the `geom`
-* We can do things like change
-  * the `size` of the points, we'll set it to `3`
-  * the `color` of the points, we'll set it to `"blue"`
-  * the transparency of the points, which is called `alpha`, we'll set it to 0.5
+* To change things about the layer we can pass additional arguments to the `geom`  
+
+* We can do things like change  
+
+  * the `size` of the points, we'll set it to `3`  
+  
+  * the `color` of the points, we'll set it to `"blue"`  
+  
+  * the transparency of the points, which is called `alpha`, we'll set it to 0.5  
+  
 
 ```{r}
-ggplot(data = acacia, mapping = aes(x = CIRC, y = HEIGHT)) +
+ggplot(data = invert,
+       mapping = aes(x = body_length_mm,
+                     y = body_mass_g)) +
   geom_point(size = 3, color = "blue", alpha = 0.5)
 ```
 
-* To add labels (like documentation for your graphs!) we use the `labs` function
+* To add labels (like documentation for your graphs!) we use the `labs` function  
 
 ```{r}
-ggplot(data = acacia, mapping = aes(x = CIRC, y = HEIGHT)) +
+ggplot(data = invert,
+       mapping = aes(x = body_length_mm,
+                     y = body_mass_g)) +
   geom_point(size = 3, color = "blue", alpha = 0.5) +
-  labs(x = "Circumference [cm]",
-       y = "Height [m]",
-       title = "Acacia Survey at UHURU")
+  labs(x = "Body length [mm]",
+       y = "Body mass [g]",
+       title = "Simulated ground-dwelling invertebrate survey")
 ```
 
+# One Continuous Variable  
 
-* Notice that when functions have lots of arguments, it is generally considered good style/formatting to hit `enter` after a comma. 
-* For example, in the `labs()` call above, I hit enter after the `x = "Circumference [cm]",`
-  * and after the `y = "Height [m]",`,
-  * etc. 
-* This makes your code **much easier** to read. 
+Throughout the semester, we will want to see the distribution of one continuous variable. The two main ways we will do that is through:  
+1. Histograms  
+
+2. Boxplots 
+
+
+## Histograms  
+
+* We can make a histogram of `body_mass_g` by modifying our earlier code.  
+
+* Note only **one** variable, so we remove the `y=...` part.  
+
+* We also change `geom_point()` to `geom_histogram`  
+
+```{r}
+ggplot(data = invert,
+       mapping = aes(x = body_mass_g)) +
+  geom_histogram()
+```
+
+* `geom_histogram()` groups observations into bins  
+
+  * i.e., all the numbers between 10-12 g  
   
-### Rescaling axes
+* automatically picks bin numbers based on data (graph above used 30 bins, see message output), but we can modify this using the `bins` argument   
 
-* We can rescale the axes to be on a `log10` scale using the 
-  * `scale_y_log10()` and `scale_x_log10()` functions, respectively.
-```{r}
-ggplot(data = acacia, mapping = aes(x = CIRC, y = HEIGHT)) +
-  geom_point(size = 3, color = "blue", alpha = 0.5) +
-  scale_y_log10() +
-  scale_x_log10()
-```
 
-* **NOTE** This doe not change the data itself, just the presentation of it
-
-> Do Problems 1.1 and 1.2 in homework 04: `ggplot`
-
-### Grouping
-
-#### Colors
-* Visualize different groups on a single graph
-* Look at influence of experimental treatment
-* in `aes()`, we name a variable (column of the `acacia` data) to define the color in the plot
+### 5 bins  
 
 ```{r}
-ggplot(acacia,
-       aes(x = CIRC,
-           y = HEIGHT,
-           color = TREATMENT)) +
-  geom_point(size = 3, alpha = 0.5)
+ggplot(data = invert,
+       mapping = aes(x = body_mass_g)) +
+  geom_histogram(bins = 5)
 ```
 
-#### Facets
+* see that there are now 5 bins, but the "edges" of the bins are unclear    
 
-* Place all the data for one group in its own facet (i.e., panel)
-* Facet specification
+### Binwidth  
+* We can set the size of the bins with `binwidth` argument   
+
+* for example, let's say we want bins that are 2.5 g across  
+
 
 ```{r}
-ggplot(acacia, aes(x = CIRC, y = HEIGHT)) +
-  geom_point(size = 3, alpha = 0.5) +
-  facet_wrap(~TREATMENT)
+ggplot(data = invert,
+       mapping = aes(x = body_mass_g)) +
+  geom_histogram(binwidth = 2.5)
 ```
 
-* Where are all the acacia in the open plots? (eaten?)
+### Histogram attributes  
 
-> Do Problems 1.3 and 1.4 in homework 04: `ggplot`
+* We can change the attributes of the histogram output in similar ways as above  
 
-### Statistical transformations
-
-* We've seen that ggplot makes graphs by combining information on
-  * Data
-  * Mapping of parts of that data to aspects of the plot
-  * A geometric object to represent the data
-
-```{r}
-ggplot(acacia, aes(x = CIRC, y = HEIGHT)) +
-  geom_point()
-```
-
-* Many kinds of geometric object (type `geom_` and show completions)
-
-* Each geom includes a statistical transformation
-* So far we've only seen
-    * `identity`: the raw form of the data or no transformation
-* Transformations exist to make things like histograms, bar plots, etc.
-* Occur as defaults in associated geoms
-
-* To look at the number of acacia in each treatment use a bar plot
-    * [`geom_bar()`](https://ggplot2.tidyverse.org/reference/geom_bar.html)
-
-```{r}
-ggplot(acacia, aes(x = TREATMENT)) +
-  geom_bar()
-```
-
-* Uses the transformation `stat_count()`
-    * Counts the number of rows for each treatment
-
-* To look at the distribution of circumferences in the dataset use a histogram
-    * [`geom_histogram()`](https://ggplot2.tidyverse.org/reference/geom_histogram.html)
-
-```{r}
-ggplot(acacia, aes(x = CIRC)) +
-  geom_histogram(fill = "red")
-```
-
-* Uses `stat_bins()` for data transformation
-    * Splits circumferences into bins and counts rows in each bin
-* Set number of `bins` or `binwidth`
-  * Default bin number is usually 30
-
-```{r}
-ggplot(acacia, aes(x = CIRC)) +
-  geom_histogram(fill = "red", bins = 15)
-```
-
-```{r}
-ggplot(acacia, aes(x = CIRC)) +
-  geom_histogram(fill = "red", binwidth = 5)
-```
-
-* These can be combined with all of the other `ggplot2` features we've learned
-
-> Do Tasks 2.1 and 2.2 in in homework 04: `ggplot`
-
-
-#### Boxplots  
-
-* [Boxplots](https://en.wikipedia.org/wiki/Box_plot) are a common way of summarizing data  
-the `geom_boxplot()`
-
-```{r}
-ggplot(acacia, aes(x = TREATMENT,
-                   y = HEIGHT)) +
-  geom_boxplot()
-```
-
-### Position
-
-* geom's also come with a default position
-* In many cases the position is `"identity"`, which just means the object is plotted in the position determined by the data, but not always
-* Let's remake our histogram, but color the bars by the treatment
-
-```{r}
-ggplot(acacia,
-       aes(x = CIRC, color = TREATMENT)) +
-  geom_histogram(binwidth = 5)
-```
-
-* You can see that the total height of the bars stayed the same
-* That's because ggplot has just colored the pieces of each bar that correspond to each treatment
-* It does this because the default `position` for `geom_histogram` is `"stacked"`, which stacks the bars on top of one another and therefore makes a stacked histogram.
-* If we want separate overlapping histograms then we need to change the position
-
-```{r}
-ggplot(acacia, aes(x = CIRC, color = TREATMENT)) +
-  geom_histogram(binwidth = 5, position = "identity")
-```
-
-* And then add some transparency so we can see all of the histograms
-
-```{r}
-ggplot(acacia, aes(x = CIRC, color = TREATMENT)) +
-  geom_histogram(binwidth = 5, position = "identity", alpha = 0.5)
-```
-
-
-### Layers
-
-* So far we've only plotted one layer or geom at a time, but we can combine multiple layers in a single plot
-    * `ggplot()` sets defaults for all layers
-    * Can combine multiple layers using `+`
-    * The first geom is plotted first and then additional geoms are layered on top 
-
-* Combine different kinds of layers
-* Add a linear model
-
-```{r}
-ggplot(acacia, aes(x = CIRC, y = HEIGHT)) +
-  geom_point() +
-  geom_smooth(method = "lm")
-```
-
-* Both the `geom_point` layer and the `geom_smooth` layer use the defaults form
-  `ggplot`
-* Both use `acacia` for data and `x = CIRC, y = HEIGHT` for the aesthetic
-* `geom_smooth` uses the statistical transformation `stat_smooth()` to produce a smoothed representation of the data
-  * `method = "lm"` means a linear model.
-  * The default is a non-linear method called "loess". 
-    + definition of "loess" is beyond the scope of this course. 
-  * Make the same plot as above again, this time without specifying the method. 
+  * Common arguments are: `fill`, `color` (outline), `size` (outline), and `alpha` (transparency).  
   
-```{r}
-ggplot(acacia, aes(x = CIRC, y = HEIGHT)) +
-  geom_point() +
-  geom_smooth()
-```
-
-* We also add linear models by a groups
-  * Add linear model by treatment
-
-```{r}
-ggplot(acacia, aes(x = CIRC, y = HEIGHT, color = TREATMENT)) +
-  geom_point() +
-  geom_smooth(method = "lm")
-```
-
-* Because the color aesthetic is the default it is inherited by geom_smooth
-* One set of points and one model for each treatment
-
-### Multiple layers and posiiton
-
-* summarize data and visualize individual observations  
-  + Summary = `geom_boxplot()`
-  + Individual points = `geom_point()`
-
-```{r}
-ggplot(acacia,
-       aes(x = TREATMENT,
-           y = HEIGHT)) +
-  geom_boxplot() +
-  geom_point()
-```
-* Some repeated observations in each TREATMENT group
-
-* Add "noise" to observations with `position = position_jitter()`
-
-```{r}
-ggplot(acacia,
-       aes(x = TREATMENT,
-           y = HEIGHT)) +
-  geom_boxplot() +
-  geom_point(position = position_jitter())
-```
-
-* the default range of `position_jitter()` is usually too much.  
-* Likewise, adding noise in both axes is misleading. 
-  + in this case, only want to add noise to the horizontal, or x-axis, using the `width` argument  
-  + remove noise from vertical (y-axis) by setting `height = 0`  
+  * You can also explore different "themes". Below is `theme_bw()`, but you can try `theme_classic()`, `theme_dark()`, `theme_void()`, etc.   
   
-```{r}
-ggplot(acacia,
-       aes(x = TREATMENT,
-           y = HEIGHT)) +
-  geom_boxplot() +
-  geom_point(
-    position = position_jitter(
-      height = 0,
-      width = 0.1))
-```
-
-* add color by treatment  
-* change the value of the `width` noise  
-* make points transparent
-* change the base "theme" of the plot  
-  + I prefer `theme_bw()  
-  + see [ggplot themes](https://ggplot2.tidyverse.org/reference/ggtheme.html) for a list of available themes  
 
 ```{r}
-ggplot(acacia,
-       aes(x = TREATMENT,
-           y = HEIGHT,
-           color = TREATMENT)) +
-  geom_boxplot() +
-  geom_point(
-    alpha = 0.5,
-    position = position_jitter(
-      height = 0,
-      width = 0.1)) +
+ggplot(data = invert,
+       mapping = aes(x = body_mass_g)) +
+  geom_histogram(binwidth = 2.5,
+                 fill = "dodgerblue",
+                 color = "black",
+                 size = 2,
+                 alpha = 0.5) +
   theme_bw()
 ```
 
-### Changing values across layers
 
-* We can also plot data from different columns or even data frames on the same graph
-* To do this we need to better understand how layers and defaults work
-* So far we've put all of the information on data and aesthetic mapping into `ggplot()`
+## Boxplots  
+
+* Boxplots summarize the data distribution  
+
+* AKA "Cat and Whisker" Plots  
+
 
 ```{r}
-ggplot(
-  data = acacia,
-  # defaults set here for all subsequent layers
-  mapping = aes(x = CIRC, 
-                y = HEIGHT)) +
-  geom_point() +
+ggplot(data = invert,
+       mapping = aes(x = body_mass_g)) +
+  geom_boxplot()
+```
+* whiskers: show minimum (left side) and maximum (right side) of data  
+
+* Box: shows where 50% of the data lies  
+
+* Line in middle of box is the median  
+
+* Useful to loo for normal distributions:  
+
+  * Symmetry of box, whiskers, etc.   
+  
+
+### Boxplot attributes  
+```{r}
+ggplot(data = invert,
+       mapping = aes(x = body_mass_g)) +
+  geom_boxplot(fill = "red",
+               color = "black")
+```
+
+## Density Plots 
+
+* Density plots show the full distribution  
+
+* i.e., a histogram has discrete bins, but a density plot is continuous  
+
+```{r}
+ggplot(data = invert,
+       mapping = aes(x = body_mass_g)) +
+  geom_density(fill = "pink",
+               alpha = 0.75) +
+  theme_dark()
+```
+
+## FINISH THIS  
+
+**You should now be able to complete problems XXX in the homework assignment**
+
+# One Continuous Variable, and Categories  
+
+## Boxplots  
+
+We will often want to compare the distributions between two groups. We can do this by modifying our boxplot code above by adding a grouping variable as our `y = ...` in the `aes()` function  
+
+```{r}
+ggplot(data = invert,
+       mapping = aes(x = body_mass_g,
+                     y = taxa)) +
+  geom_boxplot()
+```
+
+* we can also vary the color/fill by taxa by including it in the `aes()` function  
+
+```{r}
+ggplot(data = invert,
+       mapping = aes(x = body_mass_g,
+                     y = taxa,
+                     fill = taxa)) +
+  geom_boxplot()
+```
+* ggplot automatically picked two colors for us based on the values in the `taxa` column  
+
+
+### Change fill colors  
+
+### Manually  
+
+See a [list of colors](https://derekogle.com/NCGraphing/resources/colors) available in ggplot  
+
+```{r}
+ggplot(data = invert,
+       mapping = aes(x = body_mass_g,
+                     y = taxa,
+                     fill = taxa)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("dodgerblue", "hotpink"))
+```
+
+* note that this **does not** work if you put it in the `geom_boxplot()` argument:  
+
+```{r, eval=FALSE}
+ggplot(data = invert,
+       mapping = aes(x = body_mass_g,
+                     y = taxa)) +
+  geom_boxplot(fill = taxa)
+```
+
+* Likewise, if you put a fill/color argument in the `geom_boxplot()` function, it will overwrite what you mapped above  
+
+
+```{r}
+ggplot(data = invert,
+       mapping = aes(x = body_mass_g,
+                     y = taxa,
+                     fill = taxa)) +
+  geom_boxplot(fill = "black")
+```
+### Categorical vs. continuous variables  
+
+* Our data has the results of three surveys across months   
+
+* we may want to see if there are different distributions across months   
+
+
+```{r}
+
+ggplot(data = invert,
+       mapping = aes(x = body_mass_g,
+                     fill = month)) +
+  geom_boxplot()
+```
+
+* this didn't work because `month` is a number, which R interprets as a continuous variable.  
+
+* notice the warning discusses "group" structure of the data  
+
+* we can get around this a number of ways.  
+
+* the easiest at this point is to force month to be a `factor` (what R calls a categorical variable).  
+
+
+```{r}
+ggplot(data = invert,
+       mapping = aes(x = body_mass_g,
+                     fill = as.factor(month))) +
+  geom_boxplot()
+```
+
+
+## Histograms 
+
+* We can also do a similar thing with histograms.  
+
+* note that we need to **remove** the `y=...` argument, and we also need to add `position = "identity"` to the histogram call.  
+
+  * otherwise the counts are "stacked" and the display is misleading
+
+```{r}
+ggplot(data = invert,
+       mapping = aes(x = body_mass_g,
+                     fill = taxa)) +
+  geom_histogram(position = "identity",
+                 alpha = 0.75) +
+  scale_fill_manual(values = c("grey30", "goldenrod")) +
+  theme_bw()
+```
+
+#### ADD HW  
+
+**You should now be able to complete problems XXX in the homework assignment**
+
+
+# Two Continuous Variables  
+
+## Scatter Plots  
+* Display two continuous variables by mapping them to `x` and `y`  
+
+```{r}
+ggplot(data = invert,
+       mapping = aes(x = body_length_mm,
+                     y = body_mass_g)) +
+  geom_point(size = 3)
+```
+
+### map attributes to other columns  
+
+#### Color  
+
+* Using a categorical variable  
+
+* Gives discrete colors  
+
+  * i.e., "red", or "blue"  
+  
+  
+```{r}
+ggplot(data = invert,
+       mapping = aes(x = body_length_mm,
+                     y = body_mass_g,
+                     color = taxa)) +
+  geom_point(size = 3)
+```
+
+* Using a continuous variable  
+
+* gives "shades" of one color, based on value  
+
+
+```{r}
+ggplot(data = invert,
+       mapping = aes(x = body_length_mm,
+                     y = body_mass_g,
+                     color = month)) +
+  geom_point(size = 3)
+```
+
+#### Shape  
+```{r}
+ggplot(data = invert,
+       mapping = aes(x = body_length_mm,
+                     y = body_mass_g,
+                     shape = taxa)) +
+  geom_point(size = 4)
+```
+
+#### Shape + color  
+
+```{r}
+ggplot(data = invert,
+       mapping = aes(x = body_length_mm,
+                     y = body_mass_g,
+                     color = taxa, 
+                     shape = as.factor(month))) +
+  geom_point(size = 4)
+```
+
+
+## `geom_smooth()`
+
+*  We will often want to estimate the relationship between our predictor (`x`) and our response (`y`).  
+
+* do this with `geom_smooth()`
+
+```{r}
+ggplot(data = invert,
+       mapping = aes(x = body_length_mm,
+                     y = body_mass_g)) +
+  geom_point(size = 4) +
+  geom_smooth()
+```
+
+* the default is a "squiggly line"  
+
+* we will limit ourselves to linear relationships, so add `method = "lm"`  
+
+```{r}
+ggplot(data = invert,
+       mapping = aes(x = body_length_mm,
+                     y = body_mass_g)) +
+  geom_point(size = 4) +
   geom_smooth(method = "lm")
 ```
 
-* This sets the default data frame and aesthetic, which is then used by
-  `geom_point()` and `geom_smooth()`
-* Alternatively instead of setting the default we could just give these values
-  directly to `geom_point()` and `geom_smo
+* `geom_smooth()` inherits other aspects from aes.  
+
+* add a smooth for both taxa:  
+
 
 ```{r}
-ggplot() +
-  geom_point(
-    data = acacia,
-    mapping = aes(
-      x = CIRC,
-      y = HEIGHT,
-      color = TREATMENT)) +
+ggplot(data = invert,
+       mapping = aes(x = body_length_mm,
+                     y = body_mass_g,
+                     color = taxa)) +
+  geom_point(size = 4) +
   geom_smooth(method = "lm")
 ```
 
-* We can see that this information is no longer shared with other geoms since it is no longer the default, so we've asked for a linear model of nothing and so no model is shown
+## Facets  
 
-* Can use this to combine different aesthetics
-* Make a single model across all treatments while still coloring points
-
-```{r}
-ggplot() +
-  geom_point(
-    data = acacia,
-    mapping = aes(
-      x = CIRC,
-      y = HEIGHT,
-      color = TREATMENT)) +
-  geom_smooth(data = acacia,
-              mapping = aes(
-                x = CIRC,
-                y = HEIGHT),
-              method = "lm")
-```
-
-* `color` is only set in the aesthethic for the point layer
-* So the smooth layer is made across all x and y values
-
-* *Check if this makes sense to everyone*
-
-* This same sort of change can be used to plot different columns on the same plot by changing the values of x or y
-* If we wanted to plot two different columns as "Y" we could change the value of y in the aesthetic
-
-* If we wanted to use data from two different data frames we could change the value of data
-
-* We can also keep all of the values that are shared as defaults if we want to
+In any of the plots, it is also possible to add facets, which gives each group their own panel:  
 
 ```{r}
-# set defaults in ggplot()
-ggplot(data = acacia,
-       mapping = aes(
-         x = CIRC,
-         y = HEIGHT)) +
-  # add color mapping just for geom_point()
-  geom_point(mapping = aes(
-    color = TREATMENT)) +
-  geom_smooth(method = "lm")
+ggplot(data = invert,
+       mapping = aes(x = body_length_mm,
+                     y = body_mass_g,
+                     color = taxa)) +
+  geom_point(size = 4) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~taxa)
 ```
 
-> Do Task 2.3-2.5 in in homework 04: `ggplot`
+
+```{r}
+ggplot(data = invert,
+       mapping = aes(x = body_mass_g,
+                     y = taxa,
+                     fill = taxa)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("dodgerblue", "hotpink")) +
+  facet_wrap(~taxa)
+```
+
+* can also add a different variable  
+
+* this helps to visualize when we have 2+ grouping variables  
+
+
+```{r}
+ggplot(data = invert,
+       mapping = aes(x = body_mass_g,
+                     y = taxa,
+                     fill = taxa)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("dodgerblue", "hotpink")) +
+  facet_wrap(~month)
+```
+> Do Tasks XXX in the homework for this week 
+
+## Coda  
+
+You should now be able to finish the homework. The below information is provided for your personal edification  
 
 ### Grammar of graphics
 
-* Uniquely describe any plot based on a defined set of information
-* Leland Wilkinson
-* Geometric object(s)
-  * Data
-  * Mapping
-  * Statistical transformation
-  * Position (allows you to shift objects, e.g., spread out overlapping data points)
-* Facets
-* Coordinates (coordinate systems other than cartesian, also allows zooming)
+* Uniquely describe any plot based on a defined set of information  
+
+* Leland Wilkinson  
+
+* Geometric object(s)  
+
+  * Data  
+  
+  * Mapping  
+  
+  * Statistical transformation  
+  
+  * Position (allows you to shift objects, e.g., spread out overlapping data points)  
+  
+* Facets  
+
+* Coordinates (coordinate systems other than cartesian, also allows zooming)  
+
 
 ### Saving plots as new files
 
-* `ggsave()` function saves whatever the last plot you made was. 
-* name the file you want to save:
+* `ggsave()` function saves whatever the last plot you made was.  
+
+* let's rerun this code:  
+
+```{r}
+ggplot(data = invert,
+       mapping = aes(x = body_mass_g,
+                     y = taxa,
+                     fill = taxa)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("dodgerblue", "hotpink")) +
+  facet_wrap(~month)
+```
+
+* we will now save it into the home directory of our project and name the file:
 
 ```{r, eval=FALSE}
-ggsave("acacia_by_treatment.jpg")
+ggsave("invert_by_month_taxa.jpg")
 ```
-* The type of the file is determined by the file extension
+
+* The type of the file is determined by the file extension  
 
 ```{r, eval=FALSE}
-ggsave("acacia_by_treatment.pdf")
+ggsave("invert_by_month_taxa.jpg")
 ```
 
-* if you want to save it in a specific folder, add it as `"folder_name\"` in front of the file name
-  * Make sure you actually have a folder named that before saving!
-* For example, if you followed the recommended file structure for this course, you should have a `homework` folder. 
-* to save the last `ggplot` figure you made as a .png file to your homework folder, enter the following:
-```{r, eval = FALSE}
-ggsave("homework/acacia_by_treatment.png")
-```
+* if you want to save it in a specific folder, add it as `"folder_name\"` in front of the file name  
 
-* Check your folder to make sure the file is there. 
-* Open it to see how it looks
-* You may want to delete this from your homework folder so you don't get confused later. 
-
-#### Other `ggsave()` arguments
-
-Enter `?ggsave()` in the console to see the help file for this function. This lists the arguments that you can enter and gives a brief explanation of them
-
-* Size
-* define the height and width of your image
-
-```{r, eval=FALSE}
-ggsave("acacia_by_treatment.pdf", height = 5, width = 5)
-```
-
-* define the measurement unit
-```{r, eval=FALSE}
-ggsave("acacia_by_treatment.pdf",
-       height = 5,
-       width = 5,
-       units = "cm")
-```
-
-* set it to inches:
-```{r, eval=FALSE}
-ggsave("acacia_by_treatment.pdf",
-       height = 5,
-       width = 5,
-       units = "in")
-```
-
-* The default is to save the `last_plot()` that you created
-  * See help file
-* if you save your ggplot as an object, you can tell `ggsave()` which object you want to save. 
-
-```{r, eval=FALSE}
-# histogram
-acacia_hist <- ggplot(acacia,
-                      aes(x = CIRC)) +
-  geom_histogram(fill = "red", binwidth = 5)
-
-# scatter plot
-acacia_point <- ggplot(acacia,
-                      aes(x = CIRC,
-                          y = HEIGHT)) +
-  geom_point()
-
-# linear model
-acacia_lm <- ggplot(
-  data = acacia,
-  mapping = aes(x = CIRC, 
-                y = HEIGHT)) +
-  geom_point() +
-  geom_smooth(method = "lm")
-
-# save the histogram plot
-
-ggsave("acacia_histogram.png",
-       plot = acacia_hist)
-```
+  * Make sure you actually have a folder named that before saving!  
   
-> Complete HW 04: `ggplot`
+* For example, if you followed the recommended file structure for this course, you should have a `homework` folder.   
+
+* to save the last `ggplot` figure you made as a .png file to your homework folder, enter the following:  
+
+```{r, eval = FALSE}
+ggsave("homework/invert_by_month_taxa.png")
+```
+
+* Check your folder to make sure the file is there.  
+
+* Open it to see how it looks  
+
+* You may want to delete this from your homework folder so you don't get confused later. 

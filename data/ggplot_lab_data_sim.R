@@ -14,7 +14,7 @@ temp <- c(
   rnorm(10, 25),
   rnorm(10, 20))
 
-body_length_mm <- rnorm(30, 25, 5)
+body_length <- rnorm(30, 25, 5)
 body_mass_mg <- body_length^0.79
 body_mass_mg <- body_mass_mg + rnorm(30, 0, 5)
 plot(body_length_mm, body_mass_mg)
@@ -22,10 +22,10 @@ plot(body_length_mm, body_mass_mg)
 (dat <- dplyr::bind_cols(dat,
                         #count = count,
                         #temp = temp,
-                        body_length = body_length_mm,
+                        body_length_mm = body_length_mm,
                         body_mass_g = body_mass_mg))
 
-readr::write_csv(dat, "data/ground_invert_survey.csv")
+readr::write_csv(dat, "data/ggplot_lab_invert_survey.csv")
 
 library(ggplot2)
 
