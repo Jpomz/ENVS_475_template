@@ -110,14 +110,19 @@ I almost always have this cheat sheet open while I'm conducting any analyses. It
 
 dplyr aims to provide a function for each basic verb of data manipulation:
 
-* Pick observations based on their values: `filter()`
-* Pick observations based on their row number `slice()`
-* Reorder the rows: `arrange()`
-* Pick variables based on their names: `select()` 
-* Add new variables using functions on existing variables: `mutate()` 
-* Reduce many observations to a single summary: `summarise()`
+* Pick observations based on their values: `filter()`  
+  * many rows to fewer rows  
+* Reorder the rows: `arrange()`  
 
-All of these verbs can also be used with `group_by()`, which allows you to apply a verb group-by-group instead of on the whole data set, but more on this later.  
+* Pick variables based on their names: `select()`  
+  * many columns to fewer columns  
+  
+* Add new variables (columns) based on existing variables: `mutate()` 
+  
+* Reduce many observations to a single summary: `summarise()`  
+  * many rows to one  
+
+* Combine `summarise()` with `group_by()` to get one row per group  
 
 All verbs work similarly and have similar syntaxes:
 
@@ -128,6 +133,8 @@ All verbs work similarly and have similar syntaxes:
 There are other verbs in the `dplyr` package, along with many useful "helper" functions. Browse the vignettes for dplyr: `browseVignettes(package = "dplyr")`, or check the Rstudio data wrangling cheat sheet which you downloaded at the beginning of this tutorial. 
 
 ### Filter rows with `filter()`
+
+##### Many rows to fewer rows  
 
 `filter()` allows you to select a subset of rows in a data frame. The first argument is the name of the data frame. The second and subsequent arguments are the expressions that filter the data frame. 
 
@@ -176,7 +183,8 @@ Note the use of `""` around UA in the `filter()` function. Remove the quotes and
 You should have received an error code in the R console. Error codes often look like hieroglyphics the first few times you see them, but the important information in this error is the "object 'UA' not found". When we enter unquoted arguments into the dplyr functions, R looks for objects (i.e., data objects, column names within a data object, etc.) with that name. 
 
 
-#### Other Boolean operators
+#### Other Boolean operators  
+
 Other Boolean operators include:
 * `|` which means "or"  
 
@@ -242,7 +250,9 @@ Here, I will use the base R function `unique()` to see all of the values in the 
 unique(starwars$homeworld)
 ```
 
-### Arrange rows with `arrange()`
+### Arrange rows with `arrange()`  
+
+##### Change order of rows based on values in a column  
 
 `arrange()` has a similar syntax as `filter()` but instead of selecting rows, it reorders them. It takes a data frame as the first argument, and then column name(s) to order by as subsequent arguments. The data will be arranged by the first column name provided, with ties being broken by subsequent columns:
 
@@ -261,7 +271,9 @@ The default order is from smallest to largest, numeric to character, and a to z.
 arrange(starwars, desc(homeworld))
 ```
 
-### Select columns with `select()`
+### Select columns with `select()`  
+
+##### Many columns to fewer columns
 
 Data sets generally contain numerous columns, but oftentimes you are only interested in a few for a given analysis. `select()` allows you to focus on a useful subset of your data while dropping un-needed columns. You can indicate which columns you want by naming them (without quotes) or select which columns you *don't* want by putting a `-` in front of the name. I have suppressed the output to save space in this document, but be sure to run the following commands in your session and see what happens. Be sure to note the number of rows and columns that each command returns.
 
@@ -286,7 +298,9 @@ The order you write the arguments in `select()` are retained in the output. This
 select(starwars, name, homeworld, eye_color)
 ```
 
-### Add new columns with `mutate()`
+### Add new columns with `mutate()`  
+
+##### Many columns to more columns  
 
 Data analysis often requires the creation of new variable columns based on values within your data. The `mutate()` function allows you to do this. For example, let's calculate a new variable called `bmi`, which looks at how height and mass in one variable.
 
@@ -300,7 +314,9 @@ select(d2, mass, height, bmi)
 ```
 
 
-### Summarise values with `summarise()`
+### Summarise values with `summarise()`  
+
+##### Many rows to a single row  
 
 The last verb is `summarise()`. This collapses a dataframe to a single value, based on a function:
 
@@ -344,7 +360,9 @@ summarise(starwars,
 ```
 
 
-## Grouped operations
+## Grouped operations  
+
+##### Many rows to one-per-group  
 
 These verbs are useful on their own, but when used in conjuction with the `group_by()` function, the awesomeness of `dplyr` starts to shine through. It organizes a dataset into specified groups of rows. Verbs are then applied group-by-group within the dataset. Conveniently, this is accomplished using the exact same syntax as above. 
 

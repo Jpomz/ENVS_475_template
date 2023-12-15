@@ -11,7 +11,7 @@
 
 
 
-<title>Exploring data with dplyr</title>
+<title>Improving your workflow through projects</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -348,7 +348,8 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Exploring data with <code>dplyr</code></h1>
+<h1 class="title toc-ignore">Improving your workflow through
+projects</h1>
 <h3 class="subtitle">ENVS475: Experimental Analysis and Design</h3>
 <h4 class="date">December, 2023</h4>
 
@@ -356,784 +357,399 @@ display: none;
 
 <div id="TOC">
 <ul>
-<li><a href="#overview" id="toc-overview">Overview</a>
+<li><a href="#common-workflows-and-their-problems" id="toc-common-workflows-and-their-problems">Common workflows and their
+problems</a>
 <ul>
-<li><a href="#preliminaries" id="toc-preliminaries">Preliminaries</a></li>
-<li><a href="#data-starwars" id="toc-data-starwars">Data:
-<code>starwars</code></a></li>
+<li><a href="#whats-wrong-with-this" id="toc-whats-wrong-with-this">What’s wrong with this?</a></li>
 </ul></li>
-<li><a href="#dplyr" id="toc-dplyr"><code>dplyr</code></a>
+<li><a href="#rstudio-projects" id="toc-rstudio-projects">RStudio
+Projects</a>
 <ul>
-<li><a href="#single-table-verbs" id="toc-single-table-verbs">Single
-table verbs</a>
+<li><a href="#whats-so-special-about-rstudio-projects" id="toc-whats-so-special-about-rstudio-projects">What’s so special about
+RStudio Projects?</a></li>
+<li><a href="#a-note-on-saving-your-workspace-to-.rdata" id="toc-a-note-on-saving-your-workspace-to-.rdata">A note on saving your
+workspace to <code>.RData</code></a></li>
+</ul></li>
+<li><a href="#organizing-your-project-directories" id="toc-organizing-your-project-directories">Organizing your project
+directories</a>
 <ul>
-<li><a href="#filter-rows-with-filter" id="toc-filter-rows-with-filter">Filter rows with
-<code>filter()</code></a></li>
-<li><a href="#arrange-rows-with-arrange" id="toc-arrange-rows-with-arrange">Arrange rows with
-<code>arrange()</code></a></li>
-<li><a href="#select-columns-with-select" id="toc-select-columns-with-select">Select columns with
-<code>select()</code></a></li>
-<li><a href="#add-new-columns-with-mutate" id="toc-add-new-columns-with-mutate">Add new columns with
-<code>mutate()</code></a></li>
-<li><a href="#summarise-values-with-summarise" id="toc-summarise-values-with-summarise">Summarise values with
-<code>summarise()</code></a></li>
+<li><a href="#readingwriting-from-subdirectories" id="toc-readingwriting-from-subdirectories">Reading/writing from
+subdirectories</a></li>
+<li><a href="#a-suggested-structure-for-this-class" id="toc-a-suggested-structure-for-this-class">A suggested structure for
+this class</a></li>
+<li><a href="#a-note-on-handling-raw-data" id="toc-a-note-on-handling-raw-data">A note on handling raw
+data</a></li>
 </ul></li>
-<li><a href="#grouped-operations" id="toc-grouped-operations">Grouped
-operations</a></li>
-</ul></li>
-<li><a href="#chaining" id="toc-chaining">Chaining</a>
-<ul>
-<li><a href="#the-pipe-operator" id="toc-the-pipe-operator">The pipe
-operator: <code>%&gt;%</code>, <code>|&gt;</code></a></li>
-<li><a href="#formatting-with-pipes" id="toc-formatting-with-pipes">Formatting with pipes</a></li>
-</ul></li>
+<li><a href="#additional-resources" id="toc-additional-resources">Additional resources</a></li>
 </ul>
 </div>
 
-<div id="overview" class="section level1">
-<h1>Overview</h1>
-<p>This tutorial is aimed at giving you an introduction to the popular
-<code>dplyr</code> package. <code>dplyr</code> provides a few simple
-verbs that allow you to quickly and easily select and manipulate your
-data, and create an interactive environment for data exploration. This
-tutorial is based on Chapter 5 in <a href="http://r4ds.had.co.nz">“<em>R
-for Data Science</em>”</a> by Hadley Wickham &amp; Garrett Grolemund
-which is vailable for free online. Material was also adapted from the
-dplyr introduction vignette which you can find by running the following
-command:</p>
-<pre class="r"><code>vignette(&quot;dplyr&quot;)</code></pre>
-<p><code>dplyr</code> is part of the suite of packages known as
-<code>tidyverse</code>. The packages within the tidyverse were designed
-with a similar data and programming philosophy, and work together
-fluidly. Hadley Wickham is the lead developer of the tidyverse, and his
-book above takes a tidyverse-centric view, and is a fantastic resource
-if you want to learn more. We will be using the <code>tidyverse</code>
-packages throughout this course.</p>
-<div id="preliminaries" class="section level2">
-<h2>Preliminaries</h2>
-<p>Before we begin, make sure you have the <code>tidyverse</code>
-installed.</p>
-<p>If you need to install it, run the following lines of code, as
-needed. Also note that the package name is inside of “” in the function
-call:</p>
-<pre class="r"><code>install.packages(&quot;tidyverse&quot;)</code></pre>
-<p>As a reminder, you only have to run the
-<code>install.packages(...)</code> line once per machine. Running this
-line downloads the package onto the machine that you are currently
-using. However, you do need to load the packages at the beginning of
-every session. The following commands “loads” the packages and makes the
-commands available to you. Note that once the package is installed, you
-<em>do not</em> need “” around the package name.</p>
-<pre class="r"><code>library(tidyverse)</code></pre>
-</div>
-<div id="data-starwars" class="section level2">
-<h2>Data: <code>starwars</code></h2>
-<p>In order to demonstrate the basic data manipulation verbs of dplyr,
-we will be using the <code>starwars</code> database, which comes with
-<code>dplyr</code> (part of the tidyverse.</p>
-<p>We will load the <code>starwars</code> data by running the following
-command:</p>
-<pre class="r"><code>data(&quot;starwars&quot;)</code></pre>
-<p>Whenever you start working with a new dataset, you should also run
-some quick commands to get an idea of what the data looks like, and how
-it is set up. I generally run the following commands (note that I have
-suppressed the display in this document for room, but you should run
-each of these on your computer):</p>
-<pre class="r"><code>dim(starwars)
-names(starwars)
-head(starwars)
-tail(starwars)
-str(starwars)</code></pre>
-<p>The <code>dim()</code> list the number of rows and columns, in that
-order. The <code>starwars</code> dataset has 87 rows and 87 columns.</p>
-<p>You may notice that the <code>head(starwars)</code> output is
-different from many other data frames that you may have worked with
-before. It only shows the rows and columns that easily fit into your
-window. That’s because the <code>starwars</code> object is a tibble:</p>
-<pre class="r"><code>class(starwars)
-#&gt; [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
-<p>Tibbles <code>&quot;tbl_df&quot;</code> act just as a data frame would, but
-they print only the information that can fit into your window. To see
-the full data frame in the Rstudio viewer use:</p>
-<pre class="r"><code>View(starwars)</code></pre>
-<p>Or as a normal data frame use:</p>
-<pre class="r"><code>head(as.data.frame(starwars))</code></pre>
-<p>To convert a data frame to a tibble, use
-<code>as_tibble()</code>.</p>
-<p>As a general rule, I almost always use the <code>names()</code>
-function when I’m looking at a new data set. This helps me get an idea
-of the data structure, and if the variable names are meaningful, can
-help me understand what types of questions I can ask, and how I may be
-able to answer them.</p>
-<pre class="r"><code>names(starwars)
-#&gt;  [1] &quot;name&quot;       &quot;height&quot;     &quot;mass&quot;       &quot;hair_color&quot; &quot;skin_color&quot;
-#&gt;  [6] &quot;eye_color&quot;  &quot;birth_year&quot; &quot;sex&quot;        &quot;gender&quot;     &quot;homeworld&quot; 
-#&gt; [11] &quot;species&quot;    &quot;films&quot;      &quot;vehicles&quot;   &quot;starships&quot;</code></pre>
-<p>These variables should be relatively self-explanatory, but you can
-run <code>?starwars</code> for more information, including units.</p>
-</div>
-</div>
-<div id="dplyr" class="section level1">
-<h1><code>dplyr</code></h1>
-<p>Data manipulation is one of the primary tasks that scientists
-undertake. the <code>dplyr</code> package makes it easy to select the
-data you want, organize it in a useful way, calculate useful new
-variables, and summarize data by groups.</p>
-<p>There is an extremely helpful Rstudio data wrangling cheat sheet
-which you can download directly through Rstudio by clicking <em>Help
-&gt; Cheatsheets &gt; Data transformation with dplyr</em>.</p>
-<p><strong>Practice good project organization</strong> When you download
-these cheat sheets, put them all in an appropriate folder so you can
-find them again easily. Recall that I recommend the following sub
-folders in your <code>ENVS_475</code> project directory:</p>
-<pre><code>ENVS_475/
-  |─── other_resources/
-        |─── cheatsheets/
-              |─── data-transformation.pdf</code></pre>
-<p>I almost always have this cheat sheet open while I’m conducting any
-analyses. It takes a little effort to learn how to “read” the cheat
-sheet, but it’s well worth the effort.</p>
-<div id="single-table-verbs" class="section level2">
-<h2>Single table verbs</h2>
-<p>dplyr aims to provide a function for each basic verb of data
-manipulation:</p>
-<ul>
-<li><p>Pick observations based on their values:
-<code>filter()</code></p>
-<ul>
-<li>many rows to fewer rows<br />
-</li>
-</ul></li>
-<li><p>Reorder the rows: <code>arrange()</code></p></li>
-<li><p>Pick variables based on their names: <code>select()</code></p>
-<ul>
-<li>many columns to fewer columns</li>
-</ul></li>
-<li><p>Add new variables (columns) based on existing variables:
-<code>mutate()</code></p></li>
-<li><p>Reduce many observations to a single summary:
-<code>summarise()</code></p>
-<ul>
-<li>many rows to one</li>
-</ul></li>
-<li><p>Combine <code>summarise()</code> with <code>group_by()</code> to
-get one row per group</p></li>
-</ul>
-<p>All verbs work similarly and have similar syntaxes:</p>
+<p>Everything that follows in this tutorial should be a viewed as
+<em>suggestions</em> for how to organize your data, code, and results.
+These suggestions are based on hard-won lessons from my own work as well
+as advice from people who spend a lot of time thinking about efficient
+and reproducible workflows. The lessons below are unabashedly R/RStudio
+focused. However, they are just suggestions. There are many other ways
+of accomplishing these objectives so you are free to use whatever
+workflow works best for you. Even if you choose to use different
+workflows or tools that are not as R-focused, hopefully the concepts
+presented here will help make your process more efficient and
+organized.</p>
+<p><strong>One exception:</strong> Everything here is a suggestion
+<em>EXCEPT</em> for creating a folder in your project called “data”.
+This is required. For future homework assignments, you will have to load
+data objects into R. In order for your code to work on my computer, your
+folder structure must match mine. In other words, if you don’t have a
+folder called “data”, or if you name it something differently or have it
+in another sub folder, I won’t be able to correctly run/grade your
+homework script and you will then receive a zero on that assignment.
+Please help us avoid this by making a folder claled “data”. THANKS!</p>
+<div id="common-workflows-and-their-problems" class="section level1">
+<h1>Common workflows and their problems</h1>
+<p>A common workflow used by many novice R users goes something like
+this:</p>
 <ol style="list-style-type: decimal">
-<li>The first argument is a data frame.</li>
-<li>Following arguments specify what to do with the data frame using
-un-quoted variable names.</li>
-<li>Result is new data frame.</li>
+<li><p>Open base R or maybe RStudio</p></li>
+<li><p>Create a script and save it as
+<code>analysis_for_my_project.R</code></p></li>
+<li><p>Start the script with:</p></li>
 </ol>
-<p>There are other verbs in the <code>dplyr</code> package, along with
-many useful “helper” functions. Browse the vignettes for dplyr:
-<code>browseVignettes(package = &quot;dplyr&quot;)</code>, or check the Rstudio
-data wrangling cheat sheet which you downloaded at the beginning of this
-tutorial.</p>
-<div id="filter-rows-with-filter" class="section level3">
-<h3>Filter rows with <code>filter()</code></h3>
-<div id="many-rows-to-fewer-rows" class="section level5">
-<h5>Many rows to fewer rows</h5>
-<p><code>filter()</code> allows you to select a subset of rows in a data
-frame. The first argument is the name of the data frame. The second and
-subsequent arguments are the expressions that filter the data frame.</p>
-</div>
-<div id="filter-rows-based-on-numeric-data" class="section level4">
-<h4>Filter rows based on numeric data</h4>
-<p>For example, we can select all star wars characters who are greater
-than or equal to 180 cm tall with:</p>
-<pre class="r"><code>filter(starwars, height &gt;= 180)
-#&gt; # A tibble: 43 × 14
-#&gt;   name      height  mass hair_color skin_color eye_color birth_year sex   gender
-#&gt;   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-#&gt; 1 Darth Va…    202   136 none       white      yellow          41.9 male  mascu…
-#&gt; 2 Biggs Da…    183    84 black      light      brown           24   male  mascu…
-#&gt; 3 Obi-Wan …    182    77 auburn, w… fair       blue-gray       57   male  mascu…
-#&gt; 4 Anakin S…    188    84 blond      fair       blue            41.9 male  mascu…
-#&gt; # ℹ 39 more rows
-#&gt; # ℹ 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
-#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
-<ul>
-<li><p>Note that R tells us that the functioned returned “A tibble: rows
-x columns”.</p></li>
-<li><p>This makes sense, because we are only asking for star wars
-characters taller than a number.</p></li>
-<li><p>It’s always a good idea to double check that the size of the
-returned data makes sense.</p></li>
-</ul>
-</div>
-<div id="the-use-of" class="section level4">
-<h4>The use of <code>==</code></h4>
-<p>if we wanted to know which characters were <em>exactly</em> 180 cm,
-we use the following:</p>
-<pre class="r"><code>filter(starwars, height == 180)
-#&gt; # A tibble: 5 × 14
-#&gt;   name      height  mass hair_color skin_color eye_color birth_year sex   gender
-#&gt;   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-#&gt; 1 Wilhuff …    180    NA auburn, g… fair       blue              64 male  mascu…
-#&gt; 2 Han Solo     180    80 brown      fair       brown             29 male  mascu…
-#&gt; 3 Jek Tono…    180   110 brown      fair       blue              NA male  mascu…
-#&gt; 4 Ackbar       180    83 none       brown mot… orange            41 male  mascu…
-#&gt; # ℹ 1 more row
-#&gt; # ℹ 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
-#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
-<p>In the <code>filter()</code> command, we use <code>==</code> instead
-of <code>=</code>. The <code>==</code> is a Boolean operator. It is used
-to specify that we want to know if the object on the left is
-<em>exactly</em> the same as the object on the right. For example, run
-the following code:</p>
-<pre class="r"><code>5 == 5
-#&gt; [1] TRUE
-5 == 9
-#&gt; [1] FALSE
-&quot;A&quot;==&quot;a&quot;
-#&gt; [1] FALSE
-&quot;a&quot; == &quot;a&quot;
-#&gt; [1] TRUE</code></pre>
-<p>The single <code>=</code> is another way of <em>assigning</em> a
-value to an object in R. For example <code>a = 5</code> stores the value
-of 5 inside of the object called <code>a</code>.</p>
-</div>
-<div id="filtering-rows-based-on-character-data" class="section level4">
-<h4>Filtering rows based on character data</h4>
-<p>In the example above, we were filtering observations based on numeric
-data (i.e., <code>height &gt;= 150</code>). Filter also works with
-character data types. For example, let’s extract all of the star wars
-characters that are from Naboo, which is stored in the
-<code>homeworld</code> column</p>
-<pre class="r"><code>filter(starwars, homeworld == &quot;Naboo&quot;)
-#&gt; # A tibble: 11 × 14
-#&gt;   name      height  mass hair_color skin_color eye_color birth_year sex   gender
-#&gt;   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-#&gt; 1 R2-D2         96    32 &lt;NA&gt;       white, bl… red               33 none  mascu…
-#&gt; 2 Palpatine    170    75 grey       pale       yellow            82 male  mascu…
-#&gt; 3 Jar Jar …    196    66 none       orange     orange            52 male  mascu…
-#&gt; 4 Roos Tar…    224    82 none       grey       orange            NA male  mascu…
-#&gt; # ℹ 7 more rows
-#&gt; # ℹ 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
-#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
-<p>Note the use of <code>&quot;&quot;</code> around UA in the
-<code>filter()</code> function. Remove the quotes and run the code
-again. What happens?</p>
-<p>You should have received an error code in the R console. Error codes
-often look like hieroglyphics the first few times you see them, but the
-important information in this error is the “object ‘UA’ not found”. When
-we enter unquoted arguments into the dplyr functions, R looks for
-objects (i.e., data objects, column names within a data object, etc.)
-with that name.</p>
-</div>
-<div id="other-boolean-operators" class="section level4">
-<h4>Other Boolean operators</h4>
-<p>Other Boolean operators include: * <code>|</code> which means
-“or”</p>
-<ul>
-<li><p><code>&amp;</code> which means “and”</p></li>
-<li><p><code>!=</code> which means “not equal to” <strong>PAY ATTENTION
-HERE!</strong></p></li>
-<li><p><code>&gt;=</code>which means “greater than or equal to”</p></li>
-<li><p><code>&lt;=</code>which means “less than or equal to”</p></li>
-<li><p><code>&gt;</code>which means “greater than”</p></li>
-<li><p><code>&lt;</code>which means “less than”</p></li>
-</ul>
-<p>You can use boolean operators, singly and in combination:</p>
-<pre class="r"><code># starwars from Tatooine *OR* Alderaan
-filter(starwars, homeworld == &quot;Tatooine&quot; | homeworld == &quot;Alderaan&quot;)
+<pre class="r"><code>rm(list = ls())
+setwd(&quot;C:\Users\pomeranz\path\that\only\I\have&quot;)
 
-# starwars from Tatooine OR Alderaan AND that are &gt; 100 OR &lt; 150 cm
-filter(starwars, homeworld == &quot;Tatooine&quot; | homeworld == &quot;Alderaan&quot; &amp; height &gt; 100 | height &lt; 150)</code></pre>
-<p>Sometimes you want to see all of the data that do <em>not</em> meet a
-criteria. For example, maybe you don’t want to know what starwars
-characters are not from Tatooine. You can use the logical negation
-command <code>!=</code>. This command can be read as “not equal to”.</p>
-<pre class="r"><code># Not Tatooine
-filter(starwars, homeworld != &quot;Tatooine&quot;)
-#&gt; # A tibble: 67 × 14
-#&gt;   name      height  mass hair_color skin_color eye_color birth_year sex   gender
-#&gt;   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-#&gt; 1 R2-D2         96    32 &lt;NA&gt;       white, bl… red               33 none  mascu…
-#&gt; 2 Leia Org…    150    49 brown      light      brown             19 fema… femin…
-#&gt; 3 Obi-Wan …    182    77 auburn, w… fair       blue-gray         57 male  mascu…
-#&gt; 4 Wilhuff …    180    NA auburn, g… fair       blue              64 male  mascu…
-#&gt; # ℹ 63 more rows
-#&gt; # ℹ 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
-#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+library(package1)
+library(package2)</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Create a bunch of objects and do stuff to them:</li>
+</ol>
+<pre class="r"><code>x &lt;- 1:10
+y &lt;- &quot;blah&quot;</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li><p>Realize you need to be working on your dissertation instead of
+this side project so open another script you started earlier</p></li>
+<li><p>Get confused about what objects in your current environment were
+created by which script</p></li>
+<li><p><code>rm(list = ls())</code> to start from scratch</p></li>
+<li><p>Rinse and repeat</p></li>
+</ol>
+<div id="whats-wrong-with-this" class="section level2">
+<h2>What’s wrong with this?</h2>
+<p>Remember that when you open <code>R</code> (or RStudio), you create a
+<em>global workspace</em>. This is where all of the objects you create
+get stored. If you type <code>ls()</code> you can see everything that is
+currently stored in your workspace. If you are working on different
+analyses in the same global environment, it is <em>very</em> easy to
+accidentally create different objects with the same name, write code
+that depends on other code that happens to have been run previously
+during one R session (for example, you loaded a needed package in one
+script so didn’t add <code>library(package)</code> to your next script.
+What happens when you try to run this code the next time? This often
+called a “hidden dependency” and can make your life very pretty
+miserable), and many other confusing behaviors.</p>
+<p>This workflow also makes it very difficult to share your work.
+Remember that <code>R</code> will default to looking in/saving to the
+current working directory. To control this behavior, most people are
+taught to use <code>setwd()</code>. The problem with this is that the
+path you set using <code>setwd()</code> is almost certainty specific to
+the computer your used to write that code. If you use a different
+computer later or send code to your adviser for help, they will not be
+able to run it without changing the working directory. If you move the
+files to a new place on your computer, all of your code will break. Got
+a new computer? Oops, none of your code will work anymore. If you are
+running multiple analyses in the same <code>R</code> session, you’ll
+also have to constantly change your working directory, which eventually
+will lead to confusion and problems rerunning code. Manually setting the
+working directory seems like a minor annoyance but if you have to do it
+constantly (for example, an instructor who has to grade a bunch of
+homework assignments), these minor annoyances add up to a big
+headache.</p>
+<p>The good news is, there’s an easy solution that will make your life
+much easier.</p>
 </div>
-<div id="removing-nas-with-filter" class="section level4">
-<h4>Removing <code>NA</code>’s with <code>filter()</code></h4>
-<p>A common task in data analysis requires the removal of
-<code>NA</code> values in our data. For example, in the
-<code>starwars</code> data, droids don’t have hair, so
-<code>hair_color</code> is <code>NA</code>.</p>
-<p>Based on what we learned before it’s natural to think that we do this
-by using the condition <code>hair_color != NA</code> * To remove only
-rows with <code>NA</code> in specific columns use
-<code>filter</code></p>
-<pre class="r"><code>filter(starwars, hair_color != NA)</code></pre>
+</div>
+<div id="rstudio-projects" class="section level1">
+<h1>RStudio Projects</h1>
+<p>Experienced programmers learned long ago the problems outlined above.
+To solve these problems, they typically use a self-contained directory
+(i.e., folder) for each project. Each directory contains all of the data
+and code needed to create research output for that project. Notably, the
+code should not reference <em>any</em> data or objects that are found in
+another directory. This helps ensure portability - you can move the
+entire project and still be able to rerun all code.</p>
+<p>RStudio makes is very easy to create Projects.For this class I
+<strong>highly</strong> recommend that you create a single, dedicated
+Rstudio Project for this class which will contain all the code, labs,
+homework, data objects, etc. If you use R in future courses, for
+research projects, in grad school, in your job, etc., start off the
+right way and make a separate Rstudio Project for each project that you
+are working on. There are several ways to creat an R Project, but the
+easiest way is to:</p>
+<ol style="list-style-type: decimal">
+<li><p>Open RStudio</p></li>
+<li><p>Click on <code>File -&gt; New Project</code> then click
+<code>New Directory</code> (if you already have a folder associated with
+the project, you can click <code>Existing Directory</code> and then
+navigate to that folder)</p></li>
+<li><p>Click <code>New Project</code> then choose a name and a location
+for the Project (tip - don’t include spaces in the project name). Git
+and GitHub are beyond the scope of this class, so for now we will not
+worry about creating a git repository. However, I
+<strong>strongly</strong> recommend you take the time to learn about git
+and use it in your future endeavors, especially if you will be going to
+grad school and publishing scientific articles.</p></li>
+<li><p>Click <code>Create Project</code> at the bottom. RStudio will
+create a new directory with the same name as your Project and a file
+called <code>project_name.Rproj</code> inside of that
+directory.</p></li>
+</ol>
+<p>A new RStudio window should open when you create the new project. In
+the future, when you want to work on this Project, just double click the
+<code>project_name.Rproj</code> file and it will open a new instance of
+RStudio.</p>
+<div id="whats-so-special-about-rstudio-projects" class="section level2">
+<h2>What’s so special about RStudio Projects?</h2>
+<p>Projects solve two of the big problems we discussed earlier. First,
+each project opens a fresh instance of R so the global environment of
+projects is self-contained. That means you can you have multiple
+projects open at once but each one will behave independently. This means
+no more <code>rm(list = ls())</code> because the only objects in your
+environment should be the ones associated with that project (this
+doesn’t totally resolve the problem of hidden dependencies but we’ll
+talk more about that below).</p>
+<p>Second, RStudio will automatically set the working directory to the
+root directory associated with the Project. This means that whatever
+folder the <code>.Rproj</code> file is in will automatically be set as
+the working directory when you open the project. You can check this by
+typing <code>getwd()</code> in the console of your new project. This
+setting avoids the need to use <code>setwd()</code> which makes your
+code much more portable. You can move or send the entire directory,
+double-click the <code>.Rproj</code> file and pick up right where you
+left off.</p>
+</div>
+<div id="a-note-on-saving-your-workspace-to-.rdata" class="section level2">
+<h2>A note on saving your workspace to <code>.RData</code></h2>
+<blockquote>
+<p>The note is: <strong>DO NOT DO IT</strong></p>
+</blockquote>
+<p>Another common mistake made by many novice (and not so novice)
+<code>R</code> users is to save your current workspace to
+<code>.RData</code> each time you quit <code>R</code> or RStudio. On the
+surface, this seems like a really convenient shortcut. The next time you
+open <code>R</code>, all of the objects you created previously are right
+there waiting for you to keep going!</p>
+<p>The problem is that, again, this creates hidden dependencies. The
+<code>.RData</code> file does not re-load packages that you were using
+in your previous session. It does not re-set options that you may have
+set in your previous session (<code>theme_set()</code>,
+<code>stringsAsFactors = FALSE</code>). Some objects needed for, e.g.,
+making a figure may be loaded but others may not be. This means that
+even if you saved your workspace, you will still end up needing to
+re-run some chunks of code to get back to where you left off previously.
+Which chunks? Who knows. You probably think you’ll remember but you
+won’t.</p>
+<p>A better workflow is to start every <code>R</code> session with an
+empty workspace. This means you go into each session with the mindset
+that you will need to re-run all code from scratch every time. Although
+this seems like a pain, I promise it will make your life easier. It is a
+way of <em>ensuring</em> that at a minimum, you can reproduce all of
+your analyses anytime you need to.</p>
+<p>In RStudio, you can enforce this workflow by going to
+<code>RStudio -&gt; Preferences</code> and then in the
+<code>General</code> tab setting
+<code>Save workspace to .Rdata on exit</code> to <code>Never</code>.
+<strong>Do it</strong>. Trust me.</p>
+<p>What about re-running code that is very time consuming? Do you really
+need to re-run the code the cleans your raw data every time you need to
+reanalyze it? Of course not. A better workflow is to have one script
+which cleans your raw data and saves it as an object. Then, you can
+start a second script which starts with the cleaned data object and
+continues the analysis You can always save those objects (along with the
+scripts you used to create them!) so that the next time you need them,
+they can just be re-read into <code>R</code> and you can do everything
+downstream of those steps without a problem.</p>
+<p>For example, multiple scripts in a workflow might look like this
+(remember that a filename with the <code>.R</code> extension is an R
+script): <code>01_clean_raw_data.R</code>,
+<code>02_exploratory_figures.R</code>,
+<code>03_statistical_analysis.R</code>,
+<code>04_manuscript_figs.R</code>,
+<code>05_supplemental_info.R</code>.</p>
+<p>One of the benefits of this workflow is that it treats your raw data
+and code as the only <em>real</em> objects in your workflow. These
+should be the only objects that if you lose them, you would be in big
+trouble (you’re computer is backed up, right? I reiterate my
+recommendation on learning git for your future endeavors!). Cleaned data
+that you created from your raw data isn’t real. You can just re-run the
+code and create those objects again (this is why we use <code>R</code>
+scripts instead of manipulating raw data in excel. See below for more
+details). Your workspace isn’t real - as we just discussed, it can (and
+should) disappear at any time. Results and figures are not real because
+you can re-create them from the code whenever you need to. Once you get
+into this mindset of treating raw data and code as the only real
+objects, your workflow will automatically become more organized and
+reproducible. (Manuscripts are also real so save them and back them
+up!)</p>
+</div>
+</div>
+<div id="organizing-your-project-directories" class="section level1">
+<h1>Organizing your project directories</h1>
+<p>As we already saw, the <code>.Rproj</code> file treats the directory
+that it is in as the working directory for that project. This means that
+you can read files from this location and write files to this location
+without changing any settings. For example, you can stick a file called
+<code>data.csv</code> in this directory and the following code will
+work:</p>
+<pre class="r"><code>data &lt;- read.csv(&quot;data.csv&quot;)</code></pre>
+<p>A natural instinct for those of us that are inclined to be less-than
+organized might be to put all of our files associated the project in
+this directory:</p>
+<pre><code>my_proj/
+|─── data.csv
+|─── script_that_does_everything.R
+|─── test_script_that_does_something_else.R
+|─── Figure1.png
+|─── manuscript_v1.doc
+|─── manuscript_v2.doc
+.
+.
+.
+|─── manuscript_final_v2-4.doc</code></pre>
+<p>There is nothing inherently wrong with this but for most projects,
+you will end up with a very big directory that is hard to navigate when
+you need to find specific files. A better idea is to put files in
+intuitive subdirectories. You can pick whatever structure makes most
+sense to you, but I generally use something like:</p>
+<pre><code>my_proj/
+|─── data-raw/
+      |─── data.csv
+|─── data/
+      |─── clean_data.rds
+|─── figs/
+      |─── fig1.png
+      |─── fig2.png
+|─── doc/
+      |─── manuscript.Rmd
+|─── output/
+      |─── model_results.rds
+|─── scripts/
+      |─── custom_functions.R
+      |─── data_cleaning.R
+      |─── analysis.R
+      |─── figures.R</code></pre>
 <ul>
-<li>Why didn’t that work?</li>
-<li>Null values like <code>NA</code> are special</li>
-<li>We don’t want to accidentally say that two “missing” things are the
-same
+<li><p><code>data-raw/</code> contains my, you guessed it, raw data
+files.</p></li>
+<li><p><code>data/</code> contains the cleaned data files that are ready
+to go straight into the analysis</p>
 <ul>
-<li>We don’t know if they are</li>
+<li>the cleaned data was created with the <code>data_cleaning.R</code>
+file found in the <code>scripts/</code> folder.</li>
 </ul></li>
-<li>So use special commands</li>
-<li><code>is.na()</code> checks if the value is <code>NA</code></li>
-<li>Combine this with <code>!</code> for “not”</li>
-</ul>
-<pre class="r"><code>filter(starwars, !is.na(hair_color))
-#&gt; # A tibble: 82 × 14
-#&gt;   name      height  mass hair_color skin_color eye_color birth_year sex   gender
-#&gt;   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-#&gt; 1 Luke Sky…    172    77 blond      fair       blue            19   male  mascu…
-#&gt; 2 Darth Va…    202   136 none       white      yellow          41.9 male  mascu…
-#&gt; 3 Leia Org…    150    49 brown      light      brown           19   fema… femin…
-#&gt; 4 Owen Lars    178   120 brown, gr… light      blue            52   male  mascu…
-#&gt; # ℹ 78 more rows
-#&gt; # ℹ 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
-#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
-</div>
-<div id="using-unique" class="section level4">
-<h4>Using <code>unique()</code></h4>
-<p>It is also often useful to see all of the values that occur within a
-variable column. For example, what are all of the homeworld origins in
-this data set?</p>
-<p>Here, I will use the base R function <code>unique()</code> to see all
-of the values in the variable <code>homeworld</code>. To select just
-that variable, I will use the <code>$</code> subsetting function.</p>
-<pre class="r"><code>unique(starwars$homeworld)
-#&gt;  [1] &quot;Tatooine&quot;       &quot;Naboo&quot;          &quot;Alderaan&quot;       &quot;Stewjon&quot;       
-#&gt;  [5] &quot;Eriadu&quot;         &quot;Kashyyyk&quot;       &quot;Corellia&quot;       &quot;Rodia&quot;         
-#&gt;  [9] &quot;Nal Hutta&quot;      &quot;Bestine IV&quot;     NA               &quot;Kamino&quot;        
-#&gt; [13] &quot;Trandosha&quot;      &quot;Socorro&quot;        &quot;Bespin&quot;         &quot;Mon Cala&quot;      
-#&gt; [17] &quot;Chandrila&quot;      &quot;Endor&quot;          &quot;Sullust&quot;        &quot;Cato Neimoidia&quot;
-#&gt; [21] &quot;Coruscant&quot;      &quot;Toydaria&quot;       &quot;Malastare&quot;      &quot;Dathomir&quot;      
-#&gt; [25] &quot;Ryloth&quot;         &quot;Vulpter&quot;        &quot;Troiken&quot;        &quot;Tund&quot;          
-#&gt; [29] &quot;Haruun Kal&quot;     &quot;Cerea&quot;          &quot;Glee Anselm&quot;    &quot;Iridonia&quot;      
-#&gt; [33] &quot;Iktotch&quot;        &quot;Quermia&quot;        &quot;Dorin&quot;          &quot;Champala&quot;      
-#&gt; [37] &quot;Geonosis&quot;       &quot;Mirial&quot;         &quot;Serenno&quot;        &quot;Concord Dawn&quot;  
-#&gt; [41] &quot;Zolan&quot;          &quot;Ojom&quot;           &quot;Aleen Minor&quot;    &quot;Skako&quot;         
-#&gt; [45] &quot;Muunilinst&quot;     &quot;Shili&quot;          &quot;Kalee&quot;          &quot;Umbara&quot;        
-#&gt; [49] &quot;Utapau&quot;</code></pre>
-</div>
-</div>
-<div id="arrange-rows-with-arrange" class="section level3">
-<h3>Arrange rows with <code>arrange()</code></h3>
-<div id="change-order-of-rows-based-on-values-in-a-column" class="section level5">
-<h5>Change order of rows based on values in a column</h5>
-<p><code>arrange()</code> has a similar syntax as <code>filter()</code>
-but instead of selecting rows, it reorders them. It takes a data frame
-as the first argument, and then column name(s) to order by as subsequent
-arguments. The data will be arranged by the first column name provided,
-with ties being broken by subsequent columns:</p>
-<pre class="r"><code># arrange by homeworld
-arrange(starwars, homeworld)
-#&gt; # A tibble: 87 × 14
-#&gt;   name      height  mass hair_color skin_color eye_color birth_year sex   gender
-#&gt;   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-#&gt; 1 Leia Org…    150    49 brown      light      brown             19 fema… femin…
-#&gt; 2 Bail Pre…    191    NA black      tan        brown             67 male  mascu…
-#&gt; 3 Raymus A…    188    79 brown      light      brown             NA male  mascu…
-#&gt; 4 Ratts Ty…     79    15 none       grey, blue unknown           NA male  mascu…
-#&gt; # ℹ 83 more rows
-#&gt; # ℹ 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
-#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;
-
-# arrange by homeworld, then height
-arrange(starwars, homeworld, height)
-#&gt; # A tibble: 87 × 14
-#&gt;   name      height  mass hair_color skin_color eye_color birth_year sex   gender
-#&gt;   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-#&gt; 1 Leia Org…    150    49 brown      light      brown             19 fema… femin…
-#&gt; 2 Raymus A…    188    79 brown      light      brown             NA male  mascu…
-#&gt; 3 Bail Pre…    191    NA black      tan        brown             67 male  mascu…
-#&gt; 4 Ratts Ty…     79    15 none       grey, blue unknown           NA male  mascu…
-#&gt; # ℹ 83 more rows
-#&gt; # ℹ 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
-#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
-<p>The default order is from smallest to largest, numeric to character,
-and a to z. To reverse this order, use <code>desc()</code> to order a
-column in descending order:</p>
-<pre class="r"><code>arrange(starwars, desc(homeworld))
-#&gt; # A tibble: 87 × 14
-#&gt;   name      height  mass hair_color skin_color eye_color birth_year sex   gender
-#&gt;   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-#&gt; 1 Zam Wese…    168    55 blonde     fair, gre… yellow            NA fema… femin…
-#&gt; 2 Dud Bolt      94    45 none       blue, grey yellow            NA male  mascu…
-#&gt; 3 Tion Med…    206    80 none       grey       black             NA male  mascu…
-#&gt; 4 Sly Moore    178    48 none       pale       white             NA &lt;NA&gt;  &lt;NA&gt;  
-#&gt; # ℹ 83 more rows
-#&gt; # ℹ 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
-#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
-</div>
-</div>
-<div id="select-columns-with-select" class="section level3">
-<h3>Select columns with <code>select()</code></h3>
-<div id="many-columns-to-fewer-columns" class="section level5">
-<h5>Many columns to fewer columns</h5>
-<p>Data sets generally contain numerous columns, but oftentimes you are
-only interested in a few for a given analysis. <code>select()</code>
-allows you to focus on a useful subset of your data while dropping
-un-needed columns. You can indicate which columns you want by naming
-them (without quotes) or select which columns you <em>don’t</em> want by
-putting a <code>-</code> in front of the name. I have suppressed the
-output to save space in this document, but be sure to run the following
-commands in your session and see what happens. Be sure to note the
-number of rows and columns that each command returns.</p>
-<pre class="r"><code># Select columns by name
-select(starwars, height, mass, homeworld, hair_color)
-
-# Select all columns between name and eye_color (inclusive)
-select(starwars, name:eyecolor)
-
-# select all columns except for height
-select(starwars, -height)</code></pre>
-<p>There are a number of helper functions you can use within
-<code>select()</code>, like <code>starts_with()</code>,
-<code>ends_with()</code>, <code>matches()</code> and
-<code>contains()</code>. These let you quickly match larger blocks of
-variables that meet some criterion. See <code>?select</code> for more
-details.</p>
-<p>The order you write the arguments in <code>select()</code> are
-retained in the output. This can be helpful if you want to quickly
-compare the values in two columns which do not normally appear next to
-each other.</p>
-<pre class="r"><code>select(starwars, name, homeworld, eye_color)
-#&gt; # A tibble: 87 × 3
-#&gt;   name           homeworld eye_color
-#&gt;   &lt;chr&gt;          &lt;chr&gt;     &lt;chr&gt;    
-#&gt; 1 Luke Skywalker Tatooine  blue     
-#&gt; 2 C-3PO          Tatooine  yellow   
-#&gt; 3 R2-D2          Naboo     red      
-#&gt; 4 Darth Vader    Tatooine  yellow   
-#&gt; # ℹ 83 more rows</code></pre>
-</div>
-</div>
-<div id="add-new-columns-with-mutate" class="section level3">
-<h3>Add new columns with <code>mutate()</code></h3>
-<div id="many-columns-to-more-columns" class="section level5">
-<h5>Many columns to more columns</h5>
-<p>Data analysis often requires the creation of new variable columns
-based on values within your data. The <code>mutate()</code> function
-allows you to do this. For example, let’s calculate a new variable
-called <code>bmi</code>, which looks at how height and mass in one
-variable.</p>
-<pre class="r"><code># make new column called &quot;bmi&quot;
-d2 &lt;- mutate(starwars,
-  bmi = mass / height^2)
-
-# select new columns in d2, and columns used to calculate them
-select(d2, mass, height, bmi)
-#&gt; # A tibble: 87 × 3
-#&gt;    mass height     bmi
-#&gt;   &lt;dbl&gt;  &lt;int&gt;   &lt;dbl&gt;
-#&gt; 1    77    172 0.00260
-#&gt; 2    75    167 0.00269
-#&gt; 3    32     96 0.00347
-#&gt; 4   136    202 0.00333
-#&gt; # ℹ 83 more rows</code></pre>
-</div>
-</div>
-<div id="summarise-values-with-summarise" class="section level3">
-<h3>Summarise values with <code>summarise()</code></h3>
-<div id="many-rows-to-a-single-row" class="section level5">
-<h5>Many rows to a single row</h5>
-<p>The last verb is <code>summarise()</code>. This collapses a dataframe
-to a single value, based on a function:</p>
-<pre class="r"><code># mean height
-summarise(starwars,
-  height_average = mean(height, na.rm = TRUE))
-#&gt; # A tibble: 1 × 1
-#&gt;   height_average
-#&gt;            &lt;dbl&gt;
-#&gt; 1           174.
-# smallest mass
-summarise(starwars, min_mass = min(mass, na.rm = TRUE))
-#&gt; # A tibble: 1 × 1
-#&gt;   min_mass
-#&gt;      &lt;dbl&gt;
-#&gt; 1       15</code></pre>
-<p>Notice the argument <code>na.rm = TRUE</code> within the summarize
-function. If you have missing or <code>NA</code> values within your
-data, it will cause the summary functions to return <code>NA</code>.
-Recall that we discussed this in the “<code>NULL</code>’s in Vectors”
-section in our introduction to R activity.</p>
-<p>Additionally, summarize is optimized to work with functions that
-return a single value. For example, <code>range()</code> returns the
-minimum and maximum value of a set of numbers:</p>
-<pre class="r"><code>range(c(1, 2, 3, NA, 5, 6, 7), na.rm = TRUE)
-#&gt; [1] 1 7</code></pre>
-<p>When used in combination with <code>summarise()</code>, two values
-are returned, but they are not labeled, and it includes a warning
-message:</p>
-<pre class="r"><code>summarise(starwars,
-          height_range = range(height, na.rm = TRUE))
-#&gt; Warning: Returning more (or less) than 1 row per `summarise()` group was deprecated in
-#&gt; dplyr 1.1.0.
-#&gt; ℹ Please use `reframe()` instead.
-#&gt; ℹ When switching from `summarise()` to `reframe()`, remember that `reframe()`
-#&gt;   always returns an ungrouped data frame and adjust accordingly.
-#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-#&gt; generated.
-#&gt; # A tibble: 2 × 1
-#&gt;   height_range
-#&gt;          &lt;int&gt;
-#&gt; 1           66
-#&gt; 2          264</code></pre>
-<p>If this is the only thing you are calling, it may be easy to tell
-which is which, but if we have multiple summary arguments, it can be
-less obvious:</p>
-<pre class="r"><code>summarise(starwars,
-          height_range = range(height, na.rm = TRUE),
-          height_mean = mean(height, na.rm = TRUE))
-#&gt; Warning: Returning more (or less) than 1 row per `summarise()` group was deprecated in
-#&gt; dplyr 1.1.0.
-#&gt; ℹ Please use `reframe()` instead.
-#&gt; ℹ When switching from `summarise()` to `reframe()`, remember that `reframe()`
-#&gt;   always returns an ungrouped data frame and adjust accordingly.
-#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-#&gt; generated.
-#&gt; # A tibble: 2 × 2
-#&gt;   height_range height_mean
-#&gt;          &lt;int&gt;       &lt;dbl&gt;
-#&gt; 1           66        174.
-#&gt; 2          264        174.</code></pre>
-<p>However, we can get around this by calling the <code>min()</code> and
-<code>max()</code> functions separately within summarise:</p>
-<pre class="r"><code>summarise(starwars, 
-          min_height = min(height, na.rm = TRUE),
-          max_height = max(height, na.rm = TRUE),
-          mean_height = mean(height, na.rm = TRUE))
-#&gt; # A tibble: 1 × 3
-#&gt;   min_height max_height mean_height
-#&gt;        &lt;int&gt;      &lt;int&gt;       &lt;dbl&gt;
-#&gt; 1         66        264        174.</code></pre>
-</div>
-</div>
-</div>
-<div id="grouped-operations" class="section level2">
-<h2>Grouped operations</h2>
-<div id="many-rows-to-one-per-group" class="section level5">
-<h5>Many rows to one-per-group</h5>
-<p>These verbs are useful on their own, but when used in conjuction with
-the <code>group_by()</code> function, the awesomeness of
-<code>dplyr</code> starts to shine through. It organizes a dataset into
-specified groups of rows. Verbs are then applied group-by-group within
-the dataset. Conveniently, this is accomplished using the exact same
-syntax as above.</p>
-<p>Here, we will group the data by <code>homeworld</code> and then
-summarize the mean height:</p>
-<pre class="r"><code># make a new object which contains a &quot;grouping variable&quot;
-home_group &lt;- group_by(starwars, homeworld)
-summarize(home_group,
-          mean_height = mean(height, na.rm = TRUE))
-#&gt; # A tibble: 49 × 2
-#&gt;   homeworld   mean_height
-#&gt;   &lt;chr&gt;             &lt;dbl&gt;
-#&gt; 1 Alderaan           176.
-#&gt; 2 Aleen Minor         79 
-#&gt; 3 Bespin             175 
-#&gt; 4 Bestine IV         180 
-#&gt; # ℹ 45 more rows</code></pre>
-<p>The output now contains 1 row per world</p>
-<p>Notice that if we print out the <code>home_group</code> object that
-it has the same dimensions as the original, but there is now a new line
-at the top which specifies the grouping variable:</p>
-<pre class="r"><code>home_group
-#&gt; # A tibble: 87 × 14
-#&gt; # Groups:   homeworld [49]
-#&gt;   name      height  mass hair_color skin_color eye_color birth_year sex   gender
-#&gt;   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-#&gt; 1 Luke Sky…    172    77 blond      fair       blue            19   male  mascu…
-#&gt; 2 C-3PO        167    75 &lt;NA&gt;       gold       yellow         112   none  mascu…
-#&gt; 3 R2-D2         96    32 &lt;NA&gt;       white, bl… red             33   none  mascu…
-#&gt; 4 Darth Va…    202   136 none       white      yellow          41.9 male  mascu…
-#&gt; # ℹ 83 more rows
-#&gt; # ℹ 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
-#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
-</div>
-<div id="using-n-to-get-counts" class="section level4">
-<h4>Using <code>n()</code> to get counts</h4>
-<p>Another common data summarization task is to get the number of
-observations within a data set. For example, let’s say we wanted to know
-how many starwars each carrier was scheduled to operate. For this, we
-can use <code>n()</code>, which is a special function inside of the
-<code>summary()</code> function.</p>
-<pre class="r"><code>summarize(home_group, count = n())
-#&gt; # A tibble: 49 × 2
-#&gt;   homeworld   count
-#&gt;   &lt;chr&gt;       &lt;int&gt;
-#&gt; 1 Alderaan        3
-#&gt; 2 Aleen Minor     1
-#&gt; 3 Bespin          1
-#&gt; 4 Bestine IV      1
-#&gt; # ℹ 45 more rows</code></pre>
-</div>
-</div>
-</div>
-<div id="chaining" class="section level1">
-<h1>Chaining</h1>
-<p>The <code>dplyr</code> function calls don’t have any side-effects
-(unlike some base functions), making it easy to explore your data in an
-interactive way. However, one disadvantage of this is it doesn’t lead to
-very sucinct code, particularly if you want to perform many operations
-at once. You can do it step-by-step, saving a new object each time:</p>
-<pre class="r"><code># calculate starwars characters that have a BMI either &gt;0.04 or &lt; 0.01 
-a1 &lt;- group_by(starwars, homeworld)
-a2 &lt;- select(a1, homeworld, height, mass)
-a3 &lt;- mutate(a2,
-  bmi = mass / height^2)
-a4 &lt;- filter(a3, bmi &gt; 0.04 | bmi &lt; 0.005)
-a4</code></pre>
-<p>However this can lead to many problems. Giving objects appropriate
-names can be difficult (e.g. object names in <code>ggplot</code>
-example). When naming them chronologically (as above), it can be
-difficult to remember which object is which (was the summarized object
-<code>a2</code> or <code>a3</code>?…). Especially if you want to do the
-same thing over and over on different data sets or subsets of
-observations.</p>
-<div id="the-pipe-operator" class="section level2">
-<h2>The pipe operator: <code>%&gt;%</code>, <code>|&gt;</code></h2>
-<p>The pipe operator is originally from the <code>magrittr</code>
-package, but is included automatically in the <code>dplyr</code>
-package. More recently, newer version of R include a “native pipe”
-<code>|&gt;</code> as a part of the base install. Both pipes should work
-the same, and either is fine for this class. I learned using the
-<code>%&gt;%</code> pipe, so most of my code will use this one.</p>
+<li><p><code>figs/</code> contains figure files</p>
 <ul>
-<li><p>The pipe takes the output of one command and passes it as an
-input to the next command.</p></li>
-<li><p>The pipe operator allows you to write this function:
-<code>f(x,y)</code> as <code>x %&gt;% f(y)</code>.</p></li>
+<li>script to makes these figures is also in the <code>scripts/</code>
+folder.</li>
+</ul></li>
+<li><p><code>doc/</code> contains files for reports or manuscripts
+related to the projects</p></li>
+<li><p><code>output/</code> includes output from the analysis, for
+example results from fitting a model</p></li>
+<li><p><code>scripts/</code> contains R scripts used to clean the data,
+analyze data, make figures, etc. These could be put in the subdirectory
+related to the function of the script if that makes more sense to you.
+Or you can lump all of the different scripts into a single script if you
+prefer. That’s up to you.</p></li>
 </ul>
-<p>I think that this is a bit confusing to think about, but when you see
-some examples the power and ease of use becomes obvious.</p>
-<pre class="r"><code># a silly example
-x &lt;- seq(10)
-max(x)
-#&gt; [1] 10
-# is the same as
-x %&gt;% max()
-#&gt; [1] 10
-
-mean(x)
-#&gt; [1] 5.5
-x %&gt;% mean()
-#&gt; [1] 5.5</code></pre>
-<p>You can see that both syntaxes give the same result. Now, let’s go
-back our example looking at arrival and departure delays &gt; 30
-minutes</p>
-<pre class="r"><code># original method, saving new object at each step
-a1 &lt;- group_by(starwars, homeworld)
-a2 &lt;- select(a1, homeworld, height, mass)
-a3 &lt;- mutate(a2,
-  bmi = mass / height^2)
-a4 &lt;- filter(a3, bmi &gt; 0.04 | bmi &lt; 0.005)
-a4
-
-# now using the %&gt;% operator
-a5 &lt;- starwars %&gt;%
-  group_by(homeworld) |&gt;
-  select(homeworld, height, mass) |&gt;
-  mutate(bmi = mass / height^2) |&gt;
-  filter(bmi &gt; 0.04 | bmi &lt; 0.005)
-
-identical(a4, a5)
-#&gt; TRUE</code></pre>
-<p>It is helpful to say “then” when you see a <code>%&gt;%</code>
-operator. e.g. take object <code>starwars</code>, <em>then</em> group by
-year, month and day, <em>then</em> select variables arr_delay and
-dep_delay <em>then</em> summarize … etc.</p>
-<p>The pipe operator in combination with <code>dplyr</code> allows you
-to quickly examine your data and explore interesting results. One of my
-favorite aspects of this is you can answer interesting questions almost
-immediately.</p>
-<p>“I wonder what the smallest mass character is?”</p>
-<pre class="r"><code>starwars %&gt;% 
-  arrange(mass)
-#&gt; # A tibble: 87 × 14
-#&gt;   name      height  mass hair_color skin_color eye_color birth_year sex   gender
-#&gt;   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-#&gt; 1 Ratts Ty…     79    15 none       grey, blue unknown           NA male  mascu…
-#&gt; 2 Yoda          66    17 white      green      brown            896 male  mascu…
-#&gt; 3 Wicket S…     88    20 brown      brown      brown              8 male  mascu…
-#&gt; 4 R2-D2         96    32 &lt;NA&gt;       white, bl… red               33 none  mascu…
-#&gt; # ℹ 83 more rows
-#&gt; # ℹ 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
-#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
-<p>If you want to also know the homeworld:</p>
-<pre class="r"><code>starwars %&gt;% 
-  arrange(mass) %&gt;%
-  select(name, mass, homeworld)
-#&gt; # A tibble: 87 × 3
-#&gt;   name                   mass homeworld  
-#&gt;   &lt;chr&gt;                 &lt;dbl&gt; &lt;chr&gt;      
-#&gt; 1 Ratts Tyerell            15 Aleen Minor
-#&gt; 2 Yoda                     17 &lt;NA&gt;       
-#&gt; 3 Wicket Systri Warrick    20 Endor      
-#&gt; 4 R2-D2                    32 Naboo      
-#&gt; # ℹ 83 more rows</code></pre>
-<p>What homeworld has the largest average mass?</p>
-<pre class="r"><code>starwars %&gt;% 
-  group_by(homeworld) %&gt;%
-  summarise(mean_mass = mean(mass)) %&gt;%
-  arrange(desc(mean_mass))
-#&gt; # A tibble: 49 × 2
-#&gt;   homeworld mean_mass
-#&gt;   &lt;chr&gt;         &lt;dbl&gt;
-#&gt; 1 Nal Hutta      1358
-#&gt; 2 Kalee           159
-#&gt; 3 Kashyyyk        124
-#&gt; 4 Trandosha       113
-#&gt; # ℹ 45 more rows</code></pre>
+<div id="readingwriting-from-subdirectories" class="section level2">
+<h2>Reading/writing from subdirectories</h2>
+<p>Because RStudio treats the project root directory as the working
+directory, you could not do the following if, for example, your data is
+stored in a <code>data-raw/</code> subdirectory:</p>
+<pre class="r"><code>data &lt;- read.csv(&quot;data.csv&quot;)</code></pre>
+<p>Instead, you need to use relative paths. Remember that everything is
+relative to your working directory:</p>
+<pre class="r"><code>data &lt;- read.csv(&quot;data-raw/data.csv&quot;)</code></pre>
+<p>If you prefer, you can have as many layers of subdirectories as you
+want. The important thing is that as long as you move the entire project
+directory, these relative paths will still work.</p>
 </div>
-<div id="formatting-with-pipes" class="section level2">
-<h2>Formatting with pipes</h2>
-<p>A couple of pointers.</p>
+<div id="a-suggested-structure-for-this-class" class="section level2">
+<h2>A suggested structure for this class</h2>
+<pre><code>ENVS_475/
+  |─── data/
+        |─── acid_mine_hw6.csv
+        |─── clear_cut_2_hw8.rds
+        |─── uhuru_acacia_lab2.txt
+  |─── scripts/
+        |─── lab1_intro_R.R
+        |─── lab2_ggplot.R
+  |─── homework/
+        |─── Justin_Pomeranz_HW1.R
+        |─── Justin_Pomeranz_HW2.R
+  |─── other-resources/
+        |─── cheat-sheets/
+              |─── data-transformation.pdf
+              |─── data-visualization.pdf</code></pre>
 <ul>
-<li><p>always enter a new line after a pipe <code>%&gt;%</code></p></li>
-<li><p>if you have many arguments within a function in a pipe, enter a
-new line after each comma</p></li>
-<li><p>if you are making a new variable with <code>mutate</code>, or
-summarizing variables with <code>summarize</code>, give them a
-meaningful name</p></li>
-<li><p>try and limit the number of pipes in a single call. 5-6 is OK,
-but 10 or more should be avoided. If you need that many, save an
-intermediate object and then pipe that.</p></li>
+<li><p><code>data/</code> contains data files provided by me in class to
+complete labs and/or homework</p>
+<ul>
+<li>We will also be using many of the datasets built directly into
+<code>R</code>.</li>
+</ul></li>
+<li><p><code>scripts/</code> contains <code>R</code> scripts created
+during class and in labs.</p></li>
+<li><p><code>homework/</code> contains scripts (<code>.R</code>) files
+associated with each homework.</p>
+<ul>
+<li>may also include subdirectories with Rmarkdown (<code>.Rmd</code>)
+and <code>.html</code> files in the second half of the class (we will
+return to this later, if needed)</li>
+</ul></li>
+<li><p><code>other-resources/</code> contains anything else you might
+find useful in class. I recommend having a <code>cheat-sheets/</code>
+sub folder here where you can download all available ones from
+Rstudio.</p></li>
 </ul>
-<div id="bad-formatting" class="section level4">
-<h4>Bad formatting</h4>
-<pre class="r"><code># don&#39;t do these:
-# no new line after each pipe
-starwars %&gt;% group_by(year, month, day) %&gt;% filter(carrier == &quot;FL&quot; | 
-carrier == &quot;AA&quot;| carrier == &quot;UA&quot;) %&gt;% select(arr_delay, dep_delay) %&gt;%
-summarise(arr = mean(arr_delay, na.rm = TRUE), dep = mean(dep_delay, na.rm
-= TRUE)) %&gt;% filter(arr &gt; 30 | dep &gt; 30)
-# no new line after each summarize argument, and meaningless variable names
-starwars %&gt;% summarize(x1 = mean(dep_delay, na.rm = TRUE), x2 = min(dep_delay, na.rm = TRUE), x3 = max(dep_delay, na.rm = TRUE), x4 = n())</code></pre>
 </div>
-<div id="better-formatting" class="section level4">
-<h4>Better formatting</h4>
-<pre class="r"><code># new line after each pipe
-starwars %&gt;%
-  group_by(year, month, day) %&gt;%
-  select(arr_delay, dep_delay) %&gt;%
-  summarise(arr = mean(arr_delay, na.rm = TRUE), # new line here
-            dep = mean(dep_delay, na.rm = TRUE)) %&gt;%
-  filter(arr &gt; 30 | dep &gt; 30)
-
-# new line after each summarize argument, and variable names
-starwars %&gt;%
-  summarize(mean_delay = mean(dep_delay, na.rm = TRUE),
-            min_delay = min(dep_delay, na.rm = TRUE),
-            max_delay = max(dep_delay, na.rm = TRUE),
-            n_samples = n())</code></pre>
-<p>Note that when you press enter when “inside” of a function, RStudio
-automatically adds a tab space. This is very helpful for keeping the
-code format clean and makes it much easier to read.</p>
+<div id="a-note-on-handling-raw-data" class="section level2">
+<h2>A note on handling raw data</h2>
+<p>Raw data is sacred. If you purposely or accidentally change your raw
+data, everything that comes downstream (analysis, results, reports) will
+also change. To maintain the integrity of your work, get in the habit of
+<strong>never</strong> making changes to your raw data files after you
+have entered the data.</p>
+<p>One of the great things about using scripts to manipulate your data
+is that you can leave your raw data untouched and have a paper trail of
+every change you made to prepare your data for analysis. That means
+adding new variables that are composites of the raw data (e.g.,
+<code>temp_c &lt;- (temp_f -32)*(5/9)</code>), removing outliers,
+joining different data sets together, whatever. <strong>All of this is
+done in R after you’ve read in the raw data rather than in
+Excel!</strong></p>
+<p>Just as important, you don’t save these new data objects over the raw
+data or even in the same directory. Those files go in
+<code>data/</code>. This means you can only read from the
+<code>data-raw/</code> and you cannot write to it. <code>R</code> will,
+of course, allow you to write to <code>data-raw/</code>, this is just a
+suggestion to help you maintain a firewall that will keep you raw data
+in it’s raw form.</p>
 </div>
 </div>
+<div id="additional-resources" class="section level1">
+<h1>Additional resources</h1>
+<p><a href="https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects">RStudio
+Project webpage</a></p>
+<p><a href="https://r4ds.had.co.nz/workflow-projects.html">R for Data
+Science Workflow: Project</a> <a href="https://r4ds.had.co.nz/explore-intro.html">see also other chapters
+in the “Explore” section of the book</a></p>
+<p><a href="https://nicercode.github.io/blog/2013-04-05-projects/">Nice
+R Code</a></p>
+<p><a href="https://www.tidyverse.org/articles/2017/12/workflow-vs-script/">Jenny
+Bryan’s 🔥 take on <code>setwd()</code> and
+<code>rm(list=ls())</code></a></p>
+<p><a href="http://stat545.com/block002_hello-r-workspace-wd-project.html#workspace-and-working-directory">STAT545’s
+tutorial on workspaces and projects</a></p>
 </div>
 
 

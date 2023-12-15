@@ -372,19 +372,39 @@ Student A has a z-score of 1, which is higher than the z-score for student B of 
 
 ## Log-Normal Distribution  
 
-### ADD SECTION
+Let's look at an example of a non-normal distribution.  
 
+Run the following code to make this plot:
 
 ```{r}
-ln <- rlnorm(1000)
-plot(density(ln))
+set.seed(987) # for reproducibility
+x_ln <- rlnorm(1000) # sample 1000 observations from a log-normal distribution 
 
-plot(density(log(ln)))
+# plot the values
+plot(density(x_ln))
+
 ```
 
-[judge data](https://www.datanovia.com/en/lessons/transform-data-to-normal-distribution-in-r/) positive and negativer skew
+We can see that this is a highly skewed data set; lots of observations on the left side (peak) with a very few observations of really large numbers. 
+
+## Transformations  
+
+There are a number of transformations that we can perform on the data to make the observations normally distributed. For example, the log-normal distribution is one that becomes normal after we log transform it. Run the following:
+
+```{r}
+x_tranformed <- log(x_ln)
+
+plot(density(x_tranformed))
+```
+
+We can see now that the distribution is approximately normal. We will discuss other transformations as they come up in class later.  
 
 
+[Other examples of non-normal data and transformations](https://www.datanovia.com/en/lessons/transform-data-to-normal-distribution-in-r/) positive and negativer skew
+
+# Coda  
+
+You should now be able to complete HW 02 Normal Distributions  
 
 # Appendix
 ## Exampe code for figures

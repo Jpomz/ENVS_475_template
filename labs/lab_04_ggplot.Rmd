@@ -35,7 +35,7 @@ library(tidyverse)
 * So far we've been mostly working with data sets that are built into R, or making our own small data sets within our scripts. 
 * Now we will need to read in the data sets into R. 
 * But first, take a look at the `ggplot_lab_invert_survey.csv` data set by opening them. 
-* * *Right-Click on uhuru_acacia.csv in your file explorer program to Open With Notepad or text editor*  
+* * *Right-Click on invert.csv in your file explorer program to Open With Notepad or text editor*  
 * This data is comma separated, which is the default type in the `read_csv()` function. `read_csv()` is a part of the `tidyverse` and is the the main function that we will throughout this course.  
   * There is also a `read.csv()` function that comes with the base installation of R. It behaves very similarly but is slightly less "smart" than `read_csv()`. 
 * We'll call our data frame `invert` and assign it the output from `read-csv()`
@@ -165,6 +165,7 @@ ggplot(data = invert,
 # One Continuous Variable  
 
 Throughout the semester, we will want to see the distribution of one continuous variable. The two main ways we will do that is through:  
+
 1. Histograms  
 
 2. Boxplots 
@@ -279,9 +280,8 @@ ggplot(data = invert,
   theme_dark()
 ```
 
-## FINISH THIS  
 
-**You should now be able to complete problems XXX in the homework assignment**
+**You should now be able to complete problem 01 in the homework assignment**
 
 # One Continuous Variable, and Categories  
 
@@ -305,6 +305,7 @@ ggplot(data = invert,
                      fill = taxa)) +
   geom_boxplot()
 ```
+
 * ggplot automatically picked two colors for us based on the values in the `taxa` column  
 
 
@@ -342,6 +343,7 @@ ggplot(data = invert,
                      fill = taxa)) +
   geom_boxplot(fill = "black")
 ```
+
 ### Categorical vs. continuous variables  
 
 * Our data has the results of three surveys across months   
@@ -392,9 +394,8 @@ ggplot(data = invert,
   theme_bw()
 ```
 
-#### ADD HW  
 
-**You should now be able to complete problems XXX in the homework assignment**
+**You should now be able to complete problem 02 in the homework assignment**
 
 
 # Two Continuous Variables  
@@ -545,7 +546,7 @@ ggplot(data = invert,
 
 ## Coda  
 
-You should now be able to finish the homework. The below information is provided for your personal edification  
+**You should now be able to finish the homework. The below information is provided for your personal edification** 
 
 ### Grammar of graphics
 

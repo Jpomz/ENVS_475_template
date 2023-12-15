@@ -1,5 +1,5 @@
 ---
-title: "Homework: ggplot"
+title: "Homework: dplyr + ggplot"
 subtitle: "ENVS475: Experimental Analysis and Design"
 date: "Spring 2024"
 output: 
@@ -72,25 +72,31 @@ Read the data file into R using the following command:
 finch <- read.csv("data/galapago-finches.csv")
 ```
 
-# Exercises: `ggplot2`
+# Exercises: `dplyr` and `ggplot2`
 
 ## Problem 0: get to know the data  
 0.1 Use `head()` to print out the first few rows of the `finch` data.  
 
 0.2 Print out the *last* few rows of the `finch` data. 
 
-0.3 Print out the names of the columns in the `finch` data.  
+0.3 Print out the names of the columns in the `finch` data.
 
-0.4 **Modify the code**. The following code prints out all the years present in the data set exactly once. Copy this code and modify it in your assignment to print out the species present in the `finch` data. 
+0.4 Use `select()` to print out only the `species` column.  
 
-```{r}
-finch |>
-  select(year) |>
-  unique()
-```
+0.5 Use `select()` to print out the `year`, `species` and `blength` columns, in that order. 
+
+0.6 Use `arrange()` to print out the `finch` data in order based on the `blength` column.  
+
+0.7 Use `arrange()` to print out the `finch` data in order based on the `species`, `year`, and `bdepth` columns, in that order.  
+
+0.8 Use `mutate()` to add a new column called `beak_area`, and have its value equal to `blength * bdepth`.  
+
+0.9 Use `summarize` to calculate the average `blength` across the whole `finch` data set.  
+
+0.10 Use `group_by()` and  `summarize` to calculate the average `blength` for each `species` in `finch` data set.  
 
 
-## Problem: 1 Continuous variable  
+## Problem: 1 Plot one continuous variable  
 1.1 Make a histogram of the `blength` column.  
 
 1.2 Make a histogram of the `blength` column and give it a descriptive title (5-7 words) and change the the x-axis label to be more easily read and include the units (mm).  
@@ -104,7 +110,7 @@ finch |>
 1.6 Make a boxplot of the `blength` but change the fill color to one of your choice. (See a [list of color names](https://derekogle.com/NCGraphing/resources/colors) available in ggplot)  
 
 
-## Problem 2: Grouping variables  
+## Problem 2: Plot with grouping variables  
 
 2.1 Make a boxplot of the `blength`, but have the fill color vary based on the species.  
 
@@ -113,7 +119,7 @@ finch |>
 2.3 Make a boxplot of the `blength`, but have the fill color vary based on the year, and have species mapped to the y-axis.    
 
 
-## Problem 3: two continuous variables  
+## Problem 3: Plot two continuous variables  
 
 3.1 Use `geom_point()` to make a scatter plot with `blength` on the x-axis, and `bdepth` on the y-axis.  
 

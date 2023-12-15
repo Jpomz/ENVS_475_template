@@ -1,0 +1,74 @@
+---
+title: "ENVS475 Homework 00: Setup"
+subtitle: "Complete for a grade"
+date: "`r format(Sys.time(), '%B, %Y')`"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+   warning = FALSE, message = FALSE,
+   fig.align = 'center', fig.retina = 2,
+  collapse = TRUE,
+  comment = "#>"
+)
+library(tidyverse)
+data("starwars")
+```
+
+# Complete this assignment for a grade.
+
+### Learning Objectives
+
+> Following this assignment students should:
+>
+> - Have R and Rstudio downloaded
+> - Be able to access and open Rstudio
+> - Have an R-Project for the course
+> - Be able to download packages and load them into your working session
+
+1. Download R and Rstudio
+2. Make a new Project called "ENVS475" 
+3. In the console, enter the following command and run it:
+
+```{r, eval=FALSE}
+install.packages("tidyverse")
+```
+
+**NOTE:** Do *NOT* put `install.packages()` commands in your scripts. Only ever run them in the console. 
+
+* You can also install packages by clicking `Tools` --> `Install Packages` and then entering the package name in the text box and clicking `Install`  
+
+
+4. Make a new script called "lastname_first-assignment.R" and save it in your `homework` folder in your ENVS396 Project. 
+
+5. In your script, type in the following code and make sure it runs correctly:
+
+```{r, eval=FALSE}
+library(tidyverse)
+data("starwars")
+starwars %>% 
+    filter(homeworld == "Tatooine") %>%
+    select(name) %>%
+    unique()
+```
+
+
+You should see the following output in your console:
+
+```{r echo=FALSE}
+library(tidyverse)
+data("starwars")
+starwars %>% 
+    filter(homeworld == "Tatooine") %>%
+    select(name) %>%
+    unique()
+```
+
+
+## Assignment submission 
+
+**For full credit, you must show your instructor that you have accomplished all of the above tasks.**
