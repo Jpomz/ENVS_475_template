@@ -256,10 +256,18 @@ The summary output with multiple-levels of a factor and an interaction becomes m
 The intercept is the mean estimate for our reference group, which in this case is the OJ supplement at D0.5. We will need to keep this in mind when we look at all of the other coefficient estimates. 
 
 Other Coefficients:  
-* `suppVC` = `OJ:D0.5` - `VC:D0.5  
+
+* `suppVC` = `OJ:D0.5` - `VC:D0.5`  
+
 * `doseD1` = `OJ:D0.5` - `OJ:D1`  
+
 * `doseD2` = `OJ:D0.5` - `OJ:D2`  
-* `suppVC:doseD1` = `OJ:D0.5` - `VC:D1` * `suppVC:doseD2` = `OJ:D0.5` - `VC:D2`  
+
+* `suppVC:doseD1` = `OJ:D0.5` - `VC:D1` 
+
+* `suppVC:doseD2` = `OJ:D0.5` - `VC:D2`  
+
+
 ### Interpretation of p-values  
 
 * Intercept: Is mean length of `OJ:D0.5` = 0?  
